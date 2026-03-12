@@ -2,12 +2,14 @@
 Yet another application to track stock portfolios and dividends
 
 
+Supported features:
 
-## ToDo (POC phase)
+- View current value of the overall stock portfolio (across different profile) over daily, weekly and monthly change. 
+- Calculate the dividend earned over quarterly and annualy.
+- Forcast the next year to date dividend income. 
 
-### Backend
-- Building a local cache to track the stocks (start with NASDAQ, TSX) and their daily prices.
-- Build users database.
-- Allow users to create multiple profiles to track stocks on.
-- Generate monthly, quarterly and annual projection of dividend earning.
-- Generate graphs for the projections (matplotlib etc.) 
+
+Release 0.1:
+
+- Generate PDF reports of the stock portfolio and dividend.
+- Supports only one user but multiple profiles. 
