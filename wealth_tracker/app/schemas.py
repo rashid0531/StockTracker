@@ -95,3 +95,19 @@ class DividendProjection(BaseModel):
 class UserDividendProjectionsResponse(BaseModel):
     user_id: UUID
     projections: List[DividendProjection]
+
+
+class ProfileValue(BaseModel):
+    profile_id: UUID
+    profile_name: str
+    total_value: Decimal
+
+    class Config:
+        from_attributes = True
+
+
+class UserProfileValuesResponse(BaseModel):
+    user_id: UUID
+    target_currency: str
+    profiles: List[ProfileValue]
+
