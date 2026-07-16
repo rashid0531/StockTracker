@@ -1,0 +1,54 @@
+System Architecture Blueprint: Wealth & Dividend Tracking Engine
+Backend Stack: Python (FastAPI), SQLAlchemy (Async), Uvicorn, PostgreSQL (asyncpg)
+
+CONTEXT & OBJECTIVE:
+We are building a production-grade backend engine for tracking financial (stocks/ETFs) and physical assets from scratch. The app must cleanly handle users with multiple profiles (e.g., separating TFSA vs. RRSP), support assets across four regions (Canada, USA, Australia, UK), and provide historical "Time Travel" valuation and dividend tracking. The architecture must protect data integrity against corporate actions (fractional stock splits) and currency fluctuations.
+
+YOUR TASKS:
+
+1. DATABASE SETTING & SCHEMA CREATION
+Generate a PostgreSQL migration script to initialize the database with the following specifications:
+- Enable the "uuid-ossp" extension.
+- Create 'users', 'investment_profiles', and 'brokerage_accounts' tables to establish the ownership hierarchy. One profile can aggregate multiple brokerage firms (e.g., an RRSP profile with accounts at both Wealthsimple and Questrade).
+- Create a 'stock_registry' table storing global stock metadata (ticker, exchange, country, currency, current_price, and annualized_dividend_per_share). 
+- Create a 'daily_stock_prices' time-series table featuring an 'adj_close_price' column, optimized with a composite index on (stock_id, trading_date DESC) to facilitate future machine learning feature engineering.
+- Create an immutable 'stock_transactions' hot ledger table using NUMERIC(14, 4) to support fractional share transactions natively.
+- Create an 'fx_historical_rates' table to track daily cross-border currency rates (from_currency, to_currency, exchange_rate, rate_date).
+- Create a cold-storage 'compressed_historical_balances' rollup table. This must store compressed share balances and a 'compressed_fx_rate' (Volume-Weighted Exchange Rate) for positions older than 5 years to keep the main transaction table lean.
+- Create a database view 'view_all_time_share_positions' that joins hot and compressed storage using a UNION ALL, and a 'view_user_stock_holdings' view summarizing live share counts.
+
+2. REPOSITORY & APP DIRECTORY STRUCTURE
+Scaffold the Python project exactly according to this clean architecture directory tree:
+wealth_tracker/
+├── app/
+│   ├── __init__.py
+│   ├── config.py          # Pydantic BaseSettings for database connection pooling
+│   ├── database.py        # Asynchronous SQLalchemy engine & sessionmaker (AsyncSession)
+│   ├── models.py          # SQLAlchemy structural models mapping the database schema
+│   ├── schemas.py         # Pydantic data validation layer 
+│   ├── main.py            # FastAPI entrypoint 
+│   ├── worker.py          # Data ingestion background script
+│   └── routers/
+│       ├── __init__.py
+│       └── holdings.py    # Dividend calculation and portfolio valuation endpoints
+├── requirements.txt
+└── run.py                 # Application launcher string
+
+3. MARKET DATA WORKER IMPLEMENTATION (STRATEGY PATTERN)
+In 'app/worker.py', write a background market data ingestion engine. 
+- Implement the Strategy Design Pattern: Design an abstract `BaseMarketDataClient` interface.
+- Implement a concrete `YFinanceClient` subclass that wraps the `yfinance` library to retrieve daily closing values, dividend stats, and split events.
+- Implement another subclass from `BaseMarketDataClient` interface that uses yahooquery library to do the same. This is an alternative to the finance investor. 
+- The worker must query the database for active tickers, map exchange suffixes accurately (e.g., '.TO' for TSX), enforce a 2-second rate-limiting delay between requests, and write results to the database idempotently using `ON CONFLICT (stock_id, trading_date) DO UPDATE`.
+
+4. ENDPOINT CALCULATIONS
+In 'app/routers/holdings.py', write an asynchronous route GET `/holdings/projections/{user_id}` that returns a list of projected cumulative annual dividends aggregated per profile, categorized by their native currencies, by querying the unified positions view.
+
+CRITICAL INSTRUCTIONS:
+- Ensure all database execution sessions are fully asynchronous (`async/await` with `asyncpg`).
+- Write robust error handling and log info/errors at every stage of the market data ingestion routine.
+- Do not use raw strings for identifiers where UUID validation is strictly required.
+
+5. Seed synthetic data to test out the codebase. Try creating sample data for a user with two profiles (accounting TSFA, RRSP) and each profile storing stocks bought from multiple brokerage firms like Questrade, Wealthsimple, RBC investing etc. Use any batch of popular stocks /etfs that are popular and easy for you to test out the logics.
+
+Please begin by creating the files step by step, validating each component's configuration as you build out the infrastructure and save your generated codes in the present working directory.
