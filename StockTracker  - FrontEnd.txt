@@ -1,0 +1,53 @@
+System Architecture Blueprint: Wealth & Dividend Tracker Frontend
+Stack: React Native + Expo (Web, Android, iOS), NativeWind (Tailwind CSS for React Native), Expo Router, React Native Gifted Charts (or Victory Native)
+
+CONTEXT & OBJECTIVE:
+We are building a highly elegant, responsive, cross-platform (Web and Mobile) frontend for our Wealth and Dividend Tracking application. We want the layout, spacing, and polish to mimic the popular "Stock Events" mobile app UI—featuring a dark-mode first design, clean rounded cards, and bold green/red performance badge elements.
+
+YOUR TASKS:
+
+1. COMPONENT & REPOSITORY STRUCTURE
+Scaffold a clean Expo project supporting Expo Web and Mobile. Use Expo Router for file-based navigation. Ensure it includes:
+- src/components/ (Clean, reusable UI cards, input fields, and chart wrappers)
+- src/screens/ (Login, Dashboard, ProfileDetail, and PortfolioImport)
+- src/services/api.js (Axios base configuration mapping to our FastAPI backend endpoints. Implement a local fallback toggle: if the backend is unreachable, the app must gracefully use fully interactive, rich synthetic mock data so the UI remains fully testable offline).
+
+2. THE "STOCK EVENTS" VISUAL THEME (Tailwind/NativeWind)
+- Theme: Deep charcoal/dark-gray background (#121212), dark-card background (#1E1E1E), and high-contrast white text.
+- Performance Indicators: Clear indicator pill badges. Green (#4CAF50) with white text for positive changes; Red (#F44336) for negative changes.
+- Layout: Circular placeholders for stock symbols, distinct card elevation shadows on Web, and compact row spacing.
+
+3. SCREEN SPECIFIC WORKFLOWS & IMPLEMENTATIONS
+
+A. Login Screen (auth)
+- Elegant, minimalist login layout with an email and password field.
+- Simple, beautiful brand header (e.g., "Wealth Ledger").
+- Local simulation: Clicking "Sign In" writes a mock user UUID to the state and redirects to the Profile Dashboard.
+
+B. Profile Dashboard (List View)
+- Renders a list of the user's active investment profiles (e.g., "TFSA Account", "RRSP Ledger").
+- Displays the current total valuation of each profile clearly in the user's defined currency (e.g., "$124,500.20 CAD").
+- Displays the brokerage firms tied to the accounts inside that profile (e.g., "Questrade, Wealthsimple") as subtle subtext.
+- Displays an aggregate global total (sum of all profiles normalized to a single base currency) pinned beautifully to the top header card.
+
+C. Profile Detail Screen (Charts + Stock List)
+- Clicking a profile navigates here.
+- Tabbed Navigation Bar: Horizontal scroll selector for timeline intervals: 1D, 5D, 30D, 3M, 6M, 1Y, 5Y.
+- Interactive Chart: Based on the selected tab, render an interactive time-series line or scatter chart mapping the historical progression of the profile's valuation.
+- Scrollable Stock List: Mimics "Stock Events" line items:
+  * Left: Circular stock ticker badge (e.g., AAPL, ENB) and asset name subtext.
+  * Middle-Left: The number of shares owned (e.g., "12.5 shares").
+  * Middle-Right: Current live stock price, with a green/red pill badge showing the daily percentage/dollar change (e.g., "+$1.24 (+1.25%)" in green, or "-$0.45 (-0.3%)" in red).
+  * Right: Subtotal position value (Shares * Current Price) in the profile's native currency.
+
+D. Portfolio Import Form Screen (New User Onboarding)
+- A clean, multi-step stepper form for importing existing portfolios.
+- Inputs to collect: Ticker symbol, transaction type (BUY), share quantity, purchase price per share, brokerage used, local transaction FX rate relative to base currency at purchase, and purchase date.
+- Submit action: Validates data using local state, bundles the inputs into a payload, posts to the backend transactional endpoints to register the profiles, and redirects to the newly created dashboard.
+
+4. SYSTEM ROBUSTNESS INSTRUCTIONS
+- Enforce clean typing. Validate all incoming form variables prior to submission.
+- Ensure the scrolling behavior of the stock lists inside the Profile Detail page is highly performant and doesn't clash with any outer screen wrapper scrolls on web view.
+- Make all charts responsive so they resize cleanly whether rendered inside a desktop browser or on a smartphone viewport.
+
+Please begin by setting up the Expo directory workspace, config files, and the mock API client layer.
