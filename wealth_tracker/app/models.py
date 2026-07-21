@@ -3,7 +3,7 @@ from decimal import Decimal
 from typing import List, Optional
 import uuid
 
-from sqlalchemy import Date, DateTime, ForeignKey, Numeric, String, UniqueConstraint
+from sqlalchemy import Date, DateTime, ForeignKey, Numeric, String, UniqueConstraint, Text
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
@@ -232,6 +232,63 @@ class CompressedHistoricalBalance(Base):
         UniqueConstraint(
             "account_id", "stock_id", "balance_date", name="uq_compressed_balance"
         ),
+    )
+
+
+class DividendSchedule(Base):
+    __tablename__ = "dividend_schedule"
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
+    )
+    stock_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("stock_registry.id", ondelete="CASCADE"),
+        nullable=False,
+    )
+    ex_dividend_date: Mapped[Optional[datetime.date]] = mapped_column(Date, nullable=True)
+    payment_date: Mapped[Optional[datetime.date]] = mapped_column(Date, nullable=True)
+    amount_per_share: Mapped[Decimal] = mapped_column(Numeric(14, 4), nullable=False)
+    created_at: Mapped[datetime.datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+
+    stock: Mapped["StockRegistry"] = relationship()
+
+
+class UserStockThesis(Base):
+    __tablename__ = "user_stock_theses"
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
+    )
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("users.id", ondelete="CASCADE"),
+        nullable=False,
+    )
+    stock_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("stock_registry.id", ondelete="CASCADE"),
+        nullable=False,
+    )
+    thesis_text: Mapped[str] = mapped_column(Text, nullable=False)
+    review_interval_days: Mapped[int] = mapped_column(default=180, nullable=False)
+    last_reviewed_at: Mapped[datetime.datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+    created_at: Mapped[datetime.datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+    updated_at: Mapped[datetime.datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    )
+
+    user: Mapped["User"] = relationship()
+    stock: Mapped["StockRegistry"] = relationship()
+
+    __table_args__ = (
+        UniqueConstraint("user_id", "stock_id", name="uq_user_stock_thesis"),
     )
 
 

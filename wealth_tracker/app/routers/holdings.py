@@ -6,8 +6,8 @@ from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
-from app.models import User, ViewUserStockHolding, InvestmentProfile, StockRegistry, FXHistoricalRate
-from app.schemas import UserDividendProjectionsResponse, UserProfileValuesResponse
+from app.models import User, ViewUserStockHolding, InvestmentProfile, StockRegistry, FXHistoricalRate, DividendSchedule, UserStockThesis
+from app.schemas import UserDividendProjectionsResponse, UserProfileValuesResponse, UserDividendCalendarResponse, ThesisCreateUpdate, ThesisResponse
 
 router = APIRouter(prefix="/holdings", tags=["Holdings"])
 
@@ -178,3 +178,120 @@ async def get_profile_valuations(
         "target_currency": target_currency,
         "profiles": profile_list,
     }
+
+
+# Phase 1: Dividend Calendar Endpoint
+@router.get("/dividends/calendar/{user_id}", response_model=UserDividendCalendarResponse)
+async def get_dividend_calendar(user_id: UUID, db: AsyncSession = Depends(get_db)):
+    """Fetch ex-dividend and payment schedules for all stocks currently held by the user."""
+    # 1. Fetch user's active holdings
+    holdings_stmt = select(ViewUserStockHolding).where(ViewUserStockHolding.user_id == user_id)
+    holdings_res = await db.execute(holdings_stmt)
+    holdings = holdings_res.scalars().all()
+
+    # Map stock_id -> total_shares
+    stock_shares = {}
+    for h in holdings:
+        stock_shares[h.stock_id] = stock_shares.get(h.stock_id, Decimal("0.0")) + h.total_shares
+
+    if not stock_shares:
+        return {"user_id": user_id, "events": []}
+
+    # 2. Query dividend schedule for these stocks
+    schedule_stmt = (
+        select(DividendSchedule, StockRegistry)
+        .join(StockRegistry, DividendSchedule.stock_id == StockRegistry.id)
+        .where(DividendSchedule.stock_id.in_(list(stock_shares.keys())))
+        .order_by(DividendSchedule.payment_date.asc())
+    )
+    schedule_res = await db.execute(schedule_stmt)
+
+    events = []
+    for schedule, stock in schedule_res.all():
+        shares = stock_shares[stock.id]
+        projected_payout = shares * schedule.amount_per_share
+        events.append({
+            "ticker": stock.ticker,
+            "stock_name": stock.name,
+            "ex_dividend_date": schedule.ex_dividend_date,
+            "payment_date": schedule.payment_date,
+            "amount_per_share": schedule.amount_per_share,
+            "shares_owned": shares,
+            "projected_payout": projected_payout,
+            "currency": stock.currency
+        })
+
+    return {"user_id": user_id, "events": events}
+
+
+# Phase 1: Investment Thesis Journaling Endpoints
+@router.get("/theses/{user_id}/{stock_id}", response_model=ThesisResponse)
+async def get_investment_thesis(user_id: UUID, stock_id: UUID, db: AsyncSession = Depends(get_db)):
+    """Fetch the investment thesis for a user's stock holding."""
+    stmt = select(UserStockThesis).where(
+        UserStockThesis.user_id == user_id,
+        UserStockThesis.stock_id == stock_id
+    )
+    result = await db.execute(stmt)
+    thesis = result.scalar_one_or_none()
+    if not thesis:
+        raise HTTPException(status_code=404, detail="Thesis not found")
+
+    # Determine if a review is needed (outdated after review_interval_days)
+    from datetime import datetime, timezone
+    now = datetime.now(timezone.utc)
+    delta = now - thesis.last_reviewed_at
+    needs_review = delta.days >= thesis.review_interval_days
+
+    return {
+        "stock_id": thesis.stock_id,
+        "thesis_text": thesis.thesis_text,
+        "review_interval_days": thesis.review_interval_days,
+        "last_reviewed_at": thesis.last_reviewed_at,
+        "updated_at": thesis.updated_at,
+        "needs_review": needs_review
+    }
+
+
+@router.post("/theses", response_model=ThesisResponse)
+async def create_or_update_investment_thesis(body: ThesisCreateUpdate, db: AsyncSession = Depends(get_db)):
+    """Create or update (upsert) the investment thesis for a specific stock holding."""
+    from sqlalchemy.dialects.postgresql import insert
+    
+    stmt = insert(UserStockThesis).values(
+        user_id=body.user_id,
+        stock_id=body.stock_id,
+        thesis_text=body.thesis_text,
+        review_interval_days=body.review_interval_days or 180,
+        last_reviewed_at=func.now(),
+        updated_at=func.now()
+    )
+    stmt = stmt.on_conflict_do_update(
+        constraint="uq_user_stock_thesis",
+        set_={
+            "thesis_text": stmt.excluded.thesis_text,
+            "review_interval_days": stmt.excluded.review_interval_days,
+            "last_reviewed_at": func.now(),
+            "updated_at": func.now()
+        }
+    )
+    await db.execute(stmt)
+    await db.commit()
+
+    # Retrieve and return the updated thesis
+    select_stmt = select(UserStockThesis).where(
+        UserStockThesis.user_id == body.user_id,
+        UserStockThesis.stock_id == body.stock_id
+    )
+    res = await db.execute(select_stmt)
+    thesis = res.scalar_one()
+
+    return {
+        "stock_id": thesis.stock_id,
+        "thesis_text": thesis.thesis_text,
+        "review_interval_days": thesis.review_interval_days,
+        "last_reviewed_at": thesis.last_reviewed_at,
+        "updated_at": thesis.updated_at,
+        "needs_review": False
+    }
+

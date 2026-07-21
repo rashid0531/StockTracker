@@ -18,6 +18,8 @@ from app.models import (
     StockTransaction,
     User,
     ViewUserStockHolding,
+    DividendSchedule,
+    UserStockThesis,
 )
 from app.worker import YFinanceClient, run_market_data_ingestion
 
@@ -27,6 +29,8 @@ logger = logging.getLogger("seed_db")
 
 async def clear_db(session: AsyncSession):
     logger.info("Clearing existing data from database...")
+    await session.execute(delete(UserStockThesis))
+    await session.execute(delete(DividendSchedule))
     await session.execute(delete(DailyStockPrice))
     await session.execute(delete(StockTransaction))
     await session.execute(delete(CompressedHistoricalBalance))
@@ -243,6 +247,46 @@ async def seed_data(session: AsyncSession):
         currency="AUD",
     )
     session.add(c1)
+
+    # 8. Create mock dividend schedules (Phase 1)
+    ds1 = DividendSchedule(
+        stock=aapl,
+        ex_dividend_date=datetime.date(2026, 7, 28),
+        payment_date=datetime.date(2026, 8, 14),
+        amount_per_share=Decimal("0.24"),
+    )
+    ds2 = DividendSchedule(
+        stock=xiu,
+        ex_dividend_date=datetime.date(2026, 7, 30),
+        payment_date=datetime.date(2026, 8, 7),
+        amount_per_share=Decimal("0.25"),
+    )
+    ds3 = DividendSchedule(
+        stock=bhp,
+        ex_dividend_date=datetime.date(2026, 8, 10),
+        payment_date=datetime.date(2026, 9, 2),
+        amount_per_share=Decimal("1.20"),
+    )
+    ds4 = DividendSchedule(
+        stock=bp,
+        ex_dividend_date=datetime.date(2026, 8, 15),
+        payment_date=datetime.date(2026, 9, 20),
+        amount_per_share=Decimal("0.07"),
+    )
+    session.add_all([ds1, ds2, ds3, ds4])
+
+    # 9. Create a mock investment thesis (Phase 1)
+    # January 15, 2026 is >180 days before July 21, 2026, triggering review warning
+    thesis = UserStockThesis(
+        user_id=user.id,
+        stock=aapl,
+        thesis_text="Apple has a dominant ecosystem, strong services growth, and robust buyback program. High free cash flow generation makes its dividend extremely secure and likely to grow at 5-10% annually.",
+        review_interval_days=180,
+        last_reviewed_at=datetime.datetime(2026, 1, 15, 12, 0, tzinfo=datetime.timezone.utc),
+        created_at=datetime.datetime(2026, 1, 15, 12, 0, tzinfo=datetime.timezone.utc),
+        updated_at=datetime.datetime(2026, 1, 15, 12, 0, tzinfo=datetime.timezone.utc),
+    )
+    session.add(thesis)
 
     await session.commit()
     logger.info("Data seeded successfully.")

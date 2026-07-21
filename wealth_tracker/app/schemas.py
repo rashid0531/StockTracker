@@ -1,3 +1,4 @@
+from datetime import date, datetime
 from decimal import Decimal
 from typing import List, Optional
 from uuid import UUID
@@ -110,4 +111,44 @@ class UserProfileValuesResponse(BaseModel):
     user_id: UUID
     target_currency: str
     profiles: List[ProfileValue]
+
+
+# Phase 1 Features schemas
+class DividendCalendarItem(BaseModel):
+    ticker: str
+    stock_name: str
+    ex_dividend_date: Optional[date] = None
+    payment_date: Optional[date] = None
+    amount_per_share: Decimal
+    shares_owned: Decimal
+    projected_payout: Decimal
+    currency: str
+
+    class Config:
+        from_attributes = True
+
+
+class UserDividendCalendarResponse(BaseModel):
+    user_id: UUID
+    events: List[DividendCalendarItem]
+
+
+class ThesisCreateUpdate(BaseModel):
+    user_id: UUID
+    stock_id: UUID
+    thesis_text: str
+    review_interval_days: Optional[int] = 180
+
+
+class ThesisResponse(BaseModel):
+    stock_id: UUID
+    thesis_text: str
+    review_interval_days: int
+    last_reviewed_at: datetime
+    updated_at: datetime
+    needs_review: bool
+
+    class Config:
+        from_attributes = True
+
 

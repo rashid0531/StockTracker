@@ -88,7 +88,30 @@ CREATE TABLE IF NOT EXISTS compressed_historical_balances (
     CONSTRAINT uq_compressed_balance UNIQUE (account_id, stock_id, balance_date)
 );
 
--- 9. Database View: view_all_time_share_positions
+-- 9. Dividend Schedule Table
+CREATE TABLE IF NOT EXISTS dividend_schedule (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    stock_id UUID REFERENCES stock_registry(id) ON DELETE CASCADE NOT NULL,
+    ex_dividend_date DATE,
+    payment_date DATE,
+    amount_per_share NUMERIC(14, 4) NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+-- 10. User Stock Theses Table
+CREATE TABLE IF NOT EXISTS user_stock_theses (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id UUID REFERENCES users(id) ON DELETE CASCADE NOT NULL,
+    stock_id UUID REFERENCES stock_registry(id) ON DELETE CASCADE NOT NULL,
+    thesis_text TEXT NOT NULL,
+    review_interval_days INT DEFAULT 180 NOT NULL,
+    last_reviewed_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    CONSTRAINT uq_user_stock_thesis UNIQUE (user_id, stock_id)
+);
+
+-- 11. Database View: view_all_time_share_positions
 CREATE OR REPLACE VIEW view_all_time_share_positions AS
 SELECT
     account_id,
