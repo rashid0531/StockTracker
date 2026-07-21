@@ -166,6 +166,11 @@ class _DashboardViewState extends State<DashboardView> {
             activeIcon: Text("📅", style: TextStyle(fontSize: 18)),
             label: "Calendar",
           ),
+          BottomNavigationBarItem(
+            icon: Text("⚙️", style: TextStyle(fontSize: 18)),
+            activeIcon: Text("⚙️", style: TextStyle(fontSize: 18)),
+            label: "Settings",
+          ),
         ],
       ),
     );
@@ -177,6 +182,8 @@ class _DashboardViewState extends State<DashboardView> {
         return _buildFireTab(theme);
       case 2:
         return _buildCalendarTab(theme);
+      case 3:
+        return _buildSettingsTab(theme);
       case 0:
       default:
         return _buildPortfolioTab(theme);
@@ -789,6 +796,103 @@ class _DashboardViewState extends State<DashboardView> {
             }),
         ],
       ),
+    );
+  }
+
+  // 4. Settings Tab
+  Widget _buildSettingsTab(ThemeProvider theme) {
+    return ListView(
+      padding: const EdgeInsets.all(20.0),
+      children: [
+        Text("Settings", style: theme.titleStyle),
+        Text("Manage your preferences and theme options.", style: theme.subtitleStyle),
+        const SizedBox(height: 24),
+
+        // Theme Customization Card
+        Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: theme.card,
+            borderRadius: BorderRadius.circular(24),
+            border: Border.all(color: theme.border, width: 1.5),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Theme Preferences",
+                style: theme.cardTitleStyle.copyWith(fontSize: 15),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                "Switch between dark and light appearance.",
+                style: theme.subtitleStyle,
+              ),
+              const SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        theme.isDark ? "🌙" : "☀️",
+                        style: const TextStyle(fontSize: 18),
+                      ),
+                      const SizedBox(width: 10),
+                      Text(
+                        "Dark Mode",
+                        style: theme.bodyStyle.copyWith(fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                  Switch(
+                    value: theme.isDark,
+                    activeTrackColor: AppColors.positive.withValues(alpha: 0.5),
+                    activeThumbColor: AppColors.positive,
+                    onChanged: (_) => theme.toggleTheme(),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 20),
+
+        // App Information Card
+        Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: theme.card,
+            borderRadius: BorderRadius.circular(24),
+            border: Border.all(color: theme.border, width: 1.5),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "App Info",
+                style: theme.cardTitleStyle.copyWith(fontSize: 15),
+              ),
+              const SizedBox(height: 12),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("Version", style: theme.subtitleStyle),
+                  Text("1.0.0", style: theme.bodyStyle.copyWith(fontWeight: FontWeight.bold)),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("Environment", style: theme.subtitleStyle),
+                  Text("Hybrid / Mock Fallback", style: theme.bodyStyle.copyWith(color: AppColors.positive, fontWeight: FontWeight.bold)),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

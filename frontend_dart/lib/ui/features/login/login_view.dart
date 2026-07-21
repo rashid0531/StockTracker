@@ -193,43 +193,6 @@ class _LoginViewState extends State<LoginView> {
                       ),
                     ),
                     const Spacer(),
-
-                    // Theme selector switch pinned at the bottom
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                      decoration: BoxDecoration(
-                        color: theme.card,
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: theme.border),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              Text(
-                                theme.isDark ? "🌙" : "☀️",
-                                style: const TextStyle(fontSize: 16),
-                              ),
-                              const SizedBox(width: 8),
-                              Text(
-                                "Dark Mode",
-                                style: TextStyle(
-                                  color: theme.text,
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Switch(
-                            value: theme.isDark,
-                            activeThumbColor: AppColors.positive,
-                            onChanged: (_) => theme.toggleTheme(),
-                          ),
-                        ],
-                      ),
-                    ),
                   ],
                 ),
               );
