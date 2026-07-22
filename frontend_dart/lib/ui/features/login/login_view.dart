@@ -82,7 +82,6 @@ class _LoginViewState extends State<LoginView> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            const Spacer(),
                             // Top Logo / Header
                             Container(
                               width: 70,
@@ -202,7 +201,6 @@ class _LoginViewState extends State<LoginView> {
                                 ],
                               ),
                             ),
-                            const Spacer(),
                           ],
                         ),
                       ),
