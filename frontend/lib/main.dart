@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'data/services/api_service.dart';
 import 'ui/core/theme.dart';
@@ -74,7 +75,9 @@ class WealthTrackerApp extends StatelessWidget {
         scaffoldBackgroundColor: AppColors.darkBg,
         cardColor: AppColors.darkCard,
         dividerColor: AppColors.darkBorder,
-        fontFamily: 'Inter',
+        textTheme: GoogleFonts.plusJakartaSansTextTheme(
+          ThemeData(brightness: Brightness.dark).textTheme,
+        ),
         useMaterial3: true,
       ),
       // Light Theme Data
@@ -83,7 +86,9 @@ class WealthTrackerApp extends StatelessWidget {
         scaffoldBackgroundColor: AppColors.lightBg,
         cardColor: AppColors.lightCard,
         dividerColor: AppColors.lightBorder,
-        fontFamily: 'Inter',
+        textTheme: GoogleFonts.plusJakartaSansTextTheme(
+          ThemeData(brightness: Brightness.light).textTheme,
+        ),
         useMaterial3: true,
       ),
       routerConfig: _router,

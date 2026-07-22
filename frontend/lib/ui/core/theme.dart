@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:ui';
+import 'package:google_fonts/google_fonts.dart';
 
 class AppColors {
   // Common Colors
@@ -41,25 +42,27 @@ class ThemeProvider extends ChangeNotifier {
   Color get subtext => isDark ? AppColors.darkSubtext : AppColors.lightSubtext;
 
   // Custom text styles
-  TextStyle get titleStyle => TextStyle(
+  TextStyle get titleStyle => GoogleFonts.plusJakartaSans(
         color: text,
         fontSize: 22,
         fontWeight: FontWeight.w900,
+        letterSpacing: -0.2,
       );
 
-  TextStyle get subtitleStyle => TextStyle(
+  TextStyle get subtitleStyle => GoogleFonts.plusJakartaSans(
         color: subtext,
         fontSize: 12,
         fontWeight: FontWeight.w500,
       );
 
-  TextStyle get cardTitleStyle => TextStyle(
+  TextStyle get cardTitleStyle => GoogleFonts.plusJakartaSans(
         color: text,
         fontSize: 16,
         fontWeight: FontWeight.bold,
+        letterSpacing: -0.1,
       );
 
-  TextStyle get bodyStyle => TextStyle(
+  TextStyle get bodyStyle => GoogleFonts.plusJakartaSans(
         color: text,
         fontSize: 14,
       );
