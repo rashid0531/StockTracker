@@ -62,141 +62,155 @@ class _LoginViewState extends State<LoginView> {
     final apiService = Provider.of<ApiService>(context);
 
     return Scaffold(
-      backgroundColor: theme.bg,
-      body: SafeArea(
-        child: ChangeNotifierProvider(
-          create: (_) => LoginViewModel(apiService: apiService),
-          child: Consumer<LoginViewModel>(
-            builder: (context, model, child) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
-                child: Column(
-                  children: [
-                    const Spacer(),
-                    // Top Logo / Header
-                    Container(
-                      width: 70,
-                      height: 70,
-                      decoration: BoxDecoration(
-                        color: AppColors.positive.withValues(alpha: 0.15),
-                        shape: BoxShape.circle,
-                        border: Border.all(color: AppColors.positive.withValues(alpha: 0.3), width: 2),
-                      ),
-                      child: const Center(
-                        child: Text(
-                          "📈",
-                          style: TextStyle(fontSize: 34),
+      backgroundColor: Colors.transparent,
+      body: theme.buildBackground(
+        child: SafeArea(
+          child: ChangeNotifierProvider(
+            create: (_) => LoginViewModel(apiService: apiService),
+            child: Consumer<LoginViewModel>(
+              builder: (context, model, child) {
+                return LayoutBuilder(
+                  builder: (context, viewportConstraints) {
+                    return SingleChildScrollView(
+                      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 32.0),
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(
+                          minHeight: viewportConstraints.maxHeight - 64.0,
                         ),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    Text(
-                      "Wealth Tracker",
-                      style: theme.titleStyle.copyWith(fontSize: 28),
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      "Track valuations and passive dividend incomes",
-                      style: theme.subtitleStyle,
-                    ),
-                    const SizedBox(height: 48),
-
-                    // Inputs card
-                    Container(
-                      padding: const EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        color: theme.card,
-                        borderRadius: BorderRadius.circular(24),
-                        border: Border.all(color: theme.border, width: 1.5),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          TextField(
-                            controller: _emailController,
-                            style: TextStyle(color: theme.text),
-                            decoration: InputDecoration(
-                              labelText: "Email Address",
-                              labelStyle: TextStyle(color: theme.subtext),
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: theme.border),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            const Spacer(),
+                            // Top Logo / Header
+                            Container(
+                              width: 70,
+                              height: 70,
+                              decoration: BoxDecoration(
+                                color: AppColors.positive.withValues(alpha: 0.15),
+                                shape: BoxShape.circle,
+                                border: Border.all(color: AppColors.positive.withValues(alpha: 0.3), width: 2),
                               ),
-                              focusedBorder: const UnderlineInputBorder(
-                                borderSide: BorderSide(color: AppColors.positive),
+                              child: const Center(
+                                child: Text(
+                                  "📈",
+                                  style: TextStyle(fontSize: 34),
+                                ),
                               ),
                             ),
-                          ),
-                          const SizedBox(height: 16),
-                          TextField(
-                            controller: _passwordController,
-                            obscureText: true,
-                            style: TextStyle(color: theme.text),
-                            decoration: InputDecoration(
-                              labelText: "Password",
-                              labelStyle: TextStyle(color: theme.subtext),
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: theme.border),
-                              ),
-                              focusedBorder: const UnderlineInputBorder(
-                                borderSide: BorderSide(color: AppColors.positive),
-                              ),
-                            ),
-                          ),
-                          if (model.errorMessage != null) ...[
-                            const SizedBox(height: 16),
+                            const SizedBox(height: 20),
                             Text(
-                              model.errorMessage!,
-                              style: const TextStyle(color: AppColors.negative, fontSize: 12),
+                              "Wealth Tracker",
+                              style: theme.titleStyle.copyWith(fontSize: 28),
                             ),
-                          ],
-                          const SizedBox(height: 24),
-                          ElevatedButton(
-                            onPressed: model.isLoading
-                                ? null
-                                : () async {
-                                    final success = await model.signIn(
-                                      _emailController.text,
-                                      _passwordController.text,
-                                    );
-                                    if (!context.mounted) return;
-                                    if (success) {
-                                      context.replace("/dashboard");
-                                    }
-                                  },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.positive,
-                              padding: const EdgeInsets.symmetric(vertical: 16),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(16),
+                            const SizedBox(height: 6),
+                            Text(
+                              "Track valuations and passive dividend incomes",
+                              style: theme.subtitleStyle,
+                            ),
+                            const SizedBox(height: 48),
+
+                            // Inputs card
+                            Container(
+                              padding: const EdgeInsets.all(20),
+                              decoration: BoxDecoration(
+                                color: theme.card,
+                                borderRadius: BorderRadius.circular(24),
+                                border: Border.all(color: theme.border, width: 1.5),
                               ),
-                              elevation: 0,
-                            ),
-                            child: model.isLoading
-                                ? const SizedBox(
-                                    height: 20,
-                                    width: 20,
-                                    child: CircularProgressIndicator(
-                                      color: Colors.white,
-                                      strokeWidth: 2,
-                                    ),
-                                  )
-                                : const Text(
-                                    "Sign In",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  TextField(
+                                    controller: _emailController,
+                                    style: TextStyle(color: theme.text),
+                                    decoration: InputDecoration(
+                                      labelText: "Email Address",
+                                      labelStyle: TextStyle(color: theme.subtext),
+                                      enabledBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(color: theme.border),
+                                      ),
+                                      focusedBorder: const UnderlineInputBorder(
+                                        borderSide: BorderSide(color: AppColors.positive),
+                                      ),
                                     ),
                                   ),
-                          ),
-                        ],
+                                  const SizedBox(height: 16),
+                                  TextField(
+                                    controller: _passwordController,
+                                    obscureText: true,
+                                    style: TextStyle(color: theme.text),
+                                    decoration: InputDecoration(
+                                      labelText: "Password",
+                                      labelStyle: TextStyle(color: theme.subtext),
+                                      enabledBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(color: theme.border),
+                                      ),
+                                      focusedBorder: const UnderlineInputBorder(
+                                        borderSide: BorderSide(color: AppColors.positive),
+                                      ),
+                                    ),
+                                  ),
+                                  if (model.errorMessage != null) ...[
+                                    const SizedBox(height: 16),
+                                    Text(
+                                      model.errorMessage!,
+                                      style: const TextStyle(color: AppColors.negative, fontSize: 12),
+                                    ),
+                                  ],
+                                  const SizedBox(height: 24),
+                                  ElevatedButton(
+                                    onPressed: model.isLoading
+                                        ? null
+                                        : () async {
+                                            final success = await model.signIn(
+                                              _emailController.text,
+                                              _passwordController.text,
+                                            );
+                                            if (!context.mounted) return;
+                                            if (success) {
+                                              context.replace("/dashboard");
+                                            }
+                                          },
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: AppColors.positive,
+                                      padding: const EdgeInsets.symmetric(vertical: 16),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(16),
+                                      ),
+                                      elevation: 0,
+                                    ),
+                                    child: model.isLoading
+                                        ? const SizedBox(
+                                            height: 20,
+                                            width: 20,
+                                            child: CircularProgressIndicator(
+                                              color: Colors.white,
+                                              strokeWidth: 2,
+                                            ),
+                                          )
+                                        : const Text(
+                                            "Sign In",
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const Spacer(),
+                          ],
+                        ),
                       ),
-                    ),
-                    const Spacer(),
-                  ],
-                ),
-              );
-            },
+                    );
+                  },
+                );
+              },
+            ),
           ),
         ),
       ),

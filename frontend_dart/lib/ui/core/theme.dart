@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:ui';
 
 class AppColors {
   // Common Colors
@@ -62,4 +63,121 @@ class ThemeProvider extends ChangeNotifier {
         color: text,
         fontSize: 14,
       );
+
+  Widget buildBackground({required Widget child}) {
+    return PremiumBackground(
+      isDark: isDark,
+      child: child,
+    );
+  }
+}
+
+class PremiumBackground extends StatelessWidget {
+  final Widget child;
+  final bool isDark;
+
+  const PremiumBackground({
+    super.key,
+    required this.child,
+    required this.isDark,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        // Base gradient background
+        Positioned.fill(
+          child: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: isDark
+                    ? const [
+                        Color(0xFF060708),
+                        Color(0xFF0D1017),
+                        Color(0xFF080A0E),
+                      ]
+                    : const [
+                        Color(0xFFF6F8FA),
+                        Color(0xFFEDF1F6),
+                        Color(0xFFF4F6F9),
+                      ],
+              ),
+            ),
+          ),
+        ),
+        // Soft glowing mesh blobs
+        Positioned.fill(
+          child: ImageFiltered(
+            imageFilter: ImageFilter.blur(sigmaX: 90, sigmaY: 90, tileMode: TileMode.decal),
+            child: Stack(
+              children: [
+                if (isDark) ...[
+                  // Green glow for wealth growth
+                  Positioned(
+                    top: -80,
+                    right: -80,
+                    child: Container(
+                      width: 280,
+                      height: 280,
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Color(0x1A2E7D32),
+                      ),
+                    ),
+                  ),
+                  // Deep navy/indigo glow for contrast
+                  Positioned(
+                    bottom: -100,
+                    left: -100,
+                    child: Container(
+                      width: 350,
+                      height: 350,
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Color(0x121E3A8A),
+                      ),
+                    ),
+                  ),
+                ] else ...[
+                  // Soft green/mint glow in light mode
+                  Positioned(
+                    top: -100,
+                    right: -100,
+                    child: Container(
+                      width: 320,
+                      height: 320,
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Color(0x2481C784),
+                      ),
+                    ),
+                  ),
+                  // Soft blue/slate glow in light mode
+                  Positioned(
+                    bottom: -120,
+                    left: -120,
+                    child: Container(
+                      width: 380,
+                      height: 380,
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Color(0x2990CAF9),
+                      ),
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ),
+        // Content overlay
+        Positioned.fill(
+          child: child,
+        ),
+      ],
+    );
+  }
 }

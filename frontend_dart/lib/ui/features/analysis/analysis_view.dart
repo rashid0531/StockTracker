@@ -172,9 +172,9 @@ class _AnalysisViewState extends State<AnalysisView> {
     final theme = Provider.of<ThemeProvider>(context);
 
     return Scaffold(
-      backgroundColor: theme.bg,
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
-        backgroundColor: theme.bg,
+        backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
           icon: Text("←", style: TextStyle(color: theme.text, fontSize: 24, fontWeight: FontWeight.bold)),
@@ -188,7 +188,8 @@ class _AnalysisViewState extends State<AnalysisView> {
           ],
         ),
       ),
-      body: SafeArea(
+      body: theme.buildBackground(
+        child: SafeArea(
         child: AnimatedBuilder(
           animation: _viewModel,
           builder: (context, _) {
@@ -294,8 +295,9 @@ class _AnalysisViewState extends State<AnalysisView> {
           },
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 }
 
 class _LargeDonutPainter extends CustomPainter {

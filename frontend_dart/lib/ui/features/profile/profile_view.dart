@@ -421,19 +421,20 @@ class _ProfileViewState extends State<ProfileView> {
     final theme = Provider.of<ThemeProvider>(context);
 
     return Scaffold(
-      backgroundColor: theme.bg,
-      body: SafeArea(
-        child: AnimatedBuilder(
-          animation: _viewModel,
-          builder: (context, _) {
-            if (_viewModel.isLoading) {
-              return const Center(
-                child: CircularProgressIndicator(color: AppColors.positive),
-              );
-            }
+      backgroundColor: Colors.transparent,
+      body: theme.buildBackground(
+        child: SafeArea(
+          child: AnimatedBuilder(
+            animation: _viewModel,
+            builder: (context, _) {
+              if (_viewModel.isLoading) {
+                return const Center(
+                  child: CircularProgressIndicator(color: AppColors.positive),
+                );
+              }
 
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Column(
                 children: [
                   // Header Row with back and home buttons
@@ -509,8 +510,9 @@ class _ProfileViewState extends State<ProfileView> {
           },
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 
   Widget _buildTabButton(String label, String tabKey, ThemeProvider theme) {
     final isActive = _viewModel.activeTab == tabKey;

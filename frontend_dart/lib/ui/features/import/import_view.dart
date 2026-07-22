@@ -87,9 +87,9 @@ class _ImportViewState extends State<ImportView> {
     final theme = Provider.of<ThemeProvider>(context);
 
     return Scaffold(
-      backgroundColor: theme.bg,
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
-        backgroundColor: theme.bg,
+        backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
           icon: Text("←", style: TextStyle(color: theme.text, fontSize: 24, fontWeight: FontWeight.bold)),
@@ -103,7 +103,8 @@ class _ImportViewState extends State<ImportView> {
           ],
         ),
       ),
-      body: SafeArea(
+      body: theme.buildBackground(
+        child: SafeArea(
         child: Form(
           key: _formKey,
           child: ListView(
@@ -301,6 +302,7 @@ class _ImportViewState extends State<ImportView> {
           ),
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 }

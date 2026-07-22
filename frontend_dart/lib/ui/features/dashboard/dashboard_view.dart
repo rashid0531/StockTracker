@@ -119,19 +119,21 @@ class _DashboardViewState extends State<DashboardView> {
     final theme = Provider.of<ThemeProvider>(context);
 
     return Scaffold(
-      backgroundColor: theme.bg,
-      body: SafeArea(
-        child: AnimatedBuilder(
-          animation: _viewModel,
-          builder: (context, _) {
-            if (_viewModel.isLoading) {
-              return const Center(
-                child: CircularProgressIndicator(color: AppColors.positive),
-              );
-            }
+      backgroundColor: Colors.transparent,
+      body: theme.buildBackground(
+        child: SafeArea(
+          child: AnimatedBuilder(
+            animation: _viewModel,
+            builder: (context, _) {
+              if (_viewModel.isLoading) {
+                return const Center(
+                  child: CircularProgressIndicator(color: AppColors.positive),
+                );
+              }
 
-            return _buildTabContent(theme);
-          },
+              return _buildTabContent(theme);
+            },
+          ),
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
