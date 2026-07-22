@@ -141,7 +141,7 @@ class _PremiumBackgroundState extends State<PremiumBackground> {
                 height: 320,
                 decoration: const BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Color(0x3B2E7D32), // More visible green glow
+                  color: Color(0x4D4CAF50), // Brighter green glow
                 ),
               ),
             ),
@@ -154,7 +154,7 @@ class _PremiumBackgroundState extends State<PremiumBackground> {
                 height: 400,
                 decoration: const BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Color(0x333F51B5), // More visible indigo glow
+                  color: Color(0x405C6BC0), // Brighter indigo/blue glow
                 ),
               ),
             ),
@@ -189,17 +189,17 @@ class _PremiumBackgroundState extends State<PremiumBackground> {
           // Interactive Hover Responsive Glow Blob
           if (_hoverPosition != null)
             Positioned(
-              left: _hoverPosition!.dx - 160,
-              top: _hoverPosition!.dy - 160,
+              left: _hoverPosition!.dx - 180,
+              top: _hoverPosition!.dy - 180,
               child: IgnorePointer(
                 child: Container(
-                  width: 320,
-                  height: 320,
+                  width: 360,
+                  height: 360,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: widget.isDark
-                        ? const Color(0x4D2E7D32) // Shined green interactive glow
-                        : const Color(0x4081C784),
+                        ? const Color(0x5E00E676) // Bright green interactive glow (37% opacity)
+                        : const Color(0x384CAF50), // Mint green glow in light mode (22% opacity)
                   ),
                 ),
               ),
@@ -207,7 +207,7 @@ class _PremiumBackgroundState extends State<PremiumBackground> {
           // BackdropFilter for a premium smooth blur effect
           Positioned.fill(
             child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 85.0, sigmaY: 85.0),
+              filter: ImageFilter.blur(sigmaX: 45.0, sigmaY: 45.0),
               child: const SizedBox.shrink(),
             ),
           ),
