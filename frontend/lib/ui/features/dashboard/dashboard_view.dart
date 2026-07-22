@@ -5,6 +5,17 @@ import '../../../data/models/profile.dart';
 import '../../../data/services/api_service.dart';
 import '../../core/theme.dart';
 
+const List<String> _monthNames = [
+  "January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"
+];
+
+const List<String> _weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+const List<String> _weekDaysFull = [
+  "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
+];
+
 class DashboardViewModel extends ChangeNotifier {
   final ApiService apiService;
   List<InvestmentProfile> _profiles = [];
@@ -83,6 +94,9 @@ class _DashboardViewState extends State<DashboardView> {
   // Dividend Calendar State
   List<DividendCalendarEvent> _calendarEvents = [];
   bool _loadingCalendar = false;
+  DateTime _focusedMonth = DateTime(2026, 7, 1);
+  DateTime? _selectedDate = DateTime(2026, 7, 28);
+  bool _isCalendarGridView = true;
 
   @override
   void initState() {
@@ -662,14 +676,70 @@ class _DashboardViewState extends State<DashboardView> {
         padding: const EdgeInsets.all(20.0),
         physics: const AlwaysScrollableScrollPhysics(),
         children: [
-          Text("Dividend Calendar", style: theme.titleStyle),
-          Text("Chronological schedule of ex-dividend dates and payments.", style: theme.subtitleStyle),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Dividend Calendar", style: theme.titleStyle),
+                    Text("Chronological schedule of ex-dividend dates and payments.", style: theme.subtitleStyle),
+                  ],
+                ),
+              ),
+              // View Mode Toggle (Grid vs List)
+              Container(
+                decoration: BoxDecoration(
+                  color: theme.card,
+                  borderRadius: BorderRadius.circular(14),
+                  border: Border.all(color: theme.border, width: 1.5),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    GestureDetector(
+                      onTap: () => setState(() => _isCalendarGridView = true),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: _isCalendarGridView ? AppColors.positive.withValues(alpha: 0.18) : Colors.transparent,
+                          borderRadius: BorderRadius.circular(11),
+                        ),
+                        child: Icon(
+                          Icons.calendar_month_rounded,
+                          size: 18,
+                          color: _isCalendarGridView ? AppColors.positive : theme.subtext,
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () => setState(() => _isCalendarGridView = false),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: !_isCalendarGridView ? AppColors.positive.withValues(alpha: 0.18) : Colors.transparent,
+                          borderRadius: BorderRadius.circular(11),
+                        ),
+                        child: Icon(
+                          Icons.format_list_bulleted_rounded,
+                          size: 18,
+                          color: !_isCalendarGridView ? AppColors.positive : theme.subtext,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
           const SizedBox(height: 20),
 
           // 7-day Alert Warning Banner
           if (hasUpcomingExDiv)
             Container(
-              margin: const EdgeInsets.only(bottom: 24),
+              margin: const EdgeInsets.only(bottom: 20),
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
                 color: const Color(0xFFFFB300).withValues(alpha: 0.12),
@@ -708,96 +778,491 @@ class _DashboardViewState extends State<DashboardView> {
               ),
             ),
 
-          Text("Upcoming Payments", style: theme.cardTitleStyle.copyWith(fontSize: 15)),
-          const SizedBox(height: 12),
-
-          if (_calendarEvents.isEmpty)
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 40.0),
-              child: Center(
-                child: Text("No upcoming dividend payments found", style: TextStyle(color: Colors.grey)),
-              ),
-            )
+          if (_isCalendarGridView)
+            _buildInteractiveCalendarGrid(theme)
           else
-            ..._calendarEvents.map((event) {
-              final isAapl = event.ticker == "AAPL";
-              return Container(
-                margin: const EdgeInsets.only(bottom: 14),
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: theme.card,
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: theme.border, width: 1.5),
-                ),
-                child: Row(
-                  children: [
-                    // Ticker badge
-                    Container(
-                      width: 44,
-                      height: 44,
-                      decoration: BoxDecoration(
-                        color: theme.isDark ? const Color(0xFF1E2126) : const Color(0xFFF3F4F6),
-                        shape: BoxShape.circle,
-                        border: Border.all(color: theme.border),
+            _buildAgendaListView(theme),
+        ],
+      ),
+    );
+  }
+
+  // Interactive Monthly Calendar Grid Component
+  Widget _buildInteractiveCalendarGrid(ThemeProvider theme) {
+    final monthName = _monthNames[_focusedMonth.month - 1];
+    final year = _focusedMonth.year;
+
+    final daysInMonth = DateTime(_focusedMonth.year, _focusedMonth.month + 1, 0).day;
+    final firstDay = DateTime(_focusedMonth.year, _focusedMonth.month, 1);
+    final startWeekday = firstDay.weekday % 7; // 0 for Sun, 1 for Mon...
+    final totalGridCells = startWeekday + daysInMonth;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Month Navigation Card
+        Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: theme.card,
+            borderRadius: BorderRadius.circular(24),
+            border: Border.all(color: theme.border, width: 1.5),
+          ),
+          child: Column(
+            children: [
+              // Navigation Header
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.chevron_left_rounded, color: theme.text),
+                    onPressed: () {
+                      setState(() {
+                        _focusedMonth = DateTime(_focusedMonth.year, _focusedMonth.month - 1, 1);
+                        _selectedDate = null;
+                      });
+                    },
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        "$monthName $year",
+                        style: theme.cardTitleStyle.copyWith(fontSize: 16, fontWeight: FontWeight.w900),
                       ),
-                      child: Center(
-                        child: Text(
-                          event.ticker,
-                          style: TextStyle(color: theme.text, fontWeight: FontWeight.bold, fontSize: 11),
+                      const SizedBox(width: 8),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _focusedMonth = DateTime(2026, 7, 1);
+                            _selectedDate = DateTime(2026, 7, 28);
+                          });
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                          decoration: BoxDecoration(
+                            color: AppColors.positive.withValues(alpha: 0.15),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: const Text(
+                            "Today",
+                            style: TextStyle(color: AppColors.positive, fontSize: 10, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.chevron_right_rounded, color: theme.text),
+                    onPressed: () {
+                      setState(() {
+                        _focusedMonth = DateTime(_focusedMonth.year, _focusedMonth.month + 1, 1);
+                        _selectedDate = null;
+                      });
+                    },
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+
+              // Weekdays Labels Header
+              Row(
+                children: _weekdays.map((day) {
+                  return Expanded(
+                    child: Center(
+                      child: Text(
+                        day,
+                        style: TextStyle(
+                          color: theme.subtext,
+                          fontSize: 11,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
-                    const SizedBox(width: 14),
+                  );
+                }).toList(),
+              ),
+              const SizedBox(height: 10),
 
-                    // Event Details
-                    Expanded(
+              // 7-Column Days Grid
+              GridView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: totalGridCells,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 7,
+                  mainAxisSpacing: 6,
+                  crossAxisSpacing: 6,
+                  childAspectRatio: 0.85,
+                ),
+                itemBuilder: (context, index) {
+                  if (index < startWeekday) {
+                    return const SizedBox(); // Empty offset cell
+                  }
+
+                  final dayNum = index - startWeekday + 1;
+                  final currentDate = DateTime(_focusedMonth.year, _focusedMonth.month, dayNum);
+                  final dateStr = "${currentDate.year}-${currentDate.month.toString().padLeft(2, '0')}-${currentDate.day.toString().padLeft(2, '0')}";
+
+                  // Match events on this day
+                  final exEvents = _calendarEvents.where((e) => e.exDividendDate == dateStr).toList();
+                  final payEvents = _calendarEvents.where((e) => e.paymentDate == dateStr).toList();
+                  final hasEvents = exEvents.isNotEmpty || payEvents.isNotEmpty;
+
+                  final isSelected = _selectedDate != null &&
+                      _selectedDate!.year == currentDate.year &&
+                      _selectedDate!.month == currentDate.month &&
+                      _selectedDate!.day == currentDate.day;
+
+                  return GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _selectedDate = currentDate;
+                      });
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: isSelected
+                            ? AppColors.positive.withValues(alpha: 0.22)
+                            : hasEvents
+                                ? (theme.isDark ? const Color(0xFF1E222A) : const Color(0xFFEFEFF4))
+                                : Colors.transparent,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: isSelected
+                              ? AppColors.positive
+                              : hasEvents
+                                  ? (exEvents.isNotEmpty ? const Color(0xFFFFB300) : AppColors.positive)
+                                  : Colors.transparent,
+                          width: isSelected ? 2.0 : 1.0,
+                        ),
+                      ),
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(event.ticker, style: theme.cardTitleStyle.copyWith(fontSize: 14)),
-                          const SizedBox(height: 2),
-                          Text("Ex-Div: ${event.exDividendDate ?? 'N/A'}", style: theme.subtitleStyle),
-                          Text("Pay: ${event.paymentDate ?? 'N/A'}", style: theme.subtitleStyle),
+                          Text(
+                            "$dayNum",
+                            style: TextStyle(
+                              color: isSelected
+                                  ? AppColors.positive
+                                  : hasEvents
+                                      ? theme.text
+                                      : theme.subtext.withValues(alpha: 0.8),
+                              fontSize: 12,
+                              fontWeight: isSelected || hasEvents ? FontWeight.w900 : FontWeight.normal,
+                            ),
+                          ),
+                          if (hasEvents) ...[
+                            const SizedBox(height: 3),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                if (exEvents.isNotEmpty)
+                                  Container(
+                                    width: 5,
+                                    height: 5,
+                                    margin: const EdgeInsets.symmetric(horizontal: 1),
+                                    decoration: const BoxDecoration(
+                                      color: Color(0xFFFFB300),
+                                      shape: BoxShape.circle,
+                                    ),
+                                  ),
+                                if (payEvents.isNotEmpty)
+                                  Container(
+                                    width: 5,
+                                    height: 5,
+                                    margin: const EdgeInsets.symmetric(horizontal: 1),
+                                    decoration: const BoxDecoration(
+                                      color: AppColors.positive,
+                                      shape: BoxShape.circle,
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          ],
                         ],
                       ),
                     ),
+                  );
+                },
+              ),
+              const SizedBox(height: 12),
 
-                    // Payout details
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text(
-                          event.currency == "CAD"
-                              ? "\$${event.projectedPayout.toStringAsFixed(2)}"
-                              : "${event.currency}\$${event.projectedPayout.toStringAsFixed(2)}",
-                          style: theme.cardTitleStyle.copyWith(color: AppColors.positive, fontSize: 14),
+              // Calendar Legend
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Row(
+                    children: [
+                      Container(width: 8, height: 8, decoration: const BoxDecoration(color: Color(0xFFFFB300), shape: BoxShape.circle)),
+                      const SizedBox(width: 4),
+                      Text("Ex-Dividend Date", style: theme.subtitleStyle.copyWith(fontSize: 10)),
+                    ],
+                  ),
+                  const SizedBox(width: 16),
+                  Row(
+                    children: [
+                      Container(width: 8, height: 8, decoration: const BoxDecoration(color: AppColors.positive, shape: BoxShape.circle)),
+                      const SizedBox(width: 4),
+                      Text("Payment Date", style: theme.subtitleStyle.copyWith(fontSize: 10)),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 24),
+
+        // Selected Date Event Details
+        _buildSelectedDateEventsSection(theme),
+      ],
+    );
+  }
+
+  // Selected Date Events Details Section
+  Widget _buildSelectedDateEventsSection(ThemeProvider theme) {
+    if (_selectedDate == null) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text("Month Overview", style: theme.cardTitleStyle.copyWith(fontSize: 15)),
+          const SizedBox(height: 12),
+          _buildMonthEventsOverview(theme),
+        ],
+      );
+    }
+
+    final dateStr = "${_selectedDate!.year}-${_selectedDate!.month.toString().padLeft(2, '0')}-${_selectedDate!.day.toString().padLeft(2, '0')}";
+    final dayOfWeekName = _weekDaysFull[_selectedDate!.weekday % 7];
+    final monthName = _monthNames[_selectedDate!.month - 1];
+    final dayName = "$dayOfWeekName, $monthName ${_selectedDate!.day}, ${_selectedDate!.year}";
+
+    final dateExEvents = _calendarEvents.where((e) => e.exDividendDate == dateStr).toList();
+    final datePayEvents = _calendarEvents.where((e) => e.paymentDate == dateStr).toList();
+    final totalDayEvents = dateExEvents.length + datePayEvents.length;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("Events for Selected Day", style: theme.cardTitleStyle.copyWith(fontSize: 15)),
+                Text(dayName, style: theme.subtitleStyle.copyWith(color: AppColors.positive, fontWeight: FontWeight.bold)),
+              ],
+            ),
+            TextButton(
+              onPressed: () => setState(() => _selectedDate = null),
+              child: const Text("Show Month Overview", style: TextStyle(color: Colors.grey, fontSize: 11)),
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
+
+        if (totalDayEvents == 0)
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              color: theme.card,
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: theme.border),
+            ),
+            child: Center(
+              child: Text(
+                "No dividend events scheduled for $dayName",
+                style: const TextStyle(color: Colors.grey, fontSize: 13),
+              ),
+            ),
+          )
+        else ...[
+          ...dateExEvents.map((e) => _buildCalendarEventCard(theme, e, isExDiv: true)),
+          ...datePayEvents.map((e) => _buildCalendarEventCard(theme, e, isExDiv: false)),
+        ],
+      ],
+    );
+  }
+
+  // Month Overview Event Cards List
+  Widget _buildMonthEventsOverview(ThemeProvider theme) {
+    final monthEvents = _calendarEvents.where((e) {
+      final exMatch = e.exDividendDate != null &&
+          e.exDividendDate!.startsWith("${_focusedMonth.year}-${_focusedMonth.month.toString().padLeft(2, '0')}");
+      final payMatch = e.paymentDate != null &&
+          e.paymentDate!.startsWith("${_focusedMonth.year}-${_focusedMonth.month.toString().padLeft(2, '0')}");
+      return exMatch || payMatch;
+    }).toList();
+
+    if (monthEvents.isEmpty) {
+      return Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(24),
+        decoration: BoxDecoration(
+          color: theme.card,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: theme.border),
+        ),
+        child: Center(
+          child: Text(
+            "No dividend events scheduled for ${_monthNames[_focusedMonth.month - 1]} ${_focusedMonth.year}",
+            style: const TextStyle(color: Colors.grey, fontSize: 13),
+          ),
+        ),
+      );
+    }
+
+    return Column(
+      children: monthEvents.map((e) {
+        final isExDivThisMonth = e.exDividendDate != null &&
+            e.exDividendDate!.startsWith("${_focusedMonth.year}-${_focusedMonth.month.toString().padLeft(2, '0')}");
+        return _buildCalendarEventCard(theme, e, isExDiv: isExDivThisMonth);
+      }).toList(),
+    );
+  }
+
+  // Individual Event Card Component
+  Widget _buildCalendarEventCard(ThemeProvider theme, DividendCalendarEvent event, {required bool isExDiv}) {
+    final isAapl = event.ticker == "AAPL";
+    final eventDate = isExDiv ? event.exDividendDate : event.paymentDate;
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: 14),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: theme.card,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: isExDiv ? const Color(0xFFFFB300).withValues(alpha: 0.5) : theme.border,
+          width: 1.5,
+        ),
+      ),
+      child: Row(
+        children: [
+          // Ticker badge
+          Container(
+            width: 44,
+            height: 44,
+            decoration: BoxDecoration(
+              color: isExDiv
+                  ? const Color(0xFFFFB300).withValues(alpha: 0.15)
+                  : (theme.isDark ? const Color(0xFF1E2126) : const Color(0xFFF3F4F6)),
+              shape: BoxShape.circle,
+              border: Border.all(color: isExDiv ? const Color(0xFFFFB300) : theme.border),
+            ),
+            child: Center(
+              child: Text(
+                event.ticker,
+                style: TextStyle(
+                  color: isExDiv ? const Color(0xFFFFB300) : theme.text,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 11,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(width: 14),
+
+          // Event Details
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Text(event.ticker, style: theme.cardTitleStyle.copyWith(fontSize: 14)),
+                    const SizedBox(width: 8),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: isExDiv
+                            ? const Color(0xFFFFB300).withValues(alpha: 0.18)
+                            : AppColors.positive.withValues(alpha: 0.18),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: Text(
+                        isExDiv ? "Ex-Dividend" : "Payment Date",
+                        style: TextStyle(
+                          color: isExDiv ? const Color(0xFFFFC107) : AppColors.positive,
+                          fontSize: 9,
+                          fontWeight: FontWeight.bold,
                         ),
-                        const SizedBox(height: 4),
-                        Text(
-                          "${event.sharesOwned.toStringAsFixed(1)} shares • \$${event.amountPerShare.toStringAsFixed(2)}",
-                          style: theme.subtitleStyle,
-                        ),
-                        if (isAapl)
-                          Container(
-                            margin: const EdgeInsets.only(top: 6),
-                            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFFFB300).withValues(alpha: 0.12),
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                            child: const Text(
-                              "Ex-Div Alert",
-                              style: TextStyle(color: Color(0xFFFFB300), fontSize: 8, fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                      ],
+                      ),
                     ),
                   ],
                 ),
-              );
-            }),
+                const SizedBox(height: 4),
+                Text(
+                  isExDiv ? "Ex-Date: ${eventDate ?? 'N/A'}" : "Pay-Date: ${eventDate ?? 'N/A'}",
+                  style: theme.subtitleStyle.copyWith(fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  "${event.stockName} • ${event.sharesOwned.toStringAsFixed(1)} shares",
+                  style: theme.subtitleStyle,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
+          ),
+
+          // Payout details
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                event.currency == "CAD"
+                    ? "\$${event.projectedPayout.toStringAsFixed(2)}"
+                    : "${event.currency}\$${event.projectedPayout.toStringAsFixed(2)}",
+                style: theme.cardTitleStyle.copyWith(color: AppColors.positive, fontSize: 14),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                "\$${event.amountPerShare.toStringAsFixed(2)}/sh",
+                style: theme.subtitleStyle,
+              ),
+              if (isAapl && isExDiv)
+                Container(
+                  margin: const EdgeInsets.only(top: 6),
+                  padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFFFB300).withValues(alpha: 0.12),
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: const Text(
+                    "Ex-Div Alert",
+                    style: TextStyle(color: Color(0xFFFFB300), fontSize: 8, fontWeight: FontWeight.bold),
+                  ),
+                ),
+            ],
+          ),
         ],
       ),
+    );
+  }
+
+  // Agenda List View Mode
+  Widget _buildAgendaListView(ThemeProvider theme) {
+    if (_calendarEvents.isEmpty) {
+      return const Padding(
+        padding: EdgeInsets.symmetric(vertical: 40.0),
+        child: Center(
+          child: Text("No upcoming dividend payments found", style: TextStyle(color: Colors.grey)),
+        ),
+      );
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text("Upcoming Agenda Schedule", style: theme.cardTitleStyle.copyWith(fontSize: 15)),
+        const SizedBox(height: 12),
+        ..._calendarEvents.map((event) {
+          return _buildCalendarEventCard(theme, event, isExDiv: false);
+        }),
+      ],
     );
   }
 
