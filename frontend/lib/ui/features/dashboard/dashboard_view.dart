@@ -1224,6 +1224,7 @@ class _DashboardViewState extends State<DashboardView> {
           Container(
             width: 44,
             height: 44,
+            padding: const EdgeInsets.all(2),
             decoration: BoxDecoration(
               color: isExDiv
                   ? const Color(0xFFFFB300).withValues(alpha: 0.15)
@@ -1232,12 +1233,20 @@ class _DashboardViewState extends State<DashboardView> {
               border: Border.all(color: isExDiv ? const Color(0xFFFFB300) : theme.border),
             ),
             child: Center(
-              child: Text(
-                event.ticker,
-                style: TextStyle(
-                  color: isExDiv ? const Color(0xFFFFB300) : theme.text,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 11,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 3.0),
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    event.ticker,
+                    maxLines: 1,
+                    softWrap: false,
+                    style: TextStyle(
+                      color: isExDiv ? const Color(0xFFFFB300) : theme.text,
+                      fontWeight: FontWeight.w900,
+                      fontSize: 11,
+                    ),
+                  ),
                 ),
               ),
             ),
