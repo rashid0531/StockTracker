@@ -1,1 +1,0 @@
- /Users/rashid/workspace/StockTracker/frontend/.dart_tool/flutter_build/98946261f79a650837004ebdec1814bb/dart_build_result.json:  /Users/rashid/workspace/StockTracker/frontend/.dart_tool/package_config.json /Users/rashid/workspace/StockTracker/frontend/pubspec.yaml /opt/homebrew/share/flutter/bin/cache/dart-sdk/version

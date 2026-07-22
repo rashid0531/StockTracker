@@ -1,1 +1,0 @@
- /Users/rashid/workspace/StockTracker/frontend_dart/.dart_tool/flutter_build/68461045533691788e35fac7b24a87dd/native_assets.json: 
