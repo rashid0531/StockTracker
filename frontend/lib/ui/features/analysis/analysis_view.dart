@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
@@ -204,47 +205,38 @@ class _AnalysisViewState extends State<AnalysisView> {
                 if (index == 0) {
                   // Large centered Donut chart in header
                   return Container(
-                    height: 200,
                     margin: const EdgeInsets.only(bottom: 32),
-                    alignment: Alignment.center,
-                    child: SizedBox(
-                      width: 170,
-                      height: 170,
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          CustomPaint(
-                            size: const Size(170, 170),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          "Total Allocation",
+                          style: theme.subtitleStyle.copyWith(
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 0.5,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          formatCurrency(_viewModel.totalValue),
+                          style: theme.cardTitleStyle.copyWith(
+                            fontSize: 22,
+                            fontWeight: FontWeight.w900,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        SizedBox(
+                          width: 190,
+                          height: 150,
+                          child: CustomPaint(
+                            size: const Size(190, 150),
                             painter: _LargeDonutPainter(
                               items: _viewModel.items,
                               isDark: theme.isDark,
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 4.0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "Total Allocation",
-                                  style: theme.subtitleStyle.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                    letterSpacing: 0.5,
-                                  ),
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  formatCurrency(_viewModel.totalValue),
-                                  style: theme.cardTitleStyle.copyWith(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w900,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   );
                 }
@@ -311,69 +303,102 @@ class _LargeDonutPainter extends CustomPainter {
 
   Color _getShadowColor(Color color) {
     final hsl = HSLColor.fromColor(color);
-    return hsl.withLightness((hsl.lightness - 0.18).clamp(0.0, 1.0)).toColor();
+    return hsl.withLightness((hsl.lightness - 0.22).clamp(0.0, 1.0)).toColor();
+  }
+
+  Color _getLightColor(Color color) {
+    final hsl = HSLColor.fromColor(color);
+    return hsl.withLightness((hsl.lightness + 0.12).clamp(0.0, 1.0)).toColor();
   }
 
   @override
   void paint(Canvas canvas, Size size) {
-    final double radius = size.width / 2;
-    final Offset center = Offset(radius, radius);
-    final double innerRadius = radius - 20.0; // Stroke width 20
+    final double width = size.width;
+    final double height = size.height * 0.76; // Squash height for 3D elliptical perspective
+    final double chartWidth = width - 12.0;
+    final double chartHeight = height - 12.0;
+    final double depth = 16.0; // Thickness of the 3D pie slices
 
-    // Draw background path placeholder shifted down for 3D depth
-    final bgShadowPaint = Paint()
-      ..color = isDark ? const Color(0xFF141518) : const Color(0xFFD1D5DB)
-      ..strokeWidth = 18
-      ..style = PaintingStyle.stroke;
-    canvas.drawCircle(Offset(center.dx, center.dy + 8), innerRadius, bgShadowPaint);
+    // Draw drop shadow at the bottom
+    final shadowPaint = Paint()
+      ..color = Colors.black.withValues(alpha: isDark ? 0.38 : 0.16)
+      ..imageFilter = ImageFilter.blur(sigmaX: 9.0, sigmaY: 5.5);
+    canvas.drawOval(
+      Rect.fromLTWH(6.0, 6.0 + depth, chartWidth, chartHeight),
+      shadowPaint,
+    );
 
-    final bgPaint = Paint()
-      ..color = isDark ? const Color(0xFF222429) : const Color(0xFFE5E7EB)
-      ..strokeWidth = 18
-      ..style = PaintingStyle.stroke;
-    canvas.drawCircle(center, innerRadius, bgPaint);
+    // 1. Draw the 3D extrusion walls (bottom-up stack layer extrusion)
+    for (int layer = depth.toInt(); layer >= 0; layer--) {
+      double currentStartAngle = -math.pi / 2;
+      for (var item in items) {
+        final double sweepAngle = 2 * math.pi * item.percentage;
+        if (sweepAngle == 0) continue;
 
-    // 1. Draw 3D shadow/extrusion layers
+        // Explode offset: shift slice outwards in its radial direction for a modern gap separation
+        final double midAngle = currentStartAngle + sweepAngle / 2;
+        final double shift = 4.0; // 4px gap separation for the large view
+        final double shiftX = math.cos(midAngle) * shift;
+        final double shiftY = math.sin(midAngle) * shift;
+
+        final rect = Rect.fromLTWH(
+          6.0 + shiftX,
+          6.0 + shiftY + layer.toDouble(),
+          chartWidth,
+          chartHeight,
+        );
+
+        final wallPaint = Paint()
+          ..color = _getShadowColor(item.color)
+          ..style = PaintingStyle.fill;
+
+        canvas.drawArc(
+          rect,
+          currentStartAngle + 0.02,
+          sweepAngle - 0.04,
+          true,
+          wallPaint,
+        );
+
+        currentStartAngle += sweepAngle;
+      }
+    }
+
+    // 2. Draw the top active slices (with linear gradients)
     double startAngle = -math.pi / 2;
     for (var item in items) {
       final double sweepAngle = 2 * math.pi * item.percentage;
       if (sweepAngle == 0) continue;
 
-      final shadowPaint = Paint()
-        ..color = _getShadowColor(item.color)
-        ..strokeWidth = 19
-        ..style = PaintingStyle.stroke
-        ..strokeCap = StrokeCap.round;
+      final double midAngle = startAngle + sweepAngle / 2;
+      final double shift = 4.0;
+      final double shiftX = math.cos(midAngle) * shift;
+      final double shiftY = math.sin(midAngle) * shift;
 
-      canvas.drawArc(
-        Rect.fromCircle(center: Offset(center.dx, center.dy + 8), radius: innerRadius),
-        startAngle,
-        sweepAngle - 0.03,
-        false,
-        shadowPaint,
+      final rect = Rect.fromLTWH(
+        6.0 + shiftX,
+        6.0 + shiftY,
+        chartWidth,
+        chartHeight,
       );
 
-      startAngle += sweepAngle;
-    }
-
-    // 2. Draw top active layers
-    startAngle = -math.pi / 2;
-    for (var item in items) {
-      final double sweepAngle = 2 * math.pi * item.percentage;
-      if (sweepAngle == 0) continue;
-
-      final arcPaint = Paint()
-        ..color = item.color
-        ..strokeWidth = 19
-        ..style = PaintingStyle.stroke
-        ..strokeCap = StrokeCap.round;
+      final topPaint = Paint()
+        ..shader = LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            _getLightColor(item.color),
+            item.color,
+          ],
+        ).createShader(rect)
+        ..style = PaintingStyle.fill;
 
       canvas.drawArc(
-        Rect.fromCircle(center: center, radius: innerRadius),
-        startAngle,
-        sweepAngle - 0.03,
-        false,
-        arcPaint,
+        rect,
+        startAngle + 0.02,
+        sweepAngle - 0.04,
+        true,
+        topPaint,
       );
 
       startAngle += sweepAngle;

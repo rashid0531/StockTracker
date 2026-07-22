@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
@@ -1162,93 +1163,106 @@ class _DonutPainter extends CustomPainter {
 
   Color _getShadowColor(Color color) {
     final hsl = HSLColor.fromColor(color);
-    return hsl.withLightness((hsl.lightness - 0.18).clamp(0.0, 1.0)).toColor();
+    return hsl.withLightness((hsl.lightness - 0.22).clamp(0.0, 1.0)).toColor();
+  }
+
+  Color _getLightColor(Color color) {
+    final hsl = HSLColor.fromColor(color);
+    return hsl.withLightness((hsl.lightness + 0.12).clamp(0.0, 1.0)).toColor();
   }
 
   @override
   void paint(Canvas canvas, Size size) {
-    final double radius = size.width / 2;
-    final Offset center = Offset(radius, radius);
-    final double innerRadius = radius - 11.0; // Stroke width around 10
+    final double width = size.width;
+    final double height = size.height * 0.68; // Squash height for 3D elliptical perspective
+    final double chartWidth = width - 8.0;
+    final double chartHeight = height - 8.0;
+    final double depth = 12.0; // Thickness of the 3D pie slices
 
-    // Draw background path placeholder shifted down for 3D shadow depth
-    final bgShadowPaint = Paint()
-      ..color = isDark ? const Color(0xFF141518) : const Color(0xFFD1D5DB)
-      ..strokeWidth = 9.5
-      ..style = PaintingStyle.stroke;
-    canvas.drawCircle(Offset(center.dx, center.dy + 5), innerRadius, bgShadowPaint);
+    // Draw drop shadow at the bottom
+    final shadowPaint = Paint()
+      ..color = Colors.black.withValues(alpha: isDark ? 0.38 : 0.16)
+      ..imageFilter = ImageFilter.blur(sigmaX: 7.0, sigmaY: 4.5);
+    canvas.drawOval(
+      Rect.fromLTWH(4.0, 4.0 + depth, chartWidth, chartHeight),
+      shadowPaint,
+    );
 
-    final bgPaint = Paint()
-      ..color = isDark ? const Color(0xFF222429) : const Color(0xFFF3F4F6)
-      ..strokeWidth = 9.5
-      ..style = PaintingStyle.stroke;
-    canvas.drawCircle(center, innerRadius, bgPaint);
+    // 1. Draw the 3D extrusion walls (bottom-up stack layer extrusion)
+    for (int layer = depth.toInt(); layer >= 0; layer--) {
+      double currentStartAngle = -math.pi / 2;
+      for (var item in items) {
+        final double sweepAngle = 2 * math.pi * item.percentage;
+        if (sweepAngle == 0) continue;
 
-    // 1. Draw 3D shadow/extrusion layers
+        // Explode offset: shift slice outwards in its radial direction for a modern gap separation
+        final double midAngle = currentStartAngle + sweepAngle / 2;
+        final double shift = 2.5; // 2.5px gap separation
+        final double shiftX = math.cos(midAngle) * shift;
+        final double shiftY = math.sin(midAngle) * shift;
+
+        final rect = Rect.fromLTWH(
+          4.0 + shiftX,
+          4.0 + shiftY + layer.toDouble(),
+          chartWidth,
+          chartHeight,
+        );
+
+        final wallPaint = Paint()
+          ..color = _getShadowColor(item.color)
+          ..style = PaintingStyle.fill;
+
+        canvas.drawArc(
+          rect,
+          currentStartAngle + 0.02,
+          sweepAngle - 0.04,
+          true,
+          wallPaint,
+        );
+
+        currentStartAngle += sweepAngle;
+      }
+    }
+
+    // 2. Draw the top active slices (with linear gradients)
     double startAngle = -math.pi / 2;
     for (var item in items) {
       final double sweepAngle = 2 * math.pi * item.percentage;
       if (sweepAngle == 0) continue;
 
-      final shadowPaint = Paint()
-        ..color = _getShadowColor(item.color)
-        ..strokeWidth = 10.0
-        ..style = PaintingStyle.stroke
-        ..strokeCap = StrokeCap.round;
+      final double midAngle = startAngle + sweepAngle / 2;
+      final double shift = 2.5;
+      final double shiftX = math.cos(midAngle) * shift;
+      final double shiftY = math.sin(midAngle) * shift;
+
+      final rect = Rect.fromLTWH(
+        4.0 + shiftX,
+        4.0 + shiftY,
+        chartWidth,
+        chartHeight,
+      );
+
+      final topPaint = Paint()
+        ..shader = LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            _getLightColor(item.color),
+            item.color,
+          ],
+        ).createShader(rect)
+        ..style = PaintingStyle.fill;
 
       canvas.drawArc(
-        Rect.fromCircle(center: Offset(center.dx, center.dy + 5), radius: innerRadius),
-        startAngle,
-        sweepAngle - 0.05,
-        false,
-        shadowPaint,
+        rect,
+        startAngle + 0.02,
+        sweepAngle - 0.04,
+        true,
+        topPaint,
       );
 
       startAngle += sweepAngle;
     }
-
-    // 2. Draw top active layers
-    startAngle = -math.pi / 2;
-    for (var item in items) {
-      final double sweepAngle = 2 * math.pi * item.percentage;
-      if (sweepAngle == 0) continue;
-
-      final arcPaint = Paint()
-        ..color = item.color
-        ..strokeWidth = 10.0
-        ..style = PaintingStyle.stroke
-        ..strokeCap = StrokeCap.round;
-
-      canvas.drawArc(
-        Rect.fromCircle(center: center, radius: innerRadius),
-        startAngle,
-        sweepAngle - 0.05,
-        false,
-        arcPaint,
-      );
-
-      startAngle += sweepAngle;
-    }
-
-    // Render center label inside the donut hole (shifted slightly for visual balance)
-    final textPainter = TextPainter(
-      text: TextSpan(
-        text: centerLabel,
-        style: TextStyle(
-          color: isDark ? Colors.white : Colors.black87,
-          fontSize: 12,
-          fontWeight: FontWeight.w900,
-          letterSpacing: 0.2,
-        ),
-      ),
-      textDirection: TextDirection.ltr,
-    )..layout();
-
-    final textOffset = Offset(
-      center.dx - textPainter.width / 2,
-      (center.dy + 2) - textPainter.height / 2, // Offset by 2px downwards to visually center inside 3D hole
-    );
-    textPainter.paint(canvas, textOffset);
   }
 
   @override

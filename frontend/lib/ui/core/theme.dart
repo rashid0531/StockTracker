@@ -92,6 +92,7 @@ class _PremiumBackgroundState extends State<PremiumBackground> {
   @override
   Widget build(BuildContext context) {
     return MouseRegion(
+      hitTestBehavior: HitTestBehavior.opaque,
       onHover: (event) {
         setState(() {
           _hoverPosition = event.localPosition;
@@ -194,8 +195,8 @@ class _PremiumBackgroundState extends State<PremiumBackground> {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: widget.isDark
-                        ? const Color(0x332E7D32) // Soft green interactive glow
-                        : const Color(0x2B81C784),
+                        ? const Color(0x4D2E7D32) // Shined green interactive glow
+                        : const Color(0x4081C784),
                   ),
                 ),
               ),
