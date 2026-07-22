@@ -72,7 +72,7 @@ class ThemeProvider extends ChangeNotifier {
   }
 }
 
-class PremiumBackground extends StatelessWidget {
+class PremiumBackground extends StatefulWidget {
   final Widget child;
   final bool isDark;
 
@@ -83,99 +83,136 @@ class PremiumBackground extends StatelessWidget {
   });
 
   @override
+  State<PremiumBackground> createState() => _PremiumBackgroundState();
+}
+
+class _PremiumBackgroundState extends State<PremiumBackground> {
+  Offset? _hoverPosition;
+
+  @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        // Base gradient background
-        Positioned.fill(
-          child: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: isDark
-                    ? const [
-                        Color(0xFF090A0F),
-                        Color(0xFF141724),
-                        Color(0xFF0E1018),
-                      ]
-                    : const [
-                        Color(0xFFF3F5F8),
-                        Color(0xFFEAEEF4),
-                        Color(0xFFF1F4F7),
-                      ],
+    return MouseRegion(
+      onHover: (event) {
+        setState(() {
+          _hoverPosition = event.localPosition;
+        });
+      },
+      onExit: (event) {
+        setState(() {
+          _hoverPosition = null;
+        });
+      },
+      child: Stack(
+        children: [
+          // Base gradient background
+          Positioned.fill(
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: widget.isDark
+                      ? const [
+                          Color(0xFF090A0F),
+                          Color(0xFF141724),
+                          Color(0xFF0E1018),
+                        ]
+                      : const [
+                          Color(0xFFF3F5F8),
+                          Color(0xFFEAEEF4),
+                          Color(0xFFF1F4F7),
+                        ],
+                ),
               ),
             ),
           ),
-        ),
-        // Soft glowing mesh blobs
-        if (isDark) ...[
-          // Green glow for wealth growth
-          Positioned(
-            top: -100,
-            right: -100,
-            child: Container(
-              width: 320,
-              height: 320,
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-                color: Color(0x3B2E7D32), // More visible green glow
+          // Soft glowing mesh blobs
+          if (widget.isDark) ...[
+            // Green glow for wealth growth
+            Positioned(
+              top: -100,
+              right: -100,
+              child: Container(
+                width: 320,
+                height: 320,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Color(0x3B2E7D32), // More visible green glow
+                ),
               ),
+            ),
+            // Deep navy/indigo glow for contrast
+            Positioned(
+              bottom: -120,
+              left: -120,
+              child: Container(
+                width: 400,
+                height: 400,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Color(0x333F51B5), // More visible indigo glow
+                ),
+              ),
+            ),
+          ] else ...[
+            // Soft green/mint glow in light mode
+            Positioned(
+              top: -120,
+              right: -120,
+              child: Container(
+                width: 350,
+                height: 350,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Color(0x3881C784),
+                ),
+              ),
+            ),
+            // Soft blue/slate glow in light mode
+            Positioned(
+              bottom: -140,
+              left: -140,
+              child: Container(
+                width: 420,
+                height: 420,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Color(0x3890CAF9),
+                ),
+              ),
+            ),
+          ],
+          // Interactive Hover Responsive Glow Blob
+          if (_hoverPosition != null)
+            Positioned(
+              left: _hoverPosition!.dx - 160,
+              top: _hoverPosition!.dy - 160,
+              child: IgnorePointer(
+                child: Container(
+                  width: 320,
+                  height: 320,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: widget.isDark
+                        ? const Color(0x332E7D32) // Soft green interactive glow
+                        : const Color(0x2B81C784),
+                  ),
+                ),
+              ),
+            ),
+          // BackdropFilter for a premium smooth blur effect
+          Positioned.fill(
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 85.0, sigmaY: 85.0),
+              child: const SizedBox.shrink(),
             ),
           ),
-          // Deep navy/indigo glow for contrast
-          Positioned(
-            bottom: -120,
-            left: -120,
-            child: Container(
-              width: 400,
-              height: 400,
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-                color: Color(0x333F51B5), // More visible indigo glow
-              ),
-            ),
-          ),
-        ] else ...[
-          // Soft green/mint glow in light mode
-          Positioned(
-            top: -120,
-            right: -120,
-            child: Container(
-              width: 350,
-              height: 350,
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-                color: Color(0x3881C784),
-              ),
-            ),
-          ),
-          // Soft blue/slate glow in light mode
-          Positioned(
-            bottom: -140,
-            left: -140,
-            child: Container(
-              width: 420,
-              height: 420,
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-                color: Color(0x3890CAF9),
-              ),
-            ),
+          // Content overlay
+          Positioned.fill(
+            child: widget.child,
           ),
         ],
-        // BackdropFilter for a premium smooth blur effect
-        Positioned.fill(
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 85.0, sigmaY: 85.0),
-            child: const SizedBox.shrink(),
-          ),
-        ),
-        // Content overlay
-        Positioned.fill(
-          child: child,
-        ),
-      ],
+      ),
     );
   }
 }
