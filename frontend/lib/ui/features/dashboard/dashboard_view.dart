@@ -906,7 +906,8 @@ class _DashboardViewState extends State<DashboardView> {
                   // Match events on this day
                   final exEvents = _calendarEvents.where((e) => e.exDividendDate == dateStr).toList();
                   final payEvents = _calendarEvents.where((e) => e.paymentDate == dateStr).toList();
-                  final hasEvents = exEvents.isNotEmpty || payEvents.isNotEmpty;
+                  final totalEvents = exEvents.length + payEvents.length;
+                  final hasEvents = totalEvents > 0;
 
                   final isSelected = _selectedDate != null &&
                       _selectedDate!.year == currentDate.year &&
@@ -953,31 +954,52 @@ class _DashboardViewState extends State<DashboardView> {
                           ),
                           if (hasEvents) ...[
                             const SizedBox(height: 3),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                if (exEvents.isNotEmpty)
-                                  Container(
-                                    width: 5,
-                                    height: 5,
-                                    margin: const EdgeInsets.symmetric(horizontal: 1),
-                                    decoration: const BoxDecoration(
-                                      color: Color(0xFFFFB300),
-                                      shape: BoxShape.circle,
-                                    ),
+                            if (totalEvents > 1)
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+                                decoration: BoxDecoration(
+                                  color: isSelected
+                                      ? AppColors.positive
+                                      : (exEvents.isNotEmpty && payEvents.isNotEmpty
+                                          ? const Color(0xFFFFB300)
+                                          : (exEvents.isNotEmpty ? const Color(0xFFFFB300) : AppColors.positive)),
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                                child: Text(
+                                  "$totalEvents",
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 9,
+                                    fontWeight: FontWeight.w900,
                                   ),
-                                if (payEvents.isNotEmpty)
-                                  Container(
-                                    width: 5,
-                                    height: 5,
-                                    margin: const EdgeInsets.symmetric(horizontal: 1),
-                                    decoration: const BoxDecoration(
-                                      color: AppColors.positive,
-                                      shape: BoxShape.circle,
+                                ),
+                              )
+                            else
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  if (exEvents.isNotEmpty)
+                                    Container(
+                                      width: 5,
+                                      height: 5,
+                                      margin: const EdgeInsets.symmetric(horizontal: 1),
+                                      decoration: const BoxDecoration(
+                                        color: Color(0xFFFFB300),
+                                        shape: BoxShape.circle,
+                                      ),
                                     ),
-                                  ),
-                              ],
-                            ),
+                                  if (payEvents.isNotEmpty)
+                                    Container(
+                                      width: 5,
+                                      height: 5,
+                                      margin: const EdgeInsets.symmetric(horizontal: 1),
+                                      decoration: const BoxDecoration(
+                                        color: AppColors.positive,
+                                        shape: BoxShape.circle,
+                                      ),
+                                    ),
+                                ],
+                              ),
                           ],
                         ],
                       ),
@@ -1041,6 +1063,14 @@ class _DashboardViewState extends State<DashboardView> {
     final datePayEvents = _calendarEvents.where((e) => e.paymentDate == dateStr).toList();
     final totalDayEvents = dateExEvents.length + datePayEvents.length;
 
+    double dayTotalPayout = 0;
+    for (var e in dateExEvents) {
+      dayTotalPayout += e.projectedPayout;
+    }
+    for (var e in datePayEvents) {
+      dayTotalPayout += e.projectedPayout;
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -1061,6 +1091,55 @@ class _DashboardViewState extends State<DashboardView> {
           ],
         ),
         const SizedBox(height: 12),
+
+        if (totalDayEvents > 0)
+          Container(
+            width: double.infinity,
+            margin: const EdgeInsets.only(bottom: 16),
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: AppColors.positive.withValues(alpha: 0.12),
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: AppColors.positive.withValues(alpha: 0.3), width: 1.5),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "$totalDayEvents Same-Day Events",
+                      style: const TextStyle(
+                        color: AppColors.positive,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      "${dateExEvents.length} Ex-Dividend • ${datePayEvents.length} Payouts",
+                      style: theme.subtitleStyle.copyWith(fontSize: 11),
+                    ),
+                  ],
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    const Text(
+                      "Total Day Payout",
+                      style: TextStyle(color: Colors.grey, fontSize: 10),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      "\$${dayTotalPayout.toStringAsFixed(2)}",
+                      style: theme.cardTitleStyle.copyWith(color: AppColors.positive, fontSize: 15, fontWeight: FontWeight.w900),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
 
         if (totalDayEvents == 0)
           Container(
