@@ -95,82 +95,80 @@ class PremiumBackground extends StatelessWidget {
                 end: Alignment.bottomCenter,
                 colors: isDark
                     ? const [
-                        Color(0xFF060708),
-                        Color(0xFF0D1017),
-                        Color(0xFF080A0E),
+                        Color(0xFF090A0F),
+                        Color(0xFF141724),
+                        Color(0xFF0E1018),
                       ]
                     : const [
-                        Color(0xFFF6F8FA),
-                        Color(0xFFEDF1F6),
-                        Color(0xFFF4F6F9),
+                        Color(0xFFF3F5F8),
+                        Color(0xFFEAEEF4),
+                        Color(0xFFF1F4F7),
                       ],
               ),
             ),
           ),
         ),
         // Soft glowing mesh blobs
-        Positioned.fill(
-          child: ImageFiltered(
-            imageFilter: ImageFilter.blur(sigmaX: 90, sigmaY: 90, tileMode: TileMode.decal),
-            child: Stack(
-              children: [
-                if (isDark) ...[
-                  // Green glow for wealth growth
-                  Positioned(
-                    top: -80,
-                    right: -80,
-                    child: Container(
-                      width: 280,
-                      height: 280,
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Color(0x1A2E7D32),
-                      ),
-                    ),
-                  ),
-                  // Deep navy/indigo glow for contrast
-                  Positioned(
-                    bottom: -100,
-                    left: -100,
-                    child: Container(
-                      width: 350,
-                      height: 350,
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Color(0x121E3A8A),
-                      ),
-                    ),
-                  ),
-                ] else ...[
-                  // Soft green/mint glow in light mode
-                  Positioned(
-                    top: -100,
-                    right: -100,
-                    child: Container(
-                      width: 320,
-                      height: 320,
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Color(0x2481C784),
-                      ),
-                    ),
-                  ),
-                  // Soft blue/slate glow in light mode
-                  Positioned(
-                    bottom: -120,
-                    left: -120,
-                    child: Container(
-                      width: 380,
-                      height: 380,
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Color(0x2990CAF9),
-                      ),
-                    ),
-                  ),
-                ],
-              ],
+        if (isDark) ...[
+          // Green glow for wealth growth
+          Positioned(
+            top: -100,
+            right: -100,
+            child: Container(
+              width: 320,
+              height: 320,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                color: Color(0x3B2E7D32), // More visible green glow
+              ),
             ),
+          ),
+          // Deep navy/indigo glow for contrast
+          Positioned(
+            bottom: -120,
+            left: -120,
+            child: Container(
+              width: 400,
+              height: 400,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                color: Color(0x333F51B5), // More visible indigo glow
+              ),
+            ),
+          ),
+        ] else ...[
+          // Soft green/mint glow in light mode
+          Positioned(
+            top: -120,
+            right: -120,
+            child: Container(
+              width: 350,
+              height: 350,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                color: Color(0x3881C784),
+              ),
+            ),
+          ),
+          // Soft blue/slate glow in light mode
+          Positioned(
+            bottom: -140,
+            left: -140,
+            child: Container(
+              width: 420,
+              height: 420,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                color: Color(0x3890CAF9),
+              ),
+            ),
+          ),
+        ],
+        // BackdropFilter for a premium smooth blur effect
+        Positioned.fill(
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 85.0, sigmaY: 85.0),
+            child: const SizedBox.shrink(),
           ),
         ),
         // Content overlay
