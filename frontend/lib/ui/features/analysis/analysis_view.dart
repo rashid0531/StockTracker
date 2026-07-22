@@ -220,25 +220,28 @@ class _AnalysisViewState extends State<AnalysisView> {
                               isDark: theme.isDark,
                             ),
                           ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                "Total Allocation",
-                                style: theme.subtitleStyle.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  letterSpacing: 0.5,
+                          Padding(
+                            padding: const EdgeInsets.only(top: 4.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Total Allocation",
+                                  style: theme.subtitleStyle.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    letterSpacing: 0.5,
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(height: 4),
-                              Text(
-                                formatCurrency(_viewModel.totalValue),
-                                style: theme.cardTitleStyle.copyWith(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w900,
+                                const SizedBox(height: 4),
+                                Text(
+                                  formatCurrency(_viewModel.totalValue),
+                                  style: theme.cardTitleStyle.copyWith(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w900,
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ],
                       ),
@@ -306,35 +309,69 @@ class _LargeDonutPainter extends CustomPainter {
 
   _LargeDonutPainter({required this.items, required this.isDark});
 
+  Color _getShadowColor(Color color) {
+    final hsl = HSLColor.fromColor(color);
+    return hsl.withLightness((hsl.lightness - 0.18).clamp(0.0, 1.0)).toColor();
+  }
+
   @override
   void paint(Canvas canvas, Size size) {
     final double radius = size.width / 2;
     final Offset center = Offset(radius, radius);
-    final double innerRadius = radius - 18.0; // Stroke width 18
+    final double innerRadius = radius - 20.0; // Stroke width 20
 
-    // Draw background path placeholder
+    // Draw background path placeholder shifted down for 3D depth
+    final bgShadowPaint = Paint()
+      ..color = isDark ? const Color(0xFF141518) : const Color(0xFFD1D5DB)
+      ..strokeWidth = 18
+      ..style = PaintingStyle.stroke;
+    canvas.drawCircle(Offset(center.dx, center.dy + 8), innerRadius, bgShadowPaint);
+
     final bgPaint = Paint()
       ..color = isDark ? const Color(0xFF222429) : const Color(0xFFE5E7EB)
-      ..strokeWidth = 16
+      ..strokeWidth = 18
       ..style = PaintingStyle.stroke;
     canvas.drawCircle(center, innerRadius, bgPaint);
 
+    // 1. Draw 3D shadow/extrusion layers
     double startAngle = -math.pi / 2;
+    for (var item in items) {
+      final double sweepAngle = 2 * math.pi * item.percentage;
+      if (sweepAngle == 0) continue;
 
+      final shadowPaint = Paint()
+        ..color = _getShadowColor(item.color)
+        ..strokeWidth = 19
+        ..style = PaintingStyle.stroke
+        ..strokeCap = StrokeCap.round;
+
+      canvas.drawArc(
+        Rect.fromCircle(center: Offset(center.dx, center.dy + 8), radius: innerRadius),
+        startAngle,
+        sweepAngle - 0.03,
+        false,
+        shadowPaint,
+      );
+
+      startAngle += sweepAngle;
+    }
+
+    // 2. Draw top active layers
+    startAngle = -math.pi / 2;
     for (var item in items) {
       final double sweepAngle = 2 * math.pi * item.percentage;
       if (sweepAngle == 0) continue;
 
       final arcPaint = Paint()
         ..color = item.color
-        ..strokeWidth = 17
+        ..strokeWidth = 19
         ..style = PaintingStyle.stroke
         ..strokeCap = StrokeCap.round;
 
       canvas.drawArc(
         Rect.fromCircle(center: center, radius: innerRadius),
         startAngle,
-        sweepAngle - 0.03, // gap spacing
+        sweepAngle - 0.03,
         false,
         arcPaint,
       );

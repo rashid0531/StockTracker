@@ -1095,8 +1095,8 @@ class GridDonutCard extends StatelessWidget {
           children: [
             // Center-labelled Circular Donut Svg Painter
             SizedBox(
-              width: 90,
-              height: 90,
+              width: 125,
+              height: 125,
               child: CustomPaint(
                 painter: _DonutPainter(
                   items: items,
@@ -1160,34 +1160,69 @@ class _DonutPainter extends CustomPainter {
 
   _DonutPainter({required this.items, required this.centerLabel, required this.isDark});
 
+  Color _getShadowColor(Color color) {
+    final hsl = HSLColor.fromColor(color);
+    return hsl.withLightness((hsl.lightness - 0.18).clamp(0.0, 1.0)).toColor();
+  }
+
   @override
   void paint(Canvas canvas, Size size) {
     final double radius = size.width / 2;
     final Offset center = Offset(radius, radius);
-    final double innerRadius = radius - 8.5; // Stroke width 8
+    final double innerRadius = radius - 11.0; // Stroke width around 10
 
-    // Draw background placeholder circle
+    // Draw background path placeholder shifted down for 3D shadow depth
+    final bgShadowPaint = Paint()
+      ..color = isDark ? const Color(0xFF141518) : const Color(0xFFD1D5DB)
+      ..strokeWidth = 9.5
+      ..style = PaintingStyle.stroke;
+    canvas.drawCircle(Offset(center.dx, center.dy + 5), innerRadius, bgShadowPaint);
+
     final bgPaint = Paint()
       ..color = isDark ? const Color(0xFF222429) : const Color(0xFFF3F4F6)
-      ..strokeWidth = 7
+      ..strokeWidth = 9.5
       ..style = PaintingStyle.stroke;
     canvas.drawCircle(center, innerRadius, bgPaint);
 
-    double startAngle = -math.pi / 2; // Start from top 12 o'clock
-
+    // 1. Draw 3D shadow/extrusion layers
+    double startAngle = -math.pi / 2;
     for (var item in items) {
       final double sweepAngle = 2 * math.pi * item.percentage;
-      final arcPaint = Paint()
-        ..color = item.color
-        ..strokeWidth = 7.5
+      if (sweepAngle == 0) continue;
+
+      final shadowPaint = Paint()
+        ..color = _getShadowColor(item.color)
+        ..strokeWidth = 10.0
         ..style = PaintingStyle.stroke
         ..strokeCap = StrokeCap.round;
 
-      // Draw active circular arc
+      canvas.drawArc(
+        Rect.fromCircle(center: Offset(center.dx, center.dy + 5), radius: innerRadius),
+        startAngle,
+        sweepAngle - 0.05,
+        false,
+        shadowPaint,
+      );
+
+      startAngle += sweepAngle;
+    }
+
+    // 2. Draw top active layers
+    startAngle = -math.pi / 2;
+    for (var item in items) {
+      final double sweepAngle = 2 * math.pi * item.percentage;
+      if (sweepAngle == 0) continue;
+
+      final arcPaint = Paint()
+        ..color = item.color
+        ..strokeWidth = 10.0
+        ..style = PaintingStyle.stroke
+        ..strokeCap = StrokeCap.round;
+
       canvas.drawArc(
         Rect.fromCircle(center: center, radius: innerRadius),
         startAngle,
-        sweepAngle - 0.05, // minor gap spacing
+        sweepAngle - 0.05,
         false,
         arcPaint,
       );
@@ -1195,13 +1230,13 @@ class _DonutPainter extends CustomPainter {
       startAngle += sweepAngle;
     }
 
-    // Render center label inside the donut hole
+    // Render center label inside the donut hole (shifted slightly for visual balance)
     final textPainter = TextPainter(
       text: TextSpan(
         text: centerLabel,
         style: TextStyle(
           color: isDark ? Colors.white : Colors.black87,
-          fontSize: 9,
+          fontSize: 12,
           fontWeight: FontWeight.w900,
           letterSpacing: 0.2,
         ),
@@ -1211,13 +1246,13 @@ class _DonutPainter extends CustomPainter {
 
     final textOffset = Offset(
       center.dx - textPainter.width / 2,
-      center.dy - textPainter.height / 2,
+      (center.dy + 2) - textPainter.height / 2, // Offset by 2px downwards to visually center inside 3D hole
     );
     textPainter.paint(canvas, textOffset);
   }
 
   @override
   bool shouldRepaint(covariant _DonutPainter oldDelegate) {
-    return oldDelegate.items != items || oldDelegate.isDark != isDark;
+    return oldDelegate.items != items || oldDelegate.isDark != isDark || oldDelegate.centerLabel != centerLabel;
   }
 }
