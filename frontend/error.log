@@ -1,0 +1,827 @@
+Resolving dependencies...
+Downloading packages...
+  hooks 2.0.2 (2.1.0 available)
+  matcher 0.12.19 (0.12.20 available)
+  meta 1.18.0 (1.19.0 available)
+  package_config 2.2.0 (3.0.0 available)
+  record_use 0.6.0 (1.0.0 available)
+  test_api 0.7.11 (0.7.13 available)
+  vector_math 2.2.0 (2.4.0 available)
+Got dependencies!
+7 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Launching lib/main.dart on macOS in debug mode...
+Building macOS application...                                   
+✓ Built build/macos/Build/Products/Debug/stocktracker_frontend_dart.app
+2026-07-22 02:49:44.687 stocktracker_frontend_dart[67267:4902851] Running with merged UI and platform thread. Experimental.
+Syncing files to device macOS...                                    40ms
+
+Flutter run key commands.
+r Hot reload. 🔥🔥🔥
+R Hot restart.
+h List all available interactive commands.
+d Detach (terminate "flutter run" but leave application running).
+c Clear the screen
+q Quit (terminate the application on the device).
+
+A Dart VM Service on macOS is available at: http://127.0.0.1:49584/1FvZpSyrtOM=/
+The Flutter DevTools debugger and profiler on macOS is available at: http://127.0.0.1:49584/1FvZpSyrtOM=/devtools/?uri=ws://127.0.0.1:49584/1FvZpSyrtOM=/ws
+flutter: Error: google_fonts was unable to load font PlusJakartaSans-Regular because the following exception occurred:
+flutter: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/1306435ed883e4a1e6dad370e6d035955da71f4df9c07ca192833f7cb58a18d7.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/1306435ed883e4a1e6dad370e6d035955da71f4df9c07ca192833f7cb58a18d7.ttf
+flutter: 
+flutter: See https://docs.flutter.dev/development/data-and-backend/networking#platform-notes.
+flutter: If troubleshooting doesn't solve the problem, please file an issue at https://github.com/flutter/flutter/issues/new/choose.
+flutter: 
+[ERROR:flutter/runtime/dart_vm_initializer.cc(40)] Unhandled Exception: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/1306435ed883e4a1e6dad370e6d035955da71f4df9c07ca192833f7cb58a18d7.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/1306435ed883e4a1e6dad370e6d035955da71f4df9c07ca192833f7cb58a18d7.ttf
+#0      _httpFetchFontAndSaveToDevice (package:google_fonts/src/google_fonts_base.dart:257:5)
+<asynchronous suspension>
+#1      loadFontIfNecessary (package:google_fonts/src/google_fonts_base.dart:169:11)
+<asynchronous suspension>
+#2      googleFontsTextStyle.<anonymous closure> (package:google_fonts/src/google_fonts_base.dart:109:22)
+<asynchronous suspension>
+
+flutter: Error: google_fonts was unable to load font PlusJakartaSans-Medium because the following exception occurred:
+flutter: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf
+flutter: 
+flutter: See https://docs.flutter.dev/development/data-and-backend/networking#platform-notes.
+flutter: If troubleshooting doesn't solve the problem, please file an issue at https://github.com/flutter/flutter/issues/new/choose.
+flutter: 
+[ERROR:flutter/runtime/dart_vm_initializer.cc(40)] Unhandled Exception: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf
+#0      _httpFetchFontAndSaveToDevice (package:google_fonts/src/google_fonts_base.dart:257:5)
+<asynchronous suspension>
+#1      loadFontIfNecessary (package:google_fonts/src/google_fonts_base.dart:169:11)
+<asynchronous suspension>
+#2      googleFontsTextStyle.<anonymous closure> (package:google_fonts/src/google_fonts_base.dart:109:22)
+<asynchronous suspension>
+
+flutter: Error: google_fonts was unable to load font PlusJakartaSans-ExtraBold because the following exception occurred:
+flutter: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/9ab901a45e6afa0c663def7606b753bbdfb60fc73bf3277e8110c167ddb6bbc3.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/9ab901a45e6afa0c663def7606b753bbdfb60fc73bf3277e8110c167ddb6bbc3.ttf
+flutter: 
+flutter: See https://docs.flutter.dev/development/data-and-backend/networking#platform-notes.
+flutter: If troubleshooting doesn't solve the problem, please file an issue at https://github.com/flutter/flutter/issues/new/choose.
+flutter: 
+[ERROR:flutter/runtime/dart_vm_initializer.cc(40)] Unhandled Exception: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/9ab901a45e6afa0c663def7606b753bbdfb60fc73bf3277e8110c167ddb6bbc3.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/9ab901a45e6afa0c663def7606b753bbdfb60fc73bf3277e8110c167ddb6bbc3.ttf
+#0      _httpFetchFontAndSaveToDevice (package:google_fonts/src/google_fonts_base.dart:257:5)
+<asynchronous suspension>
+#1      loadFontIfNecessary (package:google_fonts/src/google_fonts_base.dart:169:11)
+<asynchronous suspension>
+#2      googleFontsTextStyle.<anonymous closure> (package:google_fonts/src/google_fonts_base.dart:109:22)
+<asynchronous suspension>
+
+flutter: Error: google_fonts was unable to load font PlusJakartaSans-ExtraBold because the following exception occurred:
+flutter: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/9ab901a45e6afa0c663def7606b753bbdfb60fc73bf3277e8110c167ddb6bbc3.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/9ab901a45e6afa0c663def7606b753bbdfb60fc73bf3277e8110c167ddb6bbc3.ttf
+flutter: 
+flutter: See https://docs.flutter.dev/development/data-and-backend/networking#platform-notes.
+flutter: If troubleshooting doesn't solve the problem, please file an issue at https://github.com/flutter/flutter/issues/new/choose.
+flutter: 
+flutter: Error: google_fonts was unable to load font PlusJakartaSans-Medium because the following exception occurred:
+flutter: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf
+flutter: 
+flutter: See https://docs.flutter.dev/development/data-and-backend/networking#platform-notes.
+flutter: If troubleshooting doesn't solve the problem, please file an issue at https://github.com/flutter/flutter/issues/new/choose.
+flutter: 
+[ERROR:flutter/runtime/dart_vm_initializer.cc(40)] Unhandled Exception: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/9ab901a45e6afa0c663def7606b753bbdfb60fc73bf3277e8110c167ddb6bbc3.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/9ab901a45e6afa0c663def7606b753bbdfb60fc73bf3277e8110c167ddb6bbc3.ttf
+#0      _httpFetchFontAndSaveToDevice (package:google_fonts/src/google_fonts_base.dart:257:5)
+<asynchronous suspension>
+#1      loadFontIfNecessary (package:google_fonts/src/google_fonts_base.dart:169:11)
+<asynchronous suspension>
+#2      googleFontsTextStyle.<anonymous closure> (package:google_fonts/src/google_fonts_base.dart:109:22)
+<asynchronous suspension>
+
+[ERROR:flutter/runtime/dart_vm_initializer.cc(40)] Unhandled Exception: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf
+#0      _httpFetchFontAndSaveToDevice (package:google_fonts/src/google_fonts_base.dart:257:5)
+<asynchronous suspension>
+#1      loadFontIfNecessary (package:google_fonts/src/google_fonts_base.dart:169:11)
+<asynchronous suspension>
+#2      googleFontsTextStyle.<anonymous closure> (package:google_fonts/src/google_fonts_base.dart:109:22)
+<asynchronous suspension>
+
+flutter: Error: google_fonts was unable to load font PlusJakartaSans-ExtraBold because the following exception occurred:
+flutter: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/9ab901a45e6afa0c663def7606b753bbdfb60fc73bf3277e8110c167ddb6bbc3.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/9ab901a45e6afa0c663def7606b753bbdfb60fc73bf3277e8110c167ddb6bbc3.ttf
+flutter: 
+flutter: See https://docs.flutter.dev/development/data-and-backend/networking#platform-notes.
+flutter: If troubleshooting doesn't solve the problem, please file an issue at https://github.com/flutter/flutter/issues/new/choose.
+flutter: 
+flutter: Error: google_fonts was unable to load font PlusJakartaSans-Medium because the following exception occurred:
+flutter: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf
+flutter: 
+flutter: See https://docs.flutter.dev/development/data-and-backend/networking#platform-notes.
+flutter: If troubleshooting doesn't solve the problem, please file an issue at https://github.com/flutter/flutter/issues/new/choose.
+flutter: 
+[ERROR:flutter/runtime/dart_vm_initializer.cc(40)] Unhandled Exception: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/9ab901a45e6afa0c663def7606b753bbdfb60fc73bf3277e8110c167ddb6bbc3.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/9ab901a45e6afa0c663def7606b753bbdfb60fc73bf3277e8110c167ddb6bbc3.ttf
+#0      _httpFetchFontAndSaveToDevice (package:google_fonts/src/google_fonts_base.dart:257:5)
+<asynchronous suspension>
+#1      loadFontIfNecessary (package:google_fonts/src/google_fonts_base.dart:169:11)
+<asynchronous suspension>
+#2      googleFontsTextStyle.<anonymous closure> (package:google_fonts/src/google_fonts_base.dart:109:22)
+<asynchronous suspension>
+
+[ERROR:flutter/runtime/dart_vm_initializer.cc(40)] Unhandled Exception: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf
+#0      _httpFetchFontAndSaveToDevice (package:google_fonts/src/google_fonts_base.dart:257:5)
+<asynchronous suspension>
+#1      loadFontIfNecessary (package:google_fonts/src/google_fonts_base.dart:169:11)
+<asynchronous suspension>
+#2      googleFontsTextStyle.<anonymous closure> (package:google_fonts/src/google_fonts_base.dart:109:22)
+<asynchronous suspension>
+
+flutter: Error: google_fonts was unable to load font PlusJakartaSans-Medium because the following exception occurred:
+flutter: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf
+flutter: 
+flutter: See https://docs.flutter.dev/development/data-and-backend/networking#platform-notes.
+flutter: If troubleshooting doesn't solve the problem, please file an issue at https://github.com/flutter/flutter/issues/new/choose.
+flutter: 
+[ERROR:flutter/runtime/dart_vm_initializer.cc(40)] Unhandled Exception: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf
+#0      _httpFetchFontAndSaveToDevice (package:google_fonts/src/google_fonts_base.dart:257:5)
+<asynchronous suspension>
+#1      loadFontIfNecessary (package:google_fonts/src/google_fonts_base.dart:169:11)
+<asynchronous suspension>
+#2      googleFontsTextStyle.<anonymous closure> (package:google_fonts/src/google_fonts_base.dart:109:22)
+<asynchronous suspension>
+
+flutter: Error: google_fonts was unable to load font PlusJakartaSans-ExtraBold because the following exception occurred:
+flutter: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/9ab901a45e6afa0c663def7606b753bbdfb60fc73bf3277e8110c167ddb6bbc3.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/9ab901a45e6afa0c663def7606b753bbdfb60fc73bf3277e8110c167ddb6bbc3.ttf
+flutter: 
+flutter: See https://docs.flutter.dev/development/data-and-backend/networking#platform-notes.
+flutter: If troubleshooting doesn't solve the problem, please file an issue at https://github.com/flutter/flutter/issues/new/choose.
+flutter: 
+[ERROR:flutter/runtime/dart_vm_initializer.cc(40)] Unhandled Exception: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/9ab901a45e6afa0c663def7606b753bbdfb60fc73bf3277e8110c167ddb6bbc3.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/9ab901a45e6afa0c663def7606b753bbdfb60fc73bf3277e8110c167ddb6bbc3.ttf
+#0      _httpFetchFontAndSaveToDevice (package:google_fonts/src/google_fonts_base.dart:257:5)
+<asynchronous suspension>
+#1      loadFontIfNecessary (package:google_fonts/src/google_fonts_base.dart:169:11)
+<asynchronous suspension>
+#2      googleFontsTextStyle.<anonymous closure> (package:google_fonts/src/google_fonts_base.dart:109:22)
+<asynchronous suspension>
+
+flutter: Error: google_fonts was unable to load font PlusJakartaSans-ExtraBold because the following exception occurred:
+flutter: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/9ab901a45e6afa0c663def7606b753bbdfb60fc73bf3277e8110c167ddb6bbc3.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/9ab901a45e6afa0c663def7606b753bbdfb60fc73bf3277e8110c167ddb6bbc3.ttf
+flutter: 
+flutter: See https://docs.flutter.dev/development/data-and-backend/networking#platform-notes.
+flutter: If troubleshooting doesn't solve the problem, please file an issue at https://github.com/flutter/flutter/issues/new/choose.
+flutter: 
+flutter: Error: google_fonts was unable to load font PlusJakartaSans-Medium because the following exception occurred:
+flutter: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf
+flutter: 
+flutter: See https://docs.flutter.dev/development/data-and-backend/networking#platform-notes.
+flutter: If troubleshooting doesn't solve the problem, please file an issue at https://github.com/flutter/flutter/issues/new/choose.
+flutter: 
+flutter: Error: google_fonts was unable to load font PlusJakartaSans-Bold because the following exception occurred:
+flutter: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf
+flutter: 
+flutter: See https://docs.flutter.dev/development/data-and-backend/networking#platform-notes.
+flutter: If troubleshooting doesn't solve the problem, please file an issue at https://github.com/flutter/flutter/issues/new/choose.
+flutter: 
+[ERROR:flutter/runtime/dart_vm_initializer.cc(40)] Unhandled Exception: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/9ab901a45e6afa0c663def7606b753bbdfb60fc73bf3277e8110c167ddb6bbc3.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/9ab901a45e6afa0c663def7606b753bbdfb60fc73bf3277e8110c167ddb6bbc3.ttf
+#0      _httpFetchFontAndSaveToDevice (package:google_fonts/src/google_fonts_base.dart:257:5)
+<asynchronous suspension>
+#1      loadFontIfNecessary (package:google_fonts/src/google_fonts_base.dart:169:11)
+<asynchronous suspension>
+#2      googleFontsTextStyle.<anonymous closure> (package:google_fonts/src/google_fonts_base.dart:109:22)
+<asynchronous suspension>
+
+[ERROR:flutter/runtime/dart_vm_initializer.cc(40)] Unhandled Exception: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf
+#0      _httpFetchFontAndSaveToDevice (package:google_fonts/src/google_fonts_base.dart:257:5)
+<asynchronous suspension>
+#1      loadFontIfNecessary (package:google_fonts/src/google_fonts_base.dart:169:11)
+<asynchronous suspension>
+#2      googleFontsTextStyle.<anonymous closure> (package:google_fonts/src/google_fonts_base.dart:109:22)
+<asynchronous suspension>
+
+[ERROR:flutter/runtime/dart_vm_initializer.cc(40)] Unhandled Exception: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf
+#0      _httpFetchFontAndSaveToDevice (package:google_fonts/src/google_fonts_base.dart:257:5)
+<asynchronous suspension>
+#1      loadFontIfNecessary (package:google_fonts/src/google_fonts_base.dart:169:11)
+<asynchronous suspension>
+#2      googleFontsTextStyle.<anonymous closure> (package:google_fonts/src/google_fonts_base.dart:109:22)
+<asynchronous suspension>
+
+flutter: Error: google_fonts was unable to load font PlusJakartaSans-Medium because the following exception occurred:
+flutter: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf
+flutter: 
+flutter: See https://docs.flutter.dev/development/data-and-backend/networking#platform-notes.
+flutter: If troubleshooting doesn't solve the problem, please file an issue at https://github.com/flutter/flutter/issues/new/choose.
+flutter: 
+flutter: Error: google_fonts was unable to load font PlusJakartaSans-ExtraBold because the following exception occurred:
+flutter: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/9ab901a45e6afa0c663def7606b753bbdfb60fc73bf3277e8110c167ddb6bbc3.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/9ab901a45e6afa0c663def7606b753bbdfb60fc73bf3277e8110c167ddb6bbc3.ttf
+flutter: 
+flutter: See https://docs.flutter.dev/development/data-and-backend/networking#platform-notes.
+flutter: If troubleshooting doesn't solve the problem, please file an issue at https://github.com/flutter/flutter/issues/new/choose.
+flutter: 
+flutter: Error: google_fonts was unable to load font PlusJakartaSans-Bold because the following exception occurred:
+flutter: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf
+flutter: 
+flutter: See https://docs.flutter.dev/development/data-and-backend/networking#platform-notes.
+flutter: If troubleshooting doesn't solve the problem, please file an issue at https://github.com/flutter/flutter/issues/new/choose.
+flutter: 
+[ERROR:flutter/runtime/dart_vm_initializer.cc(40)] Unhandled Exception: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf
+#0      _httpFetchFontAndSaveToDevice (package:google_fonts/src/google_fonts_base.dart:257:5)
+<asynchronous suspension>
+#1      loadFontIfNecessary (package:google_fonts/src/google_fonts_base.dart:169:11)
+<asynchronous suspension>
+#2      googleFontsTextStyle.<anonymous closure> (package:google_fonts/src/google_fonts_base.dart:109:22)
+<asynchronous suspension>
+
+[ERROR:flutter/runtime/dart_vm_initializer.cc(40)] Unhandled Exception: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/9ab901a45e6afa0c663def7606b753bbdfb60fc73bf3277e8110c167ddb6bbc3.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/9ab901a45e6afa0c663def7606b753bbdfb60fc73bf3277e8110c167ddb6bbc3.ttf
+#0      _httpFetchFontAndSaveToDevice (package:google_fonts/src/google_fonts_base.dart:257:5)
+<asynchronous suspension>
+#1      loadFontIfNecessary (package:google_fonts/src/google_fonts_base.dart:169:11)
+<asynchronous suspension>
+#2      googleFontsTextStyle.<anonymous closure> (package:google_fonts/src/google_fonts_base.dart:109:22)
+<asynchronous suspension>
+
+[ERROR:flutter/runtime/dart_vm_initializer.cc(40)] Unhandled Exception: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf
+#0      _httpFetchFontAndSaveToDevice (package:google_fonts/src/google_fonts_base.dart:257:5)
+<asynchronous suspension>
+#1      loadFontIfNecessary (package:google_fonts/src/google_fonts_base.dart:169:11)
+<asynchronous suspension>
+#2      googleFontsTextStyle.<anonymous closure> (package:google_fonts/src/google_fonts_base.dart:109:22)
+<asynchronous suspension>
+
+flutter: Error: google_fonts was unable to load font PlusJakartaSans-Bold because the following exception occurred:
+flutter: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf
+flutter: 
+flutter: See https://docs.flutter.dev/development/data-and-backend/networking#platform-notes.
+flutter: If troubleshooting doesn't solve the problem, please file an issue at https://github.com/flutter/flutter/issues/new/choose.
+flutter: 
+[ERROR:flutter/runtime/dart_vm_initializer.cc(40)] Unhandled Exception: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf
+#0      _httpFetchFontAndSaveToDevice (package:google_fonts/src/google_fonts_base.dart:257:5)
+<asynchronous suspension>
+#1      loadFontIfNecessary (package:google_fonts/src/google_fonts_base.dart:169:11)
+<asynchronous suspension>
+#2      googleFontsTextStyle.<anonymous closure> (package:google_fonts/src/google_fonts_base.dart:109:22)
+<asynchronous suspension>
+
+flutter: Error: google_fonts was unable to load font PlusJakartaSans-ExtraBold because the following exception occurred:
+flutter: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/9ab901a45e6afa0c663def7606b753bbdfb60fc73bf3277e8110c167ddb6bbc3.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/9ab901a45e6afa0c663def7606b753bbdfb60fc73bf3277e8110c167ddb6bbc3.ttf
+flutter: 
+flutter: See https://docs.flutter.dev/development/data-and-backend/networking#platform-notes.
+flutter: If troubleshooting doesn't solve the problem, please file an issue at https://github.com/flutter/flutter/issues/new/choose.
+flutter: 
+[ERROR:flutter/runtime/dart_vm_initializer.cc(40)] Unhandled Exception: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/9ab901a45e6afa0c663def7606b753bbdfb60fc73bf3277e8110c167ddb6bbc3.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/9ab901a45e6afa0c663def7606b753bbdfb60fc73bf3277e8110c167ddb6bbc3.ttf
+#0      _httpFetchFontAndSaveToDevice (package:google_fonts/src/google_fonts_base.dart:257:5)
+<asynchronous suspension>
+#1      loadFontIfNecessary (package:google_fonts/src/google_fonts_base.dart:169:11)
+<asynchronous suspension>
+#2      googleFontsTextStyle.<anonymous closure> (package:google_fonts/src/google_fonts_base.dart:109:22)
+<asynchronous suspension>
+
+flutter: Error: google_fonts was unable to load font PlusJakartaSans-Medium because the following exception occurred:
+flutter: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf
+flutter: 
+flutter: See https://docs.flutter.dev/development/data-and-backend/networking#platform-notes.
+flutter: If troubleshooting doesn't solve the problem, please file an issue at https://github.com/flutter/flutter/issues/new/choose.
+flutter: 
+[ERROR:flutter/runtime/dart_vm_initializer.cc(40)] Unhandled Exception: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf
+#0      _httpFetchFontAndSaveToDevice (package:google_fonts/src/google_fonts_base.dart:257:5)
+<asynchronous suspension>
+#1      loadFontIfNecessary (package:google_fonts/src/google_fonts_base.dart:169:11)
+<asynchronous suspension>
+#2      googleFontsTextStyle.<anonymous closure> (package:google_fonts/src/google_fonts_base.dart:109:22)
+<asynchronous suspension>
+
+flutter: Error: google_fonts was unable to load font PlusJakartaSans-Bold because the following exception occurred:
+flutter: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf
+flutter: 
+flutter: See https://docs.flutter.dev/development/data-and-backend/networking#platform-notes.
+flutter: If troubleshooting doesn't solve the problem, please file an issue at https://github.com/flutter/flutter/issues/new/choose.
+flutter: 
+flutter: Error: google_fonts was unable to load font PlusJakartaSans-Medium because the following exception occurred:
+flutter: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf
+flutter: 
+flutter: See https://docs.flutter.dev/development/data-and-backend/networking#platform-notes.
+flutter: If troubleshooting doesn't solve the problem, please file an issue at https://github.com/flutter/flutter/issues/new/choose.
+flutter: 
+flutter: Error: google_fonts was unable to load font PlusJakartaSans-ExtraBold because the following exception occurred:
+flutter: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/9ab901a45e6afa0c663def7606b753bbdfb60fc73bf3277e8110c167ddb6bbc3.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/9ab901a45e6afa0c663def7606b753bbdfb60fc73bf3277e8110c167ddb6bbc3.ttf
+flutter: 
+flutter: See https://docs.flutter.dev/development/data-and-backend/networking#platform-notes.
+flutter: If troubleshooting doesn't solve the problem, please file an issue at https://github.com/flutter/flutter/issues/new/choose.
+flutter: 
+[ERROR:flutter/runtime/dart_vm_initializer.cc(40)] Unhandled Exception: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf
+#0      _httpFetchFontAndSaveToDevice (package:google_fonts/src/google_fonts_base.dart:257:5)
+<asynchronous suspension>
+#1      loadFontIfNecessary (package:google_fonts/src/google_fonts_base.dart:169:11)
+<asynchronous suspension>
+#2      googleFontsTextStyle.<anonymous closure> (package:google_fonts/src/google_fonts_base.dart:109:22)
+<asynchronous suspension>
+
+[ERROR:flutter/runtime/dart_vm_initializer.cc(40)] Unhandled Exception: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf
+#0      _httpFetchFontAndSaveToDevice (package:google_fonts/src/google_fonts_base.dart:257:5)
+<asynchronous suspension>
+#1      loadFontIfNecessary (package:google_fonts/src/google_fonts_base.dart:169:11)
+<asynchronous suspension>
+#2      googleFontsTextStyle.<anonymous closure> (package:google_fonts/src/google_fonts_base.dart:109:22)
+<asynchronous suspension>
+
+[ERROR:flutter/runtime/dart_vm_initializer.cc(40)] Unhandled Exception: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/9ab901a45e6afa0c663def7606b753bbdfb60fc73bf3277e8110c167ddb6bbc3.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/9ab901a45e6afa0c663def7606b753bbdfb60fc73bf3277e8110c167ddb6bbc3.ttf
+#0      _httpFetchFontAndSaveToDevice (package:google_fonts/src/google_fonts_base.dart:257:5)
+<asynchronous suspension>
+#1      loadFontIfNecessary (package:google_fonts/src/google_fonts_base.dart:169:11)
+<asynchronous suspension>
+#2      googleFontsTextStyle.<anonymous closure> (package:google_fonts/src/google_fonts_base.dart:109:22)
+<asynchronous suspension>
+
+flutter: Error: google_fonts was unable to load font PlusJakartaSans-Bold because the following exception occurred:
+flutter: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf
+flutter: 
+flutter: See https://docs.flutter.dev/development/data-and-backend/networking#platform-notes.
+flutter: If troubleshooting doesn't solve the problem, please file an issue at https://github.com/flutter/flutter/issues/new/choose.
+flutter: 
+flutter: Error: google_fonts was unable to load font PlusJakartaSans-ExtraBold because the following exception occurred:
+flutter: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/9ab901a45e6afa0c663def7606b753bbdfb60fc73bf3277e8110c167ddb6bbc3.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/9ab901a45e6afa0c663def7606b753bbdfb60fc73bf3277e8110c167ddb6bbc3.ttf
+flutter: 
+flutter: See https://docs.flutter.dev/development/data-and-backend/networking#platform-notes.
+flutter: If troubleshooting doesn't solve the problem, please file an issue at https://github.com/flutter/flutter/issues/new/choose.
+flutter: 
+flutter: Error: google_fonts was unable to load font PlusJakartaSans-Medium because the following exception occurred:
+flutter: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf
+flutter: 
+flutter: See https://docs.flutter.dev/development/data-and-backend/networking#platform-notes.
+flutter: If troubleshooting doesn't solve the problem, please file an issue at https://github.com/flutter/flutter/issues/new/choose.
+flutter: 
+[ERROR:flutter/runtime/dart_vm_initializer.cc(40)] Unhandled Exception: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf
+#0      _httpFetchFontAndSaveToDevice (package:google_fonts/src/google_fonts_base.dart:257:5)
+<asynchronous suspension>
+#1      loadFontIfNecessary (package:google_fonts/src/google_fonts_base.dart:169:11)
+<asynchronous suspension>
+#2      googleFontsTextStyle.<anonymous closure> (package:google_fonts/src/google_fonts_base.dart:109:22)
+<asynchronous suspension>
+
+[ERROR:flutter/runtime/dart_vm_initializer.cc(40)] Unhandled Exception: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/9ab901a45e6afa0c663def7606b753bbdfb60fc73bf3277e8110c167ddb6bbc3.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/9ab901a45e6afa0c663def7606b753bbdfb60fc73bf3277e8110c167ddb6bbc3.ttf
+#0      _httpFetchFontAndSaveToDevice (package:google_fonts/src/google_fonts_base.dart:257:5)
+<asynchronous suspension>
+#1      loadFontIfNecessary (package:google_fonts/src/google_fonts_base.dart:169:11)
+<asynchronous suspension>
+#2      googleFontsTextStyle.<anonymous closure> (package:google_fonts/src/google_fonts_base.dart:109:22)
+<asynchronous suspension>
+
+[ERROR:flutter/runtime/dart_vm_initializer.cc(40)] Unhandled Exception: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf
+#0      _httpFetchFontAndSaveToDevice (package:google_fonts/src/google_fonts_base.dart:257:5)
+<asynchronous suspension>
+#1      loadFontIfNecessary (package:google_fonts/src/google_fonts_base.dart:169:11)
+<asynchronous suspension>
+#2      googleFontsTextStyle.<anonymous closure> (package:google_fonts/src/google_fonts_base.dart:109:22)
+<asynchronous suspension>
+
+flutter: Error: google_fonts was unable to load font PlusJakartaSans-Medium because the following exception occurred:
+flutter: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf
+flutter: 
+flutter: See https://docs.flutter.dev/development/data-and-backend/networking#platform-notes.
+flutter: If troubleshooting doesn't solve the problem, please file an issue at https://github.com/flutter/flutter/issues/new/choose.
+flutter: 
+flutter: Error: google_fonts was unable to load font PlusJakartaSans-ExtraBold because the following exception occurred:
+flutter: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/9ab901a45e6afa0c663def7606b753bbdfb60fc73bf3277e8110c167ddb6bbc3.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/9ab901a45e6afa0c663def7606b753bbdfb60fc73bf3277e8110c167ddb6bbc3.ttf
+flutter: 
+flutter: See https://docs.flutter.dev/development/data-and-backend/networking#platform-notes.
+flutter: If troubleshooting doesn't solve the problem, please file an issue at https://github.com/flutter/flutter/issues/new/choose.
+flutter: 
+flutter: Error: google_fonts was unable to load font PlusJakartaSans-Bold because the following exception occurred:
+flutter: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf
+flutter: 
+flutter: See https://docs.flutter.dev/development/data-and-backend/networking#platform-notes.
+flutter: If troubleshooting doesn't solve the problem, please file an issue at https://github.com/flutter/flutter/issues/new/choose.
+flutter: 
+[ERROR:flutter/runtime/dart_vm_initializer.cc(40)] Unhandled Exception: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf
+#0      _httpFetchFontAndSaveToDevice (package:google_fonts/src/google_fonts_base.dart:257:5)
+<asynchronous suspension>
+#1      loadFontIfNecessary (package:google_fonts/src/google_fonts_base.dart:169:11)
+<asynchronous suspension>
+#2      googleFontsTextStyle.<anonymous closure> (package:google_fonts/src/google_fonts_base.dart:109:22)
+<asynchronous suspension>
+
+[ERROR:flutter/runtime/dart_vm_initializer.cc(40)] Unhandled Exception: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/9ab901a45e6afa0c663def7606b753bbdfb60fc73bf3277e8110c167ddb6bbc3.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/9ab901a45e6afa0c663def7606b753bbdfb60fc73bf3277e8110c167ddb6bbc3.ttf
+#0      _httpFetchFontAndSaveToDevice (package:google_fonts/src/google_fonts_base.dart:257:5)
+<asynchronous suspension>
+#1      loadFontIfNecessary (package:google_fonts/src/google_fonts_base.dart:169:11)
+<asynchronous suspension>
+#2      googleFontsTextStyle.<anonymous closure> (package:google_fonts/src/google_fonts_base.dart:109:22)
+<asynchronous suspension>
+
+[ERROR:flutter/runtime/dart_vm_initializer.cc(40)] Unhandled Exception: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf
+#0      _httpFetchFontAndSaveToDevice (package:google_fonts/src/google_fonts_base.dart:257:5)
+<asynchronous suspension>
+#1      loadFontIfNecessary (package:google_fonts/src/google_fonts_base.dart:169:11)
+<asynchronous suspension>
+#2      googleFontsTextStyle.<anonymous closure> (package:google_fonts/src/google_fonts_base.dart:109:22)
+<asynchronous suspension>
+
+flutter: Error: google_fonts was unable to load font PlusJakartaSans-Bold because the following exception occurred:
+flutter: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf
+flutter: 
+flutter: See https://docs.flutter.dev/development/data-and-backend/networking#platform-notes.
+flutter: If troubleshooting doesn't solve the problem, please file an issue at https://github.com/flutter/flutter/issues/new/choose.
+flutter: 
+flutter: Error: google_fonts was unable to load font PlusJakartaSans-ExtraBold because the following exception occurred:
+flutter: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/9ab901a45e6afa0c663def7606b753bbdfb60fc73bf3277e8110c167ddb6bbc3.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/9ab901a45e6afa0c663def7606b753bbdfb60fc73bf3277e8110c167ddb6bbc3.ttf
+flutter: 
+flutter: See https://docs.flutter.dev/development/data-and-backend/networking#platform-notes.
+flutter: If troubleshooting doesn't solve the problem, please file an issue at https://github.com/flutter/flutter/issues/new/choose.
+flutter: 
+flutter: Error: google_fonts was unable to load font PlusJakartaSans-Medium because the following exception occurred:
+flutter: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf
+flutter: 
+flutter: See https://docs.flutter.dev/development/data-and-backend/networking#platform-notes.
+flutter: If troubleshooting doesn't solve the problem, please file an issue at https://github.com/flutter/flutter/issues/new/choose.
+flutter: 
+[ERROR:flutter/runtime/dart_vm_initializer.cc(40)] Unhandled Exception: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf
+#0      _httpFetchFontAndSaveToDevice (package:google_fonts/src/google_fonts_base.dart:257:5)
+<asynchronous suspension>
+#1      loadFontIfNecessary (package:google_fonts/src/google_fonts_base.dart:169:11)
+<asynchronous suspension>
+#2      googleFontsTextStyle.<anonymous closure> (package:google_fonts/src/google_fonts_base.dart:109:22)
+<asynchronous suspension>
+
+[ERROR:flutter/runtime/dart_vm_initializer.cc(40)] Unhandled Exception: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/9ab901a45e6afa0c663def7606b753bbdfb60fc73bf3277e8110c167ddb6bbc3.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/9ab901a45e6afa0c663def7606b753bbdfb60fc73bf3277e8110c167ddb6bbc3.ttf
+#0      _httpFetchFontAndSaveToDevice (package:google_fonts/src/google_fonts_base.dart:257:5)
+<asynchronous suspension>
+#1      loadFontIfNecessary (package:google_fonts/src/google_fonts_base.dart:169:11)
+<asynchronous suspension>
+#2      googleFontsTextStyle.<anonymous closure> (package:google_fonts/src/google_fonts_base.dart:109:22)
+<asynchronous suspension>
+
+[ERROR:flutter/runtime/dart_vm_initializer.cc(40)] Unhandled Exception: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf
+#0      _httpFetchFontAndSaveToDevice (package:google_fonts/src/google_fonts_base.dart:257:5)
+<asynchronous suspension>
+#1      loadFontIfNecessary (package:google_fonts/src/google_fonts_base.dart:169:11)
+<asynchronous suspension>
+#2      googleFontsTextStyle.<anonymous closure> (package:google_fonts/src/google_fonts_base.dart:109:22)
+<asynchronous suspension>
+
+flutter: Error: google_fonts was unable to load font PlusJakartaSans-ExtraBold because the following exception occurred:
+flutter: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/9ab901a45e6afa0c663def7606b753bbdfb60fc73bf3277e8110c167ddb6bbc3.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/9ab901a45e6afa0c663def7606b753bbdfb60fc73bf3277e8110c167ddb6bbc3.ttf
+flutter: 
+flutter: See https://docs.flutter.dev/development/data-and-backend/networking#platform-notes.
+flutter: If troubleshooting doesn't solve the problem, please file an issue at https://github.com/flutter/flutter/issues/new/choose.
+flutter: 
+flutter: Error: google_fonts was unable to load font PlusJakartaSans-Bold because the following exception occurred:
+flutter: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf
+flutter: 
+flutter: See https://docs.flutter.dev/development/data-and-backend/networking#platform-notes.
+flutter: If troubleshooting doesn't solve the problem, please file an issue at https://github.com/flutter/flutter/issues/new/choose.
+flutter: 
+flutter: Error: google_fonts was unable to load font PlusJakartaSans-Medium because the following exception occurred:
+flutter: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf
+flutter: 
+flutter: See https://docs.flutter.dev/development/data-and-backend/networking#platform-notes.
+flutter: If troubleshooting doesn't solve the problem, please file an issue at https://github.com/flutter/flutter/issues/new/choose.
+flutter: 
+[ERROR:flutter/runtime/dart_vm_initializer.cc(40)] Unhandled Exception: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/9ab901a45e6afa0c663def7606b753bbdfb60fc73bf3277e8110c167ddb6bbc3.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/9ab901a45e6afa0c663def7606b753bbdfb60fc73bf3277e8110c167ddb6bbc3.ttf
+#0      _httpFetchFontAndSaveToDevice (package:google_fonts/src/google_fonts_base.dart:257:5)
+<asynchronous suspension>
+#1      loadFontIfNecessary (package:google_fonts/src/google_fonts_base.dart:169:11)
+<asynchronous suspension>
+#2      googleFontsTextStyle.<anonymous closure> (package:google_fonts/src/google_fonts_base.dart:109:22)
+<asynchronous suspension>
+
+[ERROR:flutter/runtime/dart_vm_initializer.cc(40)] Unhandled Exception: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf
+#0      _httpFetchFontAndSaveToDevice (package:google_fonts/src/google_fonts_base.dart:257:5)
+<asynchronous suspension>
+#1      loadFontIfNecessary (package:google_fonts/src/google_fonts_base.dart:169:11)
+<asynchronous suspension>
+#2      googleFontsTextStyle.<anonymous closure> (package:google_fonts/src/google_fonts_base.dart:109:22)
+<asynchronous suspension>
+
+[ERROR:flutter/runtime/dart_vm_initializer.cc(40)] Unhandled Exception: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf
+#0      _httpFetchFontAndSaveToDevice (package:google_fonts/src/google_fonts_base.dart:257:5)
+<asynchronous suspension>
+#1      loadFontIfNecessary (package:google_fonts/src/google_fonts_base.dart:169:11)
+<asynchronous suspension>
+#2      googleFontsTextStyle.<anonymous closure> (package:google_fonts/src/google_fonts_base.dart:109:22)
+<asynchronous suspension>
+
+flutter: Error: google_fonts was unable to load font PlusJakartaSans-Medium because the following exception occurred:
+flutter: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf
+flutter: 
+flutter: See https://docs.flutter.dev/development/data-and-backend/networking#platform-notes.
+flutter: If troubleshooting doesn't solve the problem, please file an issue at https://github.com/flutter/flutter/issues/new/choose.
+flutter: 
+[ERROR:flutter/runtime/dart_vm_initializer.cc(40)] Unhandled Exception: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf
+#0      _httpFetchFontAndSaveToDevice (package:google_fonts/src/google_fonts_base.dart:257:5)
+<asynchronous suspension>
+#1      loadFontIfNecessary (package:google_fonts/src/google_fonts_base.dart:169:11)
+<asynchronous suspension>
+#2      googleFontsTextStyle.<anonymous closure> (package:google_fonts/src/google_fonts_base.dart:109:22)
+<asynchronous suspension>
+
+flutter: Error: google_fonts was unable to load font PlusJakartaSans-Bold because the following exception occurred:
+flutter: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf
+flutter: 
+flutter: See https://docs.flutter.dev/development/data-and-backend/networking#platform-notes.
+flutter: If troubleshooting doesn't solve the problem, please file an issue at https://github.com/flutter/flutter/issues/new/choose.
+flutter: 
+[ERROR:flutter/runtime/dart_vm_initializer.cc(40)] Unhandled Exception: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf
+#0      _httpFetchFontAndSaveToDevice (package:google_fonts/src/google_fonts_base.dart:257:5)
+<asynchronous suspension>
+#1      loadFontIfNecessary (package:google_fonts/src/google_fonts_base.dart:169:11)
+<asynchronous suspension>
+#2      googleFontsTextStyle.<anonymous closure> (package:google_fonts/src/google_fonts_base.dart:109:22)
+<asynchronous suspension>
+
+flutter: Error: google_fonts was unable to load font PlusJakartaSans-Medium because the following exception occurred:
+flutter: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf
+flutter: 
+flutter: See https://docs.flutter.dev/development/data-and-backend/networking#platform-notes.
+flutter: If troubleshooting doesn't solve the problem, please file an issue at https://github.com/flutter/flutter/issues/new/choose.
+flutter: 
+flutter: Error: google_fonts was unable to load font PlusJakartaSans-Bold because the following exception occurred:
+flutter: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf
+flutter: 
+flutter: See https://docs.flutter.dev/development/data-and-backend/networking#platform-notes.
+flutter: If troubleshooting doesn't solve the problem, please file an issue at https://github.com/flutter/flutter/issues/new/choose.
+flutter: 
+[ERROR:flutter/runtime/dart_vm_initializer.cc(40)] Unhandled Exception: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf
+#0      _httpFetchFontAndSaveToDevice (package:google_fonts/src/google_fonts_base.dart:257:5)
+<asynchronous suspension>
+#1      loadFontIfNecessary (package:google_fonts/src/google_fonts_base.dart:169:11)
+<asynchronous suspension>
+#2      googleFontsTextStyle.<anonymous closure> (package:google_fonts/src/google_fonts_base.dart:109:22)
+<asynchronous suspension>
+
+[ERROR:flutter/runtime/dart_vm_initializer.cc(40)] Unhandled Exception: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf
+#0      _httpFetchFontAndSaveToDevice (package:google_fonts/src/google_fonts_base.dart:257:5)
+<asynchronous suspension>
+#1      loadFontIfNecessary (package:google_fonts/src/google_fonts_base.dart:169:11)
+<asynchronous suspension>
+#2      googleFontsTextStyle.<anonymous closure> (package:google_fonts/src/google_fonts_base.dart:109:22)
+<asynchronous suspension>
+
+flutter: Error: google_fonts was unable to load font PlusJakartaSans-Bold because the following exception occurred:
+flutter: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf
+flutter: 
+flutter: See https://docs.flutter.dev/development/data-and-backend/networking#platform-notes.
+flutter: If troubleshooting doesn't solve the problem, please file an issue at https://github.com/flutter/flutter/issues/new/choose.
+flutter: 
+flutter: Error: google_fonts was unable to load font PlusJakartaSans-Medium because the following exception occurred:
+flutter: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf
+flutter: 
+flutter: See https://docs.flutter.dev/development/data-and-backend/networking#platform-notes.
+flutter: If troubleshooting doesn't solve the problem, please file an issue at https://github.com/flutter/flutter/issues/new/choose.
+flutter: 
+[ERROR:flutter/runtime/dart_vm_initializer.cc(40)] Unhandled Exception: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf
+#0      _httpFetchFontAndSaveToDevice (package:google_fonts/src/google_fonts_base.dart:257:5)
+<asynchronous suspension>
+#1      loadFontIfNecessary (package:google_fonts/src/google_fonts_base.dart:169:11)
+<asynchronous suspension>
+#2      googleFontsTextStyle.<anonymous closure> (package:google_fonts/src/google_fonts_base.dart:109:22)
+<asynchronous suspension>
+
+[ERROR:flutter/runtime/dart_vm_initializer.cc(40)] Unhandled Exception: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf
+#0      _httpFetchFontAndSaveToDevice (package:google_fonts/src/google_fonts_base.dart:257:5)
+<asynchronous suspension>
+#1      loadFontIfNecessary (package:google_fonts/src/google_fonts_base.dart:169:11)
+<asynchronous suspension>
+#2      googleFontsTextStyle.<anonymous closure> (package:google_fonts/src/google_fonts_base.dart:109:22)
+<asynchronous suspension>
+
+flutter: Error: google_fonts was unable to load font PlusJakartaSans-Medium because the following exception occurred:
+flutter: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf
+flutter: 
+flutter: See https://docs.flutter.dev/development/data-and-backend/networking#platform-notes.
+flutter: If troubleshooting doesn't solve the problem, please file an issue at https://github.com/flutter/flutter/issues/new/choose.
+flutter: 
+[ERROR:flutter/runtime/dart_vm_initializer.cc(40)] Unhandled Exception: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf
+#0      _httpFetchFontAndSaveToDevice (package:google_fonts/src/google_fonts_base.dart:257:5)
+<asynchronous suspension>
+#1      loadFontIfNecessary (package:google_fonts/src/google_fonts_base.dart:169:11)
+<asynchronous suspension>
+#2      googleFontsTextStyle.<anonymous closure> (package:google_fonts/src/google_fonts_base.dart:109:22)
+<asynchronous suspension>
+
+flutter: Error: google_fonts was unable to load font PlusJakartaSans-Bold because the following exception occurred:
+flutter: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf
+flutter: 
+flutter: See https://docs.flutter.dev/development/data-and-backend/networking#platform-notes.
+flutter: If troubleshooting doesn't solve the problem, please file an issue at https://github.com/flutter/flutter/issues/new/choose.
+flutter: 
+[ERROR:flutter/runtime/dart_vm_initializer.cc(40)] Unhandled Exception: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf
+#0      _httpFetchFontAndSaveToDevice (package:google_fonts/src/google_fonts_base.dart:257:5)
+<asynchronous suspension>
+#1      loadFontIfNecessary (package:google_fonts/src/google_fonts_base.dart:169:11)
+<asynchronous suspension>
+#2      googleFontsTextStyle.<anonymous closure> (package:google_fonts/src/google_fonts_base.dart:109:22)
+<asynchronous suspension>
+
+flutter: Error: google_fonts was unable to load font PlusJakartaSans-ExtraBold because the following exception occurred:
+flutter: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/9ab901a45e6afa0c663def7606b753bbdfb60fc73bf3277e8110c167ddb6bbc3.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/9ab901a45e6afa0c663def7606b753bbdfb60fc73bf3277e8110c167ddb6bbc3.ttf
+flutter: 
+flutter: See https://docs.flutter.dev/development/data-and-backend/networking#platform-notes.
+flutter: If troubleshooting doesn't solve the problem, please file an issue at https://github.com/flutter/flutter/issues/new/choose.
+flutter: 
+[ERROR:flutter/runtime/dart_vm_initializer.cc(40)] Unhandled Exception: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/9ab901a45e6afa0c663def7606b753bbdfb60fc73bf3277e8110c167ddb6bbc3.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/9ab901a45e6afa0c663def7606b753bbdfb60fc73bf3277e8110c167ddb6bbc3.ttf
+#0      _httpFetchFontAndSaveToDevice (package:google_fonts/src/google_fonts_base.dart:257:5)
+<asynchronous suspension>
+#1      loadFontIfNecessary (package:google_fonts/src/google_fonts_base.dart:169:11)
+<asynchronous suspension>
+#2      googleFontsTextStyle.<anonymous closure> (package:google_fonts/src/google_fonts_base.dart:109:22)
+<asynchronous suspension>
+
+flutter: Error: google_fonts was unable to load font PlusJakartaSans-Bold because the following exception occurred:
+flutter: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf
+flutter: 
+flutter: See https://docs.flutter.dev/development/data-and-backend/networking#platform-notes.
+flutter: If troubleshooting doesn't solve the problem, please file an issue at https://github.com/flutter/flutter/issues/new/choose.
+flutter: 
+flutter: Error: google_fonts was unable to load font PlusJakartaSans-Medium because the following exception occurred:
+flutter: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf
+flutter: 
+flutter: See https://docs.flutter.dev/development/data-and-backend/networking#platform-notes.
+flutter: If troubleshooting doesn't solve the problem, please file an issue at https://github.com/flutter/flutter/issues/new/choose.
+flutter: 
+flutter: Error: google_fonts was unable to load font PlusJakartaSans-ExtraBold because the following exception occurred:
+flutter: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/9ab901a45e6afa0c663def7606b753bbdfb60fc73bf3277e8110c167ddb6bbc3.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/9ab901a45e6afa0c663def7606b753bbdfb60fc73bf3277e8110c167ddb6bbc3.ttf
+flutter: 
+flutter: See https://docs.flutter.dev/development/data-and-backend/networking#platform-notes.
+flutter: If troubleshooting doesn't solve the problem, please file an issue at https://github.com/flutter/flutter/issues/new/choose.
+flutter: 
+[ERROR:flutter/runtime/dart_vm_initializer.cc(40)] Unhandled Exception: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf
+#0      _httpFetchFontAndSaveToDevice (package:google_fonts/src/google_fonts_base.dart:257:5)
+<asynchronous suspension>
+#1      loadFontIfNecessary (package:google_fonts/src/google_fonts_base.dart:169:11)
+<asynchronous suspension>
+#2      googleFontsTextStyle.<anonymous closure> (package:google_fonts/src/google_fonts_base.dart:109:22)
+<asynchronous suspension>
+
+[ERROR:flutter/runtime/dart_vm_initializer.cc(40)] Unhandled Exception: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf
+#0      _httpFetchFontAndSaveToDevice (package:google_fonts/src/google_fonts_base.dart:257:5)
+<asynchronous suspension>
+#1      loadFontIfNecessary (package:google_fonts/src/google_fonts_base.dart:169:11)
+<asynchronous suspension>
+#2      googleFontsTextStyle.<anonymous closure> (package:google_fonts/src/google_fonts_base.dart:109:22)
+<asynchronous suspension>
+
+[ERROR:flutter/runtime/dart_vm_initializer.cc(40)] Unhandled Exception: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/9ab901a45e6afa0c663def7606b753bbdfb60fc73bf3277e8110c167ddb6bbc3.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/9ab901a45e6afa0c663def7606b753bbdfb60fc73bf3277e8110c167ddb6bbc3.ttf
+#0      _httpFetchFontAndSaveToDevice (package:google_fonts/src/google_fonts_base.dart:257:5)
+<asynchronous suspension>
+#1      loadFontIfNecessary (package:google_fonts/src/google_fonts_base.dart:169:11)
+<asynchronous suspension>
+#2      googleFontsTextStyle.<anonymous closure> (package:google_fonts/src/google_fonts_base.dart:109:22)
+<asynchronous suspension>
+
+flutter: Error: google_fonts was unable to load font PlusJakartaSans-Medium because the following exception occurred:
+flutter: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf
+flutter: 
+flutter: See https://docs.flutter.dev/development/data-and-backend/networking#platform-notes.
+flutter: If troubleshooting doesn't solve the problem, please file an issue at https://github.com/flutter/flutter/issues/new/choose.
+flutter: 
+flutter: Error: google_fonts was unable to load font PlusJakartaSans-Bold because the following exception occurred:
+flutter: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf
+flutter: 
+flutter: See https://docs.flutter.dev/development/data-and-backend/networking#platform-notes.
+flutter: If troubleshooting doesn't solve the problem, please file an issue at https://github.com/flutter/flutter/issues/new/choose.
+flutter: 
+flutter: Error: google_fonts was unable to load font PlusJakartaSans-ExtraBold because the following exception occurred:
+flutter: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/9ab901a45e6afa0c663def7606b753bbdfb60fc73bf3277e8110c167ddb6bbc3.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/9ab901a45e6afa0c663def7606b753bbdfb60fc73bf3277e8110c167ddb6bbc3.ttf
+flutter: 
+flutter: See https://docs.flutter.dev/development/data-and-backend/networking#platform-notes.
+flutter: If troubleshooting doesn't solve the problem, please file an issue at https://github.com/flutter/flutter/issues/new/choose.
+flutter: 
+[ERROR:flutter/runtime/dart_vm_initializer.cc(40)] Unhandled Exception: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf
+#0      _httpFetchFontAndSaveToDevice (package:google_fonts/src/google_fonts_base.dart:257:5)
+<asynchronous suspension>
+#1      loadFontIfNecessary (package:google_fonts/src/google_fonts_base.dart:169:11)
+<asynchronous suspension>
+#2      googleFontsTextStyle.<anonymous closure> (package:google_fonts/src/google_fonts_base.dart:109:22)
+<asynchronous suspension>
+
+[ERROR:flutter/runtime/dart_vm_initializer.cc(40)] Unhandled Exception: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf
+#0      _httpFetchFontAndSaveToDevice (package:google_fonts/src/google_fonts_base.dart:257:5)
+<asynchronous suspension>
+#1      loadFontIfNecessary (package:google_fonts/src/google_fonts_base.dart:169:11)
+<asynchronous suspension>
+#2      googleFontsTextStyle.<anonymous closure> (package:google_fonts/src/google_fonts_base.dart:109:22)
+<asynchronous suspension>
+
+[ERROR:flutter/runtime/dart_vm_initializer.cc(40)] Unhandled Exception: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/9ab901a45e6afa0c663def7606b753bbdfb60fc73bf3277e8110c167ddb6bbc3.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/9ab901a45e6afa0c663def7606b753bbdfb60fc73bf3277e8110c167ddb6bbc3.ttf
+#0      _httpFetchFontAndSaveToDevice (package:google_fonts/src/google_fonts_base.dart:257:5)
+<asynchronous suspension>
+#1      loadFontIfNecessary (package:google_fonts/src/google_fonts_base.dart:169:11)
+<asynchronous suspension>
+#2      googleFontsTextStyle.<anonymous closure> (package:google_fonts/src/google_fonts_base.dart:109:22)
+<asynchronous suspension>
+
+flutter: Error: google_fonts was unable to load font PlusJakartaSans-Medium because the following exception occurred:
+flutter: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf
+flutter: 
+flutter: See https://docs.flutter.dev/development/data-and-backend/networking#platform-notes.
+flutter: If troubleshooting doesn't solve the problem, please file an issue at https://github.com/flutter/flutter/issues/new/choose.
+flutter: 
+flutter: Error: google_fonts was unable to load font PlusJakartaSans-Bold because the following exception occurred:
+flutter: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf
+flutter: 
+flutter: See https://docs.flutter.dev/development/data-and-backend/networking#platform-notes.
+flutter: If troubleshooting doesn't solve the problem, please file an issue at https://github.com/flutter/flutter/issues/new/choose.
+flutter: 
+[ERROR:flutter/runtime/dart_vm_initializer.cc(40)] Unhandled Exception: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf
+#0      _httpFetchFontAndSaveToDevice (package:google_fonts/src/google_fonts_base.dart:257:5)
+<asynchronous suspension>
+#1      loadFontIfNecessary (package:google_fonts/src/google_fonts_base.dart:169:11)
+<asynchronous suspension>
+#2      googleFontsTextStyle.<anonymous closure> (package:google_fonts/src/google_fonts_base.dart:109:22)
+<asynchronous suspension>
+
+[ERROR:flutter/runtime/dart_vm_initializer.cc(40)] Unhandled Exception: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf
+#0      _httpFetchFontAndSaveToDevice (package:google_fonts/src/google_fonts_base.dart:257:5)
+<asynchronous suspension>
+#1      loadFontIfNecessary (package:google_fonts/src/google_fonts_base.dart:169:11)
+<asynchronous suspension>
+#2      googleFontsTextStyle.<anonymous closure> (package:google_fonts/src/google_fonts_base.dart:109:22)
+<asynchronous suspension>
+
+flutter: Error: google_fonts was unable to load font PlusJakartaSans-Medium because the following exception occurred:
+flutter: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf
+flutter: 
+flutter: See https://docs.flutter.dev/development/data-and-backend/networking#platform-notes.
+flutter: If troubleshooting doesn't solve the problem, please file an issue at https://github.com/flutter/flutter/issues/new/choose.
+flutter: 
+flutter: Error: google_fonts was unable to load font PlusJakartaSans-Bold because the following exception occurred:
+flutter: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf
+flutter: 
+flutter: See https://docs.flutter.dev/development/data-and-backend/networking#platform-notes.
+flutter: If troubleshooting doesn't solve the problem, please file an issue at https://github.com/flutter/flutter/issues/new/choose.
+flutter: 
+[ERROR:flutter/runtime/dart_vm_initializer.cc(40)] Unhandled Exception: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf
+#0      _httpFetchFontAndSaveToDevice (package:google_fonts/src/google_fonts_base.dart:257:5)
+<asynchronous suspension>
+#1      loadFontIfNecessary (package:google_fonts/src/google_fonts_base.dart:169:11)
+<asynchronous suspension>
+#2      googleFontsTextStyle.<anonymous closure> (package:google_fonts/src/google_fonts_base.dart:109:22)
+<asynchronous suspension>
+
+[ERROR:flutter/runtime/dart_vm_initializer.cc(40)] Unhandled Exception: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf
+#0      _httpFetchFontAndSaveToDevice (package:google_fonts/src/google_fonts_base.dart:257:5)
+<asynchronous suspension>
+#1      loadFontIfNecessary (package:google_fonts/src/google_fonts_base.dart:169:11)
+<asynchronous suspension>
+#2      googleFontsTextStyle.<anonymous closure> (package:google_fonts/src/google_fonts_base.dart:109:22)
+<asynchronous suspension>
+
+flutter: Error: google_fonts was unable to load font PlusJakartaSans-Bold because the following exception occurred:
+flutter: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf
+flutter: 
+flutter: See https://docs.flutter.dev/development/data-and-backend/networking#platform-notes.
+flutter: If troubleshooting doesn't solve the problem, please file an issue at https://github.com/flutter/flutter/issues/new/choose.
+flutter: 
+flutter: Error: google_fonts was unable to load font PlusJakartaSans-Medium because the following exception occurred:
+flutter: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf
+flutter: 
+flutter: See https://docs.flutter.dev/development/data-and-backend/networking#platform-notes.
+flutter: If troubleshooting doesn't solve the problem, please file an issue at https://github.com/flutter/flutter/issues/new/choose.
+flutter: 
+[ERROR:flutter/runtime/dart_vm_initializer.cc(40)] Unhandled Exception: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf
+#0      _httpFetchFontAndSaveToDevice (package:google_fonts/src/google_fonts_base.dart:257:5)
+<asynchronous suspension>
+#1      loadFontIfNecessary (package:google_fonts/src/google_fonts_base.dart:169:11)
+<asynchronous suspension>
+#2      googleFontsTextStyle.<anonymous closure> (package:google_fonts/src/google_fonts_base.dart:109:22)
+<asynchronous suspension>
+
+[ERROR:flutter/runtime/dart_vm_initializer.cc(40)] Unhandled Exception: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf
+#0      _httpFetchFontAndSaveToDevice (package:google_fonts/src/google_fonts_base.dart:257:5)
+<asynchronous suspension>
+#1      loadFontIfNecessary (package:google_fonts/src/google_fonts_base.dart:169:11)
+<asynchronous suspension>
+#2      googleFontsTextStyle.<anonymous closure> (package:google_fonts/src/google_fonts_base.dart:109:22)
+<asynchronous suspension>
+
+flutter: Error: google_fonts was unable to load font PlusJakartaSans-ExtraBold because the following exception occurred:
+flutter: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/9ab901a45e6afa0c663def7606b753bbdfb60fc73bf3277e8110c167ddb6bbc3.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/9ab901a45e6afa0c663def7606b753bbdfb60fc73bf3277e8110c167ddb6bbc3.ttf
+flutter: 
+flutter: See https://docs.flutter.dev/development/data-and-backend/networking#platform-notes.
+flutter: If troubleshooting doesn't solve the problem, please file an issue at https://github.com/flutter/flutter/issues/new/choose.
+flutter: 
+flutter: Error: google_fonts was unable to load font PlusJakartaSans-Medium because the following exception occurred:
+flutter: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf
+flutter: 
+flutter: See https://docs.flutter.dev/development/data-and-backend/networking#platform-notes.
+flutter: If troubleshooting doesn't solve the problem, please file an issue at https://github.com/flutter/flutter/issues/new/choose.
+flutter: 
+flutter: Error: google_fonts was unable to load font PlusJakartaSans-Bold because the following exception occurred:
+[ERROR:flutter/runtime/dart_vm_initializer.cc(40)] Unhandled Exception: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/9ab901a45e6afa0c663def7606b753bbdfb60fc73bf3277e8110c167ddb6bbc3.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/9ab901a45e6afa0c663def7606b753bbdfb60fc73bf3277e8110c167ddb6bbc3.ttf
+#0      _httpFetchFontAndSaveToDevice (package:google_fonts/src/google_fonts_base.dart:257:5)
+<asynchronous suspension>
+#1      loadFontIfNecessary (package:google_fonts/src/google_fonts_base.dart:169:11)
+<asynchronous suspension>
+#2      googleFontsTextStyle.<anonymous closure> (package:google_fonts/src/google_fonts_base.dart:109:22)
+<asynchronous suspension>
+
+[ERROR:flutter/runtime/dart_vm_initializer.cc(40)] Unhandled Exception: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/d4478b49f18c5b0db7bd8fbbb033595061dea8c03a86246710035d750e515130.ttf
+#0      _httpFetchFontAndSaveToDevice (package:google_fonts/src/google_fonts_base.dart:257:5)
+<asynchronous suspension>
+#1      loadFontIfNecessary (package:google_fonts/src/google_fonts_base.dart:169:11)
+<asynchronous suspension>
+#2      googleFontsTextStyle.<anonymous closure> (package:google_fonts/src/google_fonts_base.dart:109:22)
+<asynchronous suspension>
+
+[ERROR:flutter/runtime/dart_vm_initializer.cc(40)] Unhandled Exception: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf
+#0      _httpFetchFontAndSaveToDevice (package:google_fonts/src/google_fonts_base.dart:257:5)
+<asynchronous suspension>
+#1      loadFontIfNecessary (package:google_fonts/src/google_fonts_base.dart:169:11)
+<asynchronous suspension>
+#2      googleFontsTextStyle.<anonymous closure> (package:google_fonts/src/google_fonts_base.dart:109:22)
+<asynchronous suspension>
+
+flutter: Exception: Failed to load font with url https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf: ClientException with SocketException: Connection failed (OS Error: Operation not permitted, errno = 1), address = fonts.gstatic.com, port = 443, uri=https://fonts.gstatic.com/s/a/5b6d946cf820c9851ff7b4776425ee43f5cf405c6f891a4a7fcb4a74d5e32d52.ttf
+flutter: 
+flutter: See https://docs.flutter.dev/development/data-and-backend/networking#platform-notes.
+flutter: If troubleshooting doesn't solve the problem, please file an issue at https://github.com/flutter/flutter/issues/new/choose.
+flutter: 
+Lost connection to device.

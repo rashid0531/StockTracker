@@ -1,0 +1,12 @@
+{
+  "/Users/rashid/workspace/StockTracker/frontend/macos/Runner/MainFlutterWindow.swift" : {
+    "abi-baseline-json" : "/Users/rashid/workspace/StockTracker/frontend/build/macos/Build/Intermediates.noindex/Runner.build/Release/Runner.build/Objects-normal/arm64/stocktracker_frontend_dart.abi.json",
+    "const-values" : "/Users/rashid/workspace/StockTracker/frontend/build/macos/Build/Intermediates.noindex/Runner.build/Release/Runner.build/Objects-normal/arm64/Runner-primary.swiftconstvalues",
+    "dependencies" : "/Users/rashid/workspace/StockTracker/frontend/build/macos/Build/Intermediates.noindex/Runner.build/Release/Runner.build/Objects-normal/arm64/Runner-primary.d",
+    "diagnostics" : "/Users/rashid/workspace/StockTracker/frontend/build/macos/Build/Intermediates.noindex/Runner.build/Release/Runner.build/Objects-normal/arm64/Runner-primary.dia",
+    "objc-header" : "/Users/rashid/workspace/StockTracker/frontend/build/macos/Build/Intermediates.noindex/Runner.build/Release/Runner.build/Objects-normal/arm64/stocktracker_frontend_dart-Swift.h",
+    "swiftdoc" : "/Users/rashid/workspace/StockTracker/frontend/build/macos/Build/Intermediates.noindex/Runner.build/Release/Runner.build/Objects-normal/arm64/stocktracker_frontend_dart.swiftdoc",
+    "swiftmodule" : "/Users/rashid/workspace/StockTracker/frontend/build/macos/Build/Intermediates.noindex/Runner.build/Release/Runner.build/Objects-normal/arm64/stocktracker_frontend_dart.swiftmodule",
+    "swiftsourceinfo" : "/Users/rashid/workspace/StockTracker/frontend/build/macos/Build/Intermediates.noindex/Runner.build/Release/Runner.build/Objects-normal/arm64/stocktracker_frontend_dart.swiftsourceinfo"
+  }
+}

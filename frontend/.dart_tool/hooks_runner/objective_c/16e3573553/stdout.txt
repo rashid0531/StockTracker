@@ -1,0 +1,54 @@
+Running `(cd /Users/rashid/.pub-cache/hosted/pub.dev/objective_c-9.4.1/; TMPDIR=/var/folders/jk/zwhwrvkn2f172lgs_jldb1xh0000gn/T/ PATH=/Applications/Xcode.app/Contents/SharedFrameworks/SwiftBuild.framework/Versions/A/PlugIns/SWBBuildService.bundle/Contents/PlugIns/SWBUniversalPlatformPlugin.bundle/Contents/Frameworks/SWBUniversalPlatform.framework/Resources:/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin:/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/local/bin:/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/libexec:/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/usr/bin:/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/usr/local/bin:/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/local/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/local/bin:/Users/rashid/.gemini/antigravity/bin:/Users/rashid/Library/Application Support/Antigravity/bin:/Users/rashid/.antigravity-ide/antigravity-ide/bin:/Users/rashid/Library/Application Support/reflex/bun/bin:/opt/homebrew/opt/openjdk@11/bin:/Users/rashid/miniconda3/condabin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/pkg/env/global/bin:/Library/Apple/usr/bin:/Library/TeX/texbin:/Applications/VMware Fusion.app/Contents/Public:/usr/local/share/dotnet:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/Applications/Postgres.app/Contents/Versions/latest/bin:/Applications/Visual Studio Code.app/Contents/Resources/app/bin:/Users/rashid/Library/Application Support/Coursier/bin:/Users/rashid/.lmstudio/bin HOME=/Users/rashid /opt/homebrew/share/flutter/bin/cache/dart-sdk/bin/dart --packages=/Users/rashid/workspace/StockTracker/frontend/.dart_tool/package_config.json /Users/rashid/workspace/StockTracker/frontend/.dart_tool/hooks_runner/objective_c/16e3573553/hook.dill --config=/Users/rashid/workspace/StockTracker/frontend/.dart_tool/hooks_runner/objective_c/16e3573553/input.json )`.
+INFO: 2026-07-22 02:47:49.585204: Using compiler /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang from BuildInput.cCompiler.cc.
+
+INFO: 2026-07-22 02:47:49.589600: Running: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk -target arm64-apple-darwin -mmacos-version-min=13 -c /Users/rashid/.pub-cache/hosted/pub.dev/objective_c-9.4.1/src/include/dart_api_dl.c -fpic -gline-tables-only -I src -o /Users/rashid/workspace/StockTracker/frontend/.dart_tool/hooks_runner/shared/objective_c/build/16e3573553/obj/src/include/dart_api_dl.c.o
+
+INFO: 2026-07-22 02:47:49.591011: Running: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk -target arm64-apple-darwin -mmacos-version-min=13 -c /Users/rashid/.pub-cache/hosted/pub.dev/objective_c-9.4.1/src/objective_c.c -fpic -gline-tables-only -I src -o /Users/rashid/workspace/StockTracker/frontend/.dart_tool/hooks_runner/shared/objective_c/build/16e3573553/obj/src/objective_c.c.o
+
+6e3573553/obj/src/input_stream_adapter.m.o
+
+INFO: 2026-07-22 02:47:49.591320: Running: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk -target arm64-apple-darwin -mmacos-version-min=13 -x objective-c -fobjc-arc -c /Users/rashid/.pub-cache/hosted/pub.dev/objective_c-9.4.1/src/objective_c.m -fpic -gline-tables-only -I src -o /Users/rashid/workspace/StockTracker/frontend/.dart_tool/hooks_runner/shared/objective_c/build/16e3573553/obj/src/objective_c.m.o
+
+INFO: 2026-07-22 02:47:49.591448: Running: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk -target arm64-apple-darwin -mmacos-version-min=13 -x objective-c -fobjc-arc -c /Users/rashid/.pub-cache/hosted/pub.dev/objective_c-9.4.1/src/observer.m -fpic -gline-tables-only -I src -o /Users/rashid/workspace/StockTracker/frontend/.dart_tool/hooks_runner/shared/objective_c/build/16e3573553/obj/src/observer.m.o
+
+
+
+INFO: 2026-07-22 02:47:49.591736: Running: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk -target arm64-apple-darwin -mmacos-version-min=13 -x objective-c -fobjc-arc -c /Users/rashid/.pub-cache/hosted/pub.dev/objective_c-9.4.1/src/protocol.m -fpic -gline-tables-only -I src -o /Users/rashid/workspace/StockTracker/frontend/.dart_tool/hooks_runner/shared/objective_c/build/16e3573553/obj/src/protocol.m.o
+
+obj/src/objective_c_bindings_generated.m.o
+
+INFO: 2026-07-22 02:47:49.742603: 
+INFO: 2026-07-22 02:47:49.742698: 
+INFO: 2026-07-22 02:47:49.742730: Generated /Users/rashid/workspace/StockTracker/frontend/.dart_tool/hooks_runner/shared/objective_c/build/16e3573553/obj/src/observer.m.o
+
+o
+INFO: 2026-07-22 02:47:49.742971: 
+INFO: 2026-07-22 02:47:49.742984: 
+INFO: 2026-07-22 02:47:49.742995: Generated /Users/rashid/workspace/StockTracker/frontend/.dart_tool/hooks_runner/shared/objective_c/build/16e3573553/obj/src/include/dart_api_dl.c.o
+
+INFO: 2026-07-22 02:47:49.743481: 
+INFO: 2026-07-22 02:47:49.743498: 
+INFO: 2026-07-22 02:47:49.743513: Generated /Users/rashid/workspace/StockTracker/frontend/.dart_tool/hooks_runner/shared/objective_c/build/16e3573553/obj/src/protocol.m.o
+
+INFO: 2026-07-22 02:47:50.057910: 
+INFO: 2026-07-22 02:47:50.057953: 
+INFO: 2026-07-22 02:47:50.057965: Generated /Users/rashid/workspace/StockTracker/frontend/.dart_tool/hooks_runner/shared/objective_c/build/16e3573553/obj/src/ns_number.m.o
+
+INFO: 2026-07-22 02:47:50.073758: 
+INFO: 2026-07-22 02:47:50.073802: 
+INFO: 2026-07-22 02:47:50.073814: Generated /Users/rashid/workspace/StockTracker/frontend/.dart_tool/hooks_runner/shared/objective_c/build/16e3573553/obj/src/objective_c.m.o
+
+INFO: 2026-07-22 02:47:50.074391: 
+INFO: 2026-07-22 02:47:50.074412: 
+INFO: 2026-07-22 02:47:50.074431: Generated /Users/rashid/workspace/StockTracker/frontend/.dart_tool/hooks_runner/shared/objective_c/build/16e3573553/obj/src/input_stream_adapter.m.o
+
+INFO: 2026-07-22 02:47:50.093202: 
+INFO: 2026-07-22 02:47:50.093258: 
+INFO: 2026-07-22 02:47:50.093269: Generated /Users/rashid/workspace/StockTracker/frontend/.dart_tool/hooks_runner/shared/objective_c/build/16e3573553/obj/src/objective_c_bindings_generated.m.o
+
+INFO: 2026-07-22 02:47:50.093605: Running: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -shared -Wl,-encryptable -undefined dynamic_lookup -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk -target arm64-apple-darwin -mmacos-version-min=13 /Users/rashid/workspace/StockTracker/frontend/.dart_tool/hooks_runner/shared/objective_c/build/16e3573553/obj/src/include/dart_api_dl.c.o /Users/rashid/workspace/StockTracker/frontend/.dart_tool/hooks_runner/shared/objective_c/build/16e3573553/obj/src/objective_c.c.o /Users/rashid/workspace/StockTracker/frontend/.dart_tool/hooks_runner/shared/objective_c/build/16e3573553/obj/src/input_stream_adapter.m.o /Users/rashid/workspace/StockTracker/frontend/.dart_tool/hooks_runner/shared/objective_c/build/16e3573553/obj/src/objective_c.m.o /Users/rashid/workspace/StockTracker/frontend/.dart_tool/hooks_runner/shared/objective_c/build/16e3573553/obj/src/observer.m.o /Users/rashid/workspace/StockTracker/frontend/.dart_tool/hooks_runner/shared/objective_c/build/16e3573553/obj/src/ns_number.m.o /Users/rashid/workspace/StockTracker/frontend/.dart_tool/hooks_runner/shared/objective_c/build/16e3573553/obj/src/protocol.m.o /Users/rashid/workspace/StockTracker/frontend/.dart_tool/hooks_runner/shared/objective_c/build/16e3573553/obj/src/objective_c_bindings_generated.m.o -o /Users/rashid/workspace/StockTracker/frontend/.dart_tool/hooks_runner/shared/objective_c/build/16e3573553/objective_c.dylib
+
+INFO: 2026-07-22 02:47:50.132583: 
+INFO: 2026-07-22 02:47:50.132650: 
+INFO: 2026-07-22 02:47:50.132663: Generated /Users/rashid/workspace/StockTracker/frontend/.dart_tool/hooks_runner/shared/objective_c/build/16e3573553/objective_c.dylib
+

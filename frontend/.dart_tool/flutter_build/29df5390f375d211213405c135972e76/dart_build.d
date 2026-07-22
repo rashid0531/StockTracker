@@ -1,0 +1,1 @@
+ /Users/rashid/workspace/StockTracker/frontend_dart/.dart_tool/flutter_build/29df5390f375d211213405c135972e76/dart_build_result.json: 
