@@ -253,8 +253,8 @@ class _DashboardViewState extends State<DashboardView> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("SoloRash Net Worth", style: theme.titleStyle.copyWith(fontSize: 18, fontWeight: FontWeight.w900)),
-                      Text("StockTracker by SoloRash", style: theme.subtitleStyle.copyWith(fontSize: 11)),
+                      Text("My Net Worth", style: theme.titleStyle.copyWith(fontSize: 18, fontWeight: FontWeight.w900)),
+                      Text("WealthTracker by Solo Rash", style: theme.subtitleStyle.copyWith(fontSize: 11)),
                     ],
                   ),
                 ],

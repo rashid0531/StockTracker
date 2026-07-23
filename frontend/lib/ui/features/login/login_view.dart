@@ -111,8 +111,8 @@ class _LoginViewState extends State<LoginView> {
                             ),
                             const SizedBox(height: 18),
                             Text(
-                              "SoloRash StockTracker",
-                              style: theme.titleStyle.copyWith(fontSize: 26, fontWeight: FontWeight.w900),
+                              "WealthTracker",
+                              style: theme.titleStyle.copyWith(fontSize: 28, fontWeight: FontWeight.w900),
                               textAlign: TextAlign.center,
                             ),
                             const SizedBox(height: 4),

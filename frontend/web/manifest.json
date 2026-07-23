@@ -1,6 +1,6 @@
 {
-    "name": "stocktracker_frontend_dart",
-    "short_name": "stocktracker_frontend_dart",
+    "name": "WealthTracker",
+    "short_name": "WealthTracker",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
