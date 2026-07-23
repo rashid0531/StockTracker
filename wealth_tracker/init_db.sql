@@ -6,6 +6,8 @@ CREATE TABLE IF NOT EXISTS users (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     email VARCHAR(255) UNIQUE NOT NULL,
     name VARCHAR(255) NOT NULL,
+    primary_country VARCHAR(50) DEFAULT 'Canada' NOT NULL,
+    primary_currency VARCHAR(3) DEFAULT 'CAD' NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
@@ -14,6 +16,8 @@ CREATE TABLE IF NOT EXISTS investment_profiles (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID REFERENCES users(id) ON DELETE CASCADE NOT NULL,
     name VARCHAR(255) NOT NULL, -- e.g., 'TFSA', 'RRSP'
+    country VARCHAR(50) DEFAULT 'Canada' NOT NULL, -- Tax jurisdiction country
+    account_type VARCHAR(100) DEFAULT 'TFSA' NOT NULL, -- Country-specific account type
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
@@ -141,6 +145,8 @@ SELECT
     u.id AS user_id,
     p.id AS profile_id,
     p.name AS profile_name,
+    p.country AS profile_country,
+    p.account_type,
     a.id AS account_id,
     a.broker_name,
     s.id AS stock_id,
@@ -154,4 +160,4 @@ JOIN brokerage_accounts a ON vp.account_id = a.id
 JOIN investment_profiles p ON a.profile_id = p.id
 JOIN users u ON p.user_id = u.id
 JOIN stock_registry s ON vp.stock_id = s.id
-GROUP BY u.id, p.id, p.name, a.id, a.broker_name, s.id, s.ticker, s.exchange, s.currency, s.annualized_dividend_per_share;
+GROUP BY u.id, p.id, p.name, p.country, p.account_type, a.id, a.broker_name, s.id, s.ticker, s.exchange, s.currency, s.annualized_dividend_per_share;

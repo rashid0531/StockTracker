@@ -19,6 +19,8 @@ class User(Base):
     )
     email: Mapped[str] = mapped_column(String(255), unique=True, nullable=False)
     name: Mapped[str] = mapped_column(String(255), nullable=False)
+    primary_country: Mapped[str] = mapped_column(String(50), default="Canada", nullable=False)
+    primary_currency: Mapped[str] = mapped_column(String(3), default="CAD", nullable=False)
     created_at: Mapped[datetime.datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
     )
@@ -40,6 +42,8 @@ class InvestmentProfile(Base):
         nullable=False,
     )
     name: Mapped[str] = mapped_column(String(255), nullable=False)
+    country: Mapped[str] = mapped_column(String(50), default="Canada", nullable=False)
+    account_type: Mapped[str] = mapped_column(String(100), default="TFSA", nullable=False)
     created_at: Mapped[datetime.datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
     )
@@ -314,6 +318,8 @@ class ViewUserStockHolding(Base):
         UUID(as_uuid=True), primary_key=True
     )
     profile_name: Mapped[str] = mapped_column(String(255))
+    profile_country: Mapped[str] = mapped_column(String(50))
+    account_type: Mapped[str] = mapped_column(String(100))
     account_id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), primary_key=True
     )

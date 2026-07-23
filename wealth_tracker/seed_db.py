@@ -51,6 +51,8 @@ async def seed_data(session: AsyncSession):
         id=uuid.UUID("d0e34cbb-5820-4e1b-b384-cb9ef3a1b80c"),
         email="jane.doe@example.com",
         name="Jane Doe",
+        primary_country="Canada",
+        primary_currency="CAD",
     )
     session.add(user)
 
@@ -58,12 +60,16 @@ async def seed_data(session: AsyncSession):
     tfsa_profile = InvestmentProfile(
         id=uuid.UUID("a9117be5-4ea5-419f-b778-be75b22b271d"),
         user=user,
-        name="TFSA",
+        name="TFSA Account",
+        country="Canada",
+        account_type="TFSA (Tax-Free Savings Account)",
     )
     rrsp_profile = InvestmentProfile(
         id=uuid.UUID("f90117d3-9bc0-4c28-98e3-4de75b2b271e"),
         user=user,
-        name="RRSP",
+        name="RRSP Ledger",
+        country="Canada",
+        account_type="RRSP (Registered Retirement Savings Plan)",
     )
     session.add_all([tfsa_profile, rrsp_profile])
 

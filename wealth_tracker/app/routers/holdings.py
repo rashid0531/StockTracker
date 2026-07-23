@@ -85,7 +85,7 @@ async def get_profile_valuations(
     profiles_res = await db.execute(profiles_stmt)
     profiles = profiles_res.scalars().all()
 
-    profile_names = {p.id: p.name for p in profiles}
+    profile_info = {p.id: p for p in profiles}
     profile_values = {p.id: Decimal("0.0000") for p in profiles}
 
     # 3. Fetch all active holdings with current stock prices
@@ -167,7 +167,9 @@ async def get_profile_valuations(
     profile_list = [
         {
             "profile_id": pid,
-            "profile_name": profile_names[pid],
+            "profile_name": profile_info[pid].name,
+            "country": profile_info[pid].country,
+            "account_type": profile_info[pid].account_type,
             "total_value": round(profile_values[pid], 4),
         }
         for pid in profile_values

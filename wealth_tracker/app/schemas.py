@@ -8,6 +8,8 @@ from pydantic import BaseModel, Field
 class UserBase(BaseModel):
     email: str
     name: str
+    primary_country: Optional[str] = "Canada"
+    primary_currency: Optional[str] = "CAD"
 
 
 class UserCreate(UserBase):
@@ -23,6 +25,8 @@ class UserResponse(UserBase):
 
 class ProfileBase(BaseModel):
     name: str  # e.g., 'TFSA', 'RRSP'
+    country: str = "Canada"  # Jurisdiction country
+    account_type: str = "TFSA"  # Country-specific account type
 
 
 class ProfileCreate(ProfileBase):
@@ -101,6 +105,8 @@ class UserDividendProjectionsResponse(BaseModel):
 class ProfileValue(BaseModel):
     profile_id: UUID
     profile_name: str
+    country: str = "Canada"
+    account_type: str = "TFSA"
     total_value: Decimal
 
     class Config:
