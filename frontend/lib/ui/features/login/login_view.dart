@@ -83,32 +83,50 @@ class _LoginViewState extends State<LoginView> {
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             // Top Logo / Header
-                            Container(
-                              width: 70,
-                              height: 70,
-                              decoration: BoxDecoration(
-                                color: AppColors.positive.withValues(alpha: 0.15),
-                                shape: BoxShape.circle,
-                                border: Border.all(color: AppColors.positive.withValues(alpha: 0.3), width: 2),
-                              ),
-                              child: const Center(
-                                child: Text(
-                                  "📈",
-                                  style: TextStyle(fontSize: 34),
+                            Center(
+                              child: Container(
+                                width: 84,
+                                height: 84,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: AppColors.positive.withValues(alpha: 0.3),
+                                      blurRadius: 20,
+                                      spreadRadius: 2,
+                                    ),
+                                  ],
+                                ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(42),
+                                  child: Image.asset(
+                                    'assets/images/solorash_logo.jpg',
+                                    fit: BoxFit.cover,
+                                    errorBuilder: (context, error, stackTrace) => const Center(
+                                      child: Text("⚡", style: TextStyle(fontSize: 34)),
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
-                            const SizedBox(height: 20),
+                            const SizedBox(height: 18),
                             Text(
-                              "Wealth Tracker",
-                              style: theme.titleStyle.copyWith(fontSize: 28),
+                              "SoloRash StockTracker",
+                              style: theme.titleStyle.copyWith(fontSize: 26, fontWeight: FontWeight.w900),
+                              textAlign: TextAlign.center,
                             ),
-                            const SizedBox(height: 6),
+                            const SizedBox(height: 4),
                             Text(
-                              "Track valuations and passive dividend incomes",
-                              style: theme.subtitleStyle,
+                              "FINANCIAL TECHNOLOGIES",
+                              style: TextStyle(
+                                color: AppColors.positive,
+                                fontSize: 11,
+                                fontWeight: FontWeight.w800,
+                                letterSpacing: 2.5,
+                              ),
+                              textAlign: TextAlign.center,
                             ),
-                            const SizedBox(height: 48),
+                            const SizedBox(height: 40),
 
                             // Inputs card
                             Container(

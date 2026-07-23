@@ -220,15 +220,43 @@ class _DashboardViewState extends State<DashboardView> {
         physics: const AlwaysScrollableScrollPhysics(),
         padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
         children: [
-          // Top Header Row
+          // Top Header Row with SoloRash Logo
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              Row(
                 children: [
-                  Text("My Net Worth", style: theme.titleStyle),
-                  Text("Wealth & Dividend Tracker", style: theme.subtitleStyle),
+                  Container(
+                    width: 42,
+                    height: 42,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppColors.positive.withValues(alpha: 0.3),
+                          blurRadius: 12,
+                        ),
+                      ],
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(21),
+                      child: Image.asset(
+                        'assets/images/solorash_logo.jpg',
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) => const Center(
+                          child: Text("⚡", style: TextStyle(fontSize: 20)),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("SoloRash Net Worth", style: theme.titleStyle.copyWith(fontSize: 18, fontWeight: FontWeight.w900)),
+                      Text("StockTracker by SoloRash", style: theme.subtitleStyle.copyWith(fontSize: 11)),
+                    ],
+                  ),
                 ],
               ),
               IconButton(

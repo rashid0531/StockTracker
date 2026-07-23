@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import 'data/services/api_service.dart';
 import 'ui/core/theme.dart';
+import 'ui/features/splash/splash_view.dart';
 import 'ui/features/login/login_view.dart';
 import 'ui/features/dashboard/dashboard_view.dart';
 import 'ui/features/profile/profile_view.dart';
@@ -33,6 +34,10 @@ class WealthTrackerApp extends StatelessWidget {
     routes: [
       GoRoute(
         path: '/',
+        builder: (context, state) => const SplashView(),
+      ),
+      GoRoute(
+        path: '/login',
         builder: (context, state) => const LoginView(),
       ),
       GoRoute(
