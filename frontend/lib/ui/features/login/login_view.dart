@@ -117,12 +117,12 @@ class _LoginViewState extends State<LoginView> {
                             ),
                             const SizedBox(height: 4),
                             Text(
-                              "FINANCIAL TECHNOLOGIES",
+                              "AUTOMATE TODAY. BUILD WEALTH TOMORROW.",
                               style: TextStyle(
-                                color: AppColors.positive,
-                                fontSize: 11,
+                                color: const Color(0xFFE5C158),
+                                fontSize: 10,
                                 fontWeight: FontWeight.w800,
-                                letterSpacing: 2.5,
+                                letterSpacing: 2.0,
                               ),
                               textAlign: TextAlign.center,
                             ),
