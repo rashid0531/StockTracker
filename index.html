@@ -18,7 +18,7 @@
 
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="SoloRash StockTracker - Wealth & Dividend Portfolio Management">
+  <meta name="description" content="WealthTracker - Track Today. Grow Tomorrow. Built with ❤️ by Solo Rash">
 
   <!-- Cache Control Meta Tags -->
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
@@ -46,18 +46,18 @@
   <!-- iOS meta tags & icons -->
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="SoloRash StockTracker">
+  <meta name="apple-mobile-web-app-title" content="WealthTracker">
   <link rel="apple-touch-icon" href="solorash_logo.jpg">
 
   <!-- Favicon -->
-  <link rel="icon" type="image/jpeg" href="solorash_logo.jpg"/>
+  <link rel="icon" type="image/png" href="splash_bg.png"/>
 
-  <title>SoloRash StockTracker</title>
+  <title>WealthTracker by Solo Rash</title>
   <link rel="manifest" href="manifest.json">
 
   <style>
     body {
-      background-color: #0B0E14;
+      background-color: #070B12;
       margin: 0;
       padding: 0;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -65,62 +65,28 @@
       overflow: hidden;
     }
     .splash-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      width: 100vw;
-      background: radial-gradient(circle at 50% 40%, rgba(0, 229, 255, 0.12) 0%, rgba(0, 230, 118, 0.08) 35%, #0B0E14 75%);
-    }
-    .logo-wrapper {
       position: relative;
-      width: 130px;
-      height: 130px;
-      border-radius: 50%;
-      box-shadow: 0 0 45px rgba(0, 230, 118, 0.4), 0 0 60px rgba(0, 229, 255, 0.25);
-      animation: pulseGlow 2.5s infinite alternate ease-in-out;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #070B12;
     }
-    .logo-img {
+    .splash-img {
       width: 100%;
       height: 100%;
-      border-radius: 50%;
       object-fit: cover;
-    }
-    @keyframes pulseGlow {
-      0% {
-        transform: scale(0.96);
-        box-shadow: 0 0 30px rgba(0, 230, 118, 0.3), 0 0 40px rgba(0, 229, 255, 0.2);
-      }
-      100% {
-        transform: scale(1.04);
-        box-shadow: 0 0 55px rgba(0, 230, 118, 0.55), 0 0 75px rgba(0, 229, 255, 0.35);
-      }
-    }
-    .brand-title {
-      margin-top: 28px;
-      font-size: 32px;
-      font-weight: 900;
-      letter-spacing: 1.2px;
-      background: linear-gradient(135deg, #FFFFFF 0%, #E0E6ED 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .brand-subtitle {
-      margin-top: 6px;
-      font-size: 11px;
-      font-weight: 800;
-      color: #00E676;
-      letter-spacing: 3.5px;
+      object-position: center;
     }
     .spinner-bar {
-      margin-top: 45px;
-      width: 180px;
-      height: 4px;
-      background: rgba(255, 255, 255, 0.1);
+      position: absolute;
+      bottom: 24px;
+      width: 160px;
+      height: 3px;
+      background: rgba(255, 255, 255, 0.15);
       border-radius: 4px;
       overflow: hidden;
-      position: relative;
     }
     .spinner-bar::after {
       content: '';
@@ -137,25 +103,13 @@
       50% { width: 60%; }
       100% { left: 100%; width: 30%; }
     }
-    .footer-note {
-      position: absolute;
-      bottom: 24px;
-      font-size: 10px;
-      color: #8F9CAE;
-      letter-spacing: 1.0px;
-    }
   </style>
 </head>
 <body>
-  <!-- Initial Web HTML Splash Container for SoloRash Branding -->
+  <!-- Initial Web HTML Splash Container featuring User Artwork -->
   <div id="splash" class="splash-container">
-    <div class="logo-wrapper">
-      <img src="solorash_logo.jpg" alt="SoloRash Logo" class="logo-img" onerror="this.style.display='none'">
-    </div>
-    <div class="brand-title">SoloRash</div>
-    <div class="brand-subtitle">FINANCIAL TECHNOLOGIES</div>
+    <img src="splash_bg.png" alt="WealthTracker Splash" class="splash-img">
     <div class="spinner-bar"></div>
-    <div class="footer-note">SoloRash Technologies &copy; 2026</div>
   </div>
 
   <script src="flutter_bootstrap.js" async></script>
