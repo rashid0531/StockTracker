@@ -94473,9 +94473,9 @@ e===$&&A.a()
 s=e.gWt()>=0
 e=A.b([new A.bt(0,B.V,B.u.bQ(0.3),B.j,12)],t.E)
 e=A.aF(A.u9(A.b4(21),A.aCl("assets/images/solorash_logo.jpg",B.a1,new A.apB(),B.jZ),B.bK),B.l,f,new A.ax(f,f,f,f,e,f,B.an),42,f,f,42)
-r=A.a3("SoloRash Net Worth",f,f,f,f,A.az().$4$color$fontSize$fontWeight$letterSpacing(a.a===B.f?B.e:B.q,22,B.au,-0.2).vd(18,B.au),f,f)
+r=A.a3("My Net Worth",f,f,f,f,A.az().$4$color$fontSize$fontWeight$letterSpacing(a.a===B.f?B.e:B.q,22,B.au,-0.2).vd(18,B.au),f,f)
 q=t.p
-r=A.bx(A.b([e,B.j0,A.bn(A.b([r,A.a3("StockTracker by SoloRash",f,f,f,f,A.az().$3$color$fontSize$fontWeight(a.a===B.f?B.A:B.B,12,B.C).c2(11),f,f)],q),B.X,B.o,B.n)],q),B.t,B.o,B.n,0)
+r=A.bx(A.b([e,B.j0,A.bn(A.b([r,A.a3("WealthTracker by Solo Rash",f,f,f,f,A.az().$3$color$fontSize$fontWeight(a.a===B.f?B.A:B.B,12,B.C).c2(11),f,f)],q),B.X,B.o,B.n)],q),B.t,B.o,B.n,0)
 e=a.a===B.f
 p=e?B.a0:B.e
 o=A.bY(e?B.G:B.F,1)
@@ -95437,7 +95437,7 @@ A.atn.prototype={
 $2(a,b){var s,r,q,p,o,n,m,l,k,j,i,h=null,g=A.b([new A.bt(2,B.V,B.u.bQ(0.3),B.j,20)],t.E)
 g=A.dD(A.aF(A.u9(A.b4(42),A.aCl("assets/images/solorash_logo.jpg",B.a1,new A.atk(),B.jZ),B.bK),B.l,h,new A.ax(h,h,h,h,g,h,B.an),84,h,h,84),h,h)
 s=this.b
-r=A.a3("SoloRash StockTracker",h,h,h,h,A.az().$4$color$fontSize$fontWeight$letterSpacing(s.a===B.f?B.e:B.q,22,B.au,-0.2).vd(26,B.au),B.d6,h)
+r=A.a3("WealthTracker",h,h,h,h,A.az().$4$color$fontSize$fontWeight$letterSpacing(s.a===B.f?B.e:B.q,22,B.au,-0.2).vd(28,B.au),B.d6,h)
 q=A.a3("AUTOMATE TODAY. BUILD WEALTH TOMORROW.",h,h,h,h,A.b6(h,h,B.Gc,h,h,h,h,h,h,h,h,10,h,h,B.fg,h,h,!0,h,2,h,h,h,h,h,h),B.d6,h)
 p=s.a===B.f
 o=p?B.a0:B.e
