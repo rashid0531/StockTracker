@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/theme.dart';
 
@@ -18,7 +17,6 @@ class _SplashViewState extends State<SplashView> with SingleTickerProviderStateM
 
   double _loadingProgress = 0.0;
   Timer? _progressTimer;
-  String _statusText = "Initializing secure session...";
 
   @override
   void initState() {
@@ -26,7 +24,7 @@ class _SplashViewState extends State<SplashView> with SingleTickerProviderStateM
 
     _animationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1400),
+      duration: const Duration(milliseconds: 1200),
     );
 
     _fadeAnimation = CurvedAnimation(
@@ -34,27 +32,22 @@ class _SplashViewState extends State<SplashView> with SingleTickerProviderStateM
       curve: Curves.easeIn,
     );
 
-    _scaleAnimation = Tween<double>(begin: 0.85, end: 1.0).animate(
+    _scaleAnimation = Tween<double>(begin: 0.96, end: 1.0).animate(
       CurvedAnimation(
         parent: _animationController,
-        curve: Curves.easeOutBack,
+        curve: Curves.easeOutCubic,
       ),
     );
 
     _animationController.forward();
 
-    // Progress bar animation over 2.2 seconds
-    _progressTimer = Timer.periodic(const Duration(milliseconds: 40), (timer) {
+    // 2.5 second auto progress timer to navigate to /login
+    _progressTimer = Timer.periodic(const Duration(milliseconds: 35), (timer) {
       if (!mounted) return;
       setState(() {
         _loadingProgress += 0.02;
-        if (_loadingProgress >= 0.35 && _loadingProgress < 0.7) {
-          _statusText = "Loading market data engines...";
-        } else if (_loadingProgress >= 0.7 && _loadingProgress < 0.95) {
-          _statusText = "Preparing portfolio views...";
-        } else if (_loadingProgress >= 1.0) {
+        if (_loadingProgress >= 1.0) {
           _loadingProgress = 1.0;
-          _statusText = "Welcome to StockTracker";
           timer.cancel();
           _navigateToNextScreen();
         }
@@ -63,11 +56,9 @@ class _SplashViewState extends State<SplashView> with SingleTickerProviderStateM
   }
 
   void _navigateToNextScreen() {
-    Future.delayed(const Duration(milliseconds: 300), () {
-      if (mounted) {
-        context.go('/login');
-      }
-    });
+    if (mounted) {
+      context.go('/login');
+    }
   }
 
   @override
@@ -79,193 +70,106 @@ class _SplashViewState extends State<SplashView> with SingleTickerProviderStateM
 
   @override
   Widget build(BuildContext context) {
-    final theme = Provider.of<ThemeProvider>(context);
-
     return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: theme.buildBackground(
-        child: SafeArea(
-          child: Stack(
-            children: [
-              // Skip button in top right
-              Positioned(
-                top: 16,
-                right: 20,
-                child: TextButton(
-                  onPressed: () => context.go('/login'),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        "Skip",
-                        style: TextStyle(
-                          color: theme.subtext,
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600,
+      backgroundColor: const Color(0xFF070B12),
+      body: GestureDetector(
+        onTap: _navigateToNextScreen,
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            // Full Screen User Splash Artwork
+            ScaleTransition(
+              scale: _scaleAnimation,
+              child: FadeTransition(
+                opacity: _fadeAnimation,
+                child: Image.asset(
+                  'assets/images/splash_bg.png',
+                  fit: BoxFit.cover,
+                  alignment: Alignment.center,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      color: const Color(0xFF070B12),
+                      child: const Center(
+                        child: Text(
+                          "WealthTracker\nby SOLO RASH",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
                         ),
                       ),
-                      const SizedBox(width: 4),
-                      Icon(Icons.arrow_forward_ios_rounded, size: 12, color: theme.subtext),
-                    ],
-                  ),
+                    );
+                  },
                 ),
               ),
+            ),
 
-              // Main Center Content
-              Center(
+            // Top Right Skip Pill
+            SafeArea(
+              child: Align(
+                alignment: Alignment.topRight,
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 32.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      // Animated Logo Container
-                      ScaleTransition(
-                        scale: _scaleAnimation,
-                        child: FadeTransition(
-                          opacity: _fadeAnimation,
-                          child: Container(
-                            width: 140,
-                            height: 140,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: AppColors.positive.withValues(alpha: 0.35),
-                                  blurRadius: 36,
-                                  spreadRadius: 6,
+                  padding: const EdgeInsets.only(top: 16.0, right: 20.0),
+                  child: FadeTransition(
+                    opacity: _fadeAnimation,
+                    child: Material(
+                      color: Colors.black.withValues(alpha: 0.45),
+                      borderRadius: BorderRadius.circular(20),
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(20),
+                        onTap: _navigateToNextScreen,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(color: Colors.white.withValues(alpha: 0.2), width: 1),
+                          ),
+                          child: const Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                "Skip",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
                                 ),
-                                BoxShadow(
-                                  color: const Color(0xFF00E5FF).withValues(alpha: 0.25),
-                                  blurRadius: 50,
-                                  spreadRadius: 10,
-                                ),
-                              ],
-                            ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(70),
-                              child: Image.asset(
-                                'assets/images/solorash_logo.jpg',
-                                fit: BoxFit.cover,
-                                errorBuilder: (context, error, stackTrace) {
-                                  // Fallback vector icon logo
-                                  return Container(
-                                    color: const Color(0xFF0B101D),
-                                    child: const Center(
-                                      child: Text(
-                                        "⚡",
-                                        style: TextStyle(fontSize: 54),
-                                      ),
-                                    ),
-                                  );
-                                },
                               ),
-                            ),
+                              SizedBox(width: 4),
+                              Icon(Icons.arrow_forward_ios_rounded, size: 10, color: Colors.white),
+                            ],
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 32),
-
-                      // Brand Titles
-                      FadeTransition(
-                        opacity: _fadeAnimation,
-                        child: Column(
-                          children: [
-                            Text(
-                              "SoloRash",
-                              style: theme.titleStyle.copyWith(
-                                fontSize: 34,
-                                fontWeight: FontWeight.w900,
-                                letterSpacing: 1.2,
-                              ),
-                            ),
-                            const SizedBox(height: 6),
-                            Text(
-                              "FINANCIAL TECHNOLOGIES",
-                              style: TextStyle(
-                                color: AppColors.positive,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w800,
-                                letterSpacing: 3.5,
-                              ),
-                            ),
-                            const SizedBox(height: 14),
-                            Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 5),
-                              decoration: BoxDecoration(
-                                color: theme.card,
-                                borderRadius: BorderRadius.circular(20),
-                                border: Border.all(color: theme.border),
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  const Text("📈", style: TextStyle(fontSize: 14)),
-                                  const SizedBox(width: 8),
-                                  Text(
-                                    "StockTracker Suite",
-                                    style: theme.subtitleStyle.copyWith(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 50),
-
-                      // Loading Progress Indicator
-                      FadeTransition(
-                        opacity: _fadeAnimation,
-                        child: Column(
-                          children: [
-                            SizedBox(
-                              width: 200,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: LinearProgressIndicator(
-                                  value: _loadingProgress,
-                                  minHeight: 4,
-                                  backgroundColor: theme.border,
-                                  valueColor: const AlwaysStoppedAnimation<Color>(AppColors.positive),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 14),
-                            Text(
-                              _statusText,
-                              style: theme.subtitleStyle.copyWith(fontSize: 11),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-
-              // Footer
-              Positioned(
-                bottom: 24,
-                left: 0,
-                right: 0,
-                child: FadeTransition(
-                  opacity: _fadeAnimation,
-                  child: Center(
-                    child: Text(
-                      "SoloRash Technologies © 2026",
-                      style: theme.subtitleStyle.copyWith(
-                        fontSize: 10,
-                        letterSpacing: 1.0,
                       ),
                     ),
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+
+            // Bottom Glowing Progress Bar
+            Positioned(
+              bottom: 12,
+              left: 40,
+              right: 40,
+              child: SafeArea(
+                child: FadeTransition(
+                  opacity: _fadeAnimation,
+                  child: Column(
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(6),
+                        child: LinearProgressIndicator(
+                          value: _loadingProgress,
+                          minHeight: 3,
+                          backgroundColor: Colors.white.withValues(alpha: 0.1),
+                          valueColor: const AlwaysStoppedAnimation<Color>(AppColors.positive),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
