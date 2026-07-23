@@ -217,12 +217,61 @@ class ApiService {
     }
   };
 
+  // User primary residential country & currency preferences
+  String _userPrimaryCountry = "Canada";
+  String _userPrimaryCurrency = "CAD";
+
+  String get userPrimaryCountry => _userPrimaryCountry;
+  String get userPrimaryCurrency => _userPrimaryCurrency;
+
+  void setUserPrimaryPreferences({required String country, required String currency}) {
+    _userPrimaryCountry = country;
+    _userPrimaryCurrency = currency;
+  }
+
+  // Country-specific investment account types lookup
+  static const Map<String, List<String>> countryAccountTypes = {
+    "Canada": [
+      "TFSA (Tax-Free Savings Account)",
+      "RRSP (Registered Retirement Savings Plan)",
+      "FHSA (First Home Savings Account)",
+      "Non-Registered (Taxable)",
+      "RESP (Registered Education Savings Plan)",
+    ],
+    "United States": [
+      "Roth IRA",
+      "Traditional IRA",
+      "401(k) / 403(b)",
+      "Taxable Brokerage",
+      "HSA (Health Savings Account)",
+    ],
+    "United Kingdom": [
+      "Stocks & Shares ISA",
+      "SIPP (Self-Invested Personal Pension)",
+      "GIA (General Investment Account)",
+    ],
+    "Australia": [
+      "Superannuation Account",
+      "Taxable Trading Account",
+    ],
+    "Germany": [
+      "Depot (Taxable Brokerage)",
+      "Private Altersvorsorge",
+    ],
+    "Global / Other": [
+      "Taxable Brokerage Account",
+      "Retirement Plan",
+      "Savings & Investment",
+    ],
+  };
+
   // Mock profile definitions
   final List<Map<String, dynamic>> _mockProfiles = [
     {
       "id": "a9117be5-4ea5-419f-b778-be75b22b271d",
       "name": "TFSA Account",
       "type": "TFSA",
+      "country": "Canada",
       "totalValue": 124500.2,
       "totalChange": 4500.2,
       "totalChangePercent": 3.75,
@@ -232,12 +281,36 @@ class ApiService {
       "id": "f90117d3-9bc0-4c28-98e3-4de75b2b271e",
       "name": "RRSP Ledger",
       "type": "RRSP",
+      "country": "Canada",
       "totalValue": 340200.5,
       "totalChange": -1200.5,
       "totalChangePercent": -0.35,
       "annualDividend": 258.93,
     }
   ];
+
+  // Create new profile dynamically
+  Future<InvestmentProfile> createProfile({
+    required String name,
+    required String country,
+    required String type,
+  }) async {
+    await Future.delayed(const Duration(milliseconds: 400));
+    final newId = "prof-${DateTime.now().millisecondsSinceEpoch}";
+    final newProfileMap = {
+      "id": newId,
+      "name": name,
+      "country": country,
+      "type": type,
+      "totalValue": 0.0,
+      "totalChange": 0.0,
+      "totalChangePercent": 0.0,
+      "annualDividend": 0.0,
+    };
+    _mockProfiles.add(newProfileMap);
+    _mockStocks[newId] = [];
+    return InvestmentProfile.fromJson(newProfileMap);
+  }
 
   // Mock stock listings
   final Map<String, List<Map<String, dynamic>>> _mockStocks = {};

@@ -198,6 +198,27 @@ class _LoginViewState extends State<LoginView> {
                                             ),
                                           ),
                                   ),
+                                  const SizedBox(height: 12),
+                                  OutlinedButton(
+                                    onPressed: () {
+                                      context.push("/import");
+                                    },
+                                    style: OutlinedButton.styleFrom(
+                                      padding: const EdgeInsets.symmetric(vertical: 14),
+                                      side: BorderSide(color: theme.border),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(16),
+                                      ),
+                                    ),
+                                    child: Text(
+                                      "New User? Create Profile Setup",
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold,
+                                        color: theme.text,
+                                      ),
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),

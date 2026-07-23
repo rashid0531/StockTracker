@@ -70,6 +70,7 @@ class InvestmentProfile {
   final String id;
   final String name;
   final String type;
+  final String? country;
   final double totalValue;
   final double totalChange;
   final double totalChangePercent;
@@ -80,6 +81,7 @@ class InvestmentProfile {
     required this.id,
     required this.name,
     required this.type,
+    this.country,
     required this.totalValue,
     required this.totalChange,
     required this.totalChangePercent,
@@ -93,6 +95,7 @@ class InvestmentProfile {
       id: json['id'] as String,
       name: json['name'] as String,
       type: json['type'] as String,
+      country: json['country'] as String? ?? 'Canada',
       totalValue: (json['totalValue'] as num).toDouble(),
       totalChange: (json['totalChange'] as num).toDouble(),
       totalChangePercent: (json['totalChangePercent'] as num).toDouble(),
