@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../data/models/profile.dart';
 import '../../../data/services/api_service.dart';
 import '../../core/theme.dart';
+import '../profile/profile_view.dart';
 
 const List<String> _monthNames = [
   "January", "February", "March", "April", "May", "June",
@@ -21,10 +24,95 @@ class DashboardViewModel extends ChangeNotifier {
   List<InvestmentProfile> _profiles = [];
   bool _isLoading = true;
 
+  // Persistent cost targets
+  double _coffeeCost = 100.0;
+  double _utilityCost = 300.0;
+  double _housingCost = 2000.0;
+  double _fireCost = 4000.0;
+
+  // Calendar State
+  List<DividendCalendarEvent> _calendarEvents = [];
+  bool _isLoadingCalendar = false;
+
+  // History State
+  List<TransactionRecord> _transactions = [];
+  bool _isLoadingTransactions = false;
+  String _historyProfileFilter = "ALL";
+  String _historyTypeFilter = "ALL";
+  String _historySearchQuery = "";
+
+  // Dividend Tab State
+  String _dividendProfileId = "ALL";
+  String _activeDividendInterval = "1W";
+  List<ChartPoint> _dividendChartPoints = [];
+  bool _isLoadingDividend = false;
+
   DashboardViewModel({required this.apiService});
 
   List<InvestmentProfile> get profiles => _profiles;
   bool get isLoading => _isLoading;
+
+  double get coffeeCost => _coffeeCost;
+  double get utilityCost => _utilityCost;
+  double get housingCost => _housingCost;
+  double get fireCost => _fireCost;
+
+  List<DividendCalendarEvent> get calendarEvents => _calendarEvents;
+  bool get isLoadingCalendar => _isLoadingCalendar;
+
+  List<TransactionRecord> get transactions => _transactions;
+  bool get isLoadingTransactions => _isLoadingTransactions;
+  String get historyProfileFilter => _historyProfileFilter;
+  String get historyTypeFilter => _historyTypeFilter;
+  String get historySearchQuery => _historySearchQuery;
+
+  String get dividendProfileId => _dividendProfileId;
+  String get activeDividendInterval => _activeDividendInterval;
+  List<ChartPoint> get dividendChartPoints => _dividendChartPoints;
+  bool get isLoadingDividend => _isLoadingDividend;
+
+  InvestmentProfile? get selectedDividendProfile {
+    if (_dividendProfileId == "ALL" || _profiles.isEmpty) return null;
+    return _profiles.firstWhere((p) => p.id == _dividendProfileId, orElse: () => _profiles[0]);
+  }
+
+  double get currentSelectedDividendAmount {
+    if (_dividendProfileId == "ALL") {
+      return totalDividendCAD;
+    }
+    final p = selectedDividendProfile;
+    if (p == null) return 0;
+    return apiService.convertCurrencyToCAD(p.annualDividend, p.type == "TFSA" ? "CAD" : "USD");
+  }
+
+  void setDividendProfileId(String id) {
+    _dividendProfileId = id;
+    loadDividendTab();
+  }
+
+  void setActiveDividendInterval(String interval) {
+    _activeDividendInterval = interval;
+    loadDividendTab();
+  }
+
+  Future<void> loadDividendTab() async {
+    _isLoadingDividend = true;
+    notifyListeners();
+
+    try {
+      final pid = _dividendProfileId == "ALL" ? "a9117be5-4ea5-419f-b778-be75b22b271d" : _dividendProfileId;
+      _dividendChartPoints = await apiService.getChartPoints(
+        pid,
+        _activeDividendInterval,
+        true,
+      );
+    } catch (e) {
+      debugPrint("Error loading dividend tab: $e");
+    } finally {
+      _isLoadingDividend = false;
+      notifyListeners();
+    }
+  }
 
   double get totalValuationCAD {
     double total = 0;
@@ -59,16 +147,142 @@ class DashboardViewModel extends ChangeNotifier {
     return weightedChange;
   }
 
+  Map<String, double> get currencyBreakdowns {
+    final Map<String, double> totals = {};
+    for (var p in _profiles) {
+      for (var s in p.stocks) {
+        totals[s.currency] = (totals[s.currency] ?? 0.0) + s.value;
+      }
+    }
+    return totals;
+  }
+
+  List<TransactionRecord> get filteredTransactions {
+    var list = List<TransactionRecord>.from(_transactions);
+    if (_historyProfileFilter != "ALL") {
+      list = list.where((t) => t.profileId == _historyProfileFilter).toList();
+    }
+    if (_historyTypeFilter != "ALL") {
+      list = list.where((t) => t.type.toUpperCase() == _historyTypeFilter.toUpperCase()).toList();
+    }
+    if (_historySearchQuery.trim().isNotEmpty) {
+      final q = _historySearchQuery.trim().toLowerCase();
+      list = list.where((t) => t.ticker.toLowerCase().contains(q) || t.stockName.toLowerCase().contains(q)).toList();
+    }
+    return list;
+  }
+
+  void setHistoryProfileFilter(String id) {
+    _historyProfileFilter = id;
+    notifyListeners();
+  }
+
+  void setHistoryTypeFilter(String type) {
+    _historyTypeFilter = type;
+    notifyListeners();
+  }
+
+  void setHistorySearchQuery(String q) {
+    _historySearchQuery = q;
+    notifyListeners();
+  }
+
+  Future<void> loadTransactions() async {
+    _isLoadingTransactions = true;
+    notifyListeners();
+
+    try {
+      _transactions = await apiService.getTransactions();
+    } catch (e) {
+      debugPrint("Error loading transactions: $e");
+    } finally {
+      _isLoadingTransactions = false;
+      notifyListeners();
+    }
+  }
+
   Future<void> loadDashboard() async {
     _isLoading = true;
     notifyListeners();
 
     try {
       _profiles = await apiService.getProfiles();
+      await loadFireMilestones();
+      await loadTransactions();
     } catch (e) {
       debugPrint("Error loading dashboard: $e");
     } finally {
       _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> loadFireMilestones() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      _coffeeCost = prefs.getDouble('coffee_cost') ?? 100.0;
+      _utilityCost = prefs.getDouble('utility_cost') ?? 300.0;
+      _housingCost = prefs.getDouble('housing_cost') ?? 2000.0;
+      _fireCost = prefs.getDouble('fire_cost') ?? 4000.0;
+    } catch (e) {
+      debugPrint("Error loading FIRE milestones: $e");
+    }
+  }
+
+  Future<void> updateCoffeeCost(double val) async {
+    _coffeeCost = val;
+    notifyListeners();
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setDouble('coffee_cost', val);
+    } catch (e) {
+      debugPrint("Error saving coffee cost: $e");
+    }
+  }
+
+  Future<void> updateUtilityCost(double val) async {
+    _utilityCost = val;
+    notifyListeners();
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setDouble('utility_cost', val);
+    } catch (e) {
+      debugPrint("Error saving utility cost: $e");
+    }
+  }
+
+  Future<void> updateHousingCost(double val) async {
+    _housingCost = val;
+    notifyListeners();
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setDouble('housing_cost', val);
+    } catch (e) {
+      debugPrint("Error saving housing cost: $e");
+    }
+  }
+
+  Future<void> updateFireCost(double val) async {
+    _fireCost = val;
+    notifyListeners();
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setDouble('fire_cost', val);
+    } catch (e) {
+      debugPrint("Error saving FIRE cost: $e");
+    }
+  }
+
+  Future<void> loadCalendar() async {
+    _isLoadingCalendar = true;
+    notifyListeners();
+
+    try {
+      _calendarEvents = await apiService.getDividendCalendar(ApiService.mockUserId);
+    } catch (e) {
+      debugPrint("Error loading calendar: $e");
+    } finally {
+      _isLoadingCalendar = false;
       notifyListeners();
     }
   }
@@ -82,18 +296,10 @@ class DashboardView extends StatefulWidget {
 }
 
 class _DashboardViewState extends State<DashboardView> {
-  late DashboardViewModel _viewModel;
+  late final DashboardViewModel _viewModel = DashboardViewModel(apiService: ApiService());
   int _currentTabIndex = 0;
 
-  // FIRE Milestones State (locally customizable)
-  double _coffeeCost = 100.0;
-  double _utilityCost = 300.0;
-  double _housingCost = 2000.0;
-  double _fireCost = 4000.0;
-
-  // Dividend Calendar State
-  List<DividendCalendarEvent> _calendarEvents = [];
-  bool _loadingCalendar = false;
+  // Calendar UI Helper State
   DateTime _focusedMonth = DateTime(2026, 7, 1);
   DateTime? _selectedDate = DateTime(2026, 7, 28);
   bool _isCalendarGridView = true;
@@ -101,39 +307,82 @@ class _DashboardViewState extends State<DashboardView> {
   @override
   void initState() {
     super.initState();
-    final apiService = Provider.of<ApiService>(context, listen: false);
-    _viewModel = DashboardViewModel(apiService: apiService);
     Future.microtask(() async {
       await _viewModel.loadDashboard();
-      await _loadCalendar();
+      await _viewModel.loadCalendar();
     });
   }
 
-  Future<void> _loadCalendar() async {
-    setState(() => _loadingCalendar = true);
-    try {
-      final apiService = Provider.of<ApiService>(context, listen: false);
-      final events = await apiService.getDividendCalendar(ApiService.mockUserId);
-      setState(() {
-        _calendarEvents = events;
-      });
-    } catch (e) {
-      debugPrint("Error loading calendar: $e");
-    } finally {
-      setState(() => _loadingCalendar = false);
-    }
+  void _showSaveFeedback(ThemeProvider theme) {
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Row(
+          children: [
+            const Text("💾", style: TextStyle(fontSize: 16)),
+            const SizedBox(width: 10),
+            Text(
+              "Cost target saved and updated!",
+              style: TextStyle(color: theme.text, fontWeight: FontWeight.bold, fontSize: 13),
+            ),
+          ],
+        ),
+        backgroundColor: theme.card,
+        behavior: SnackBarBehavior.floating,
+        duration: const Duration(seconds: 2),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+          side: BorderSide(color: theme.border, width: 1.5),
+        ),
+      ),
+    );
   }
 
   String formatCAD(double val) {
     return "\$${val.toStringAsFixed(2)}";
   }
 
+  Widget _buildMultiCurrencyRow(ThemeProvider theme) {
+    final breakdowns = _viewModel.currencyBreakdowns;
+    if (breakdowns.isEmpty) return const SizedBox.shrink();
+
+    final List<String> parts = [];
+    final sortedCurrencies = breakdowns.keys.toList()..sort();
+    for (var currency in sortedCurrencies) {
+      final value = breakdowns[currency] ?? 0.0;
+      if (value > 0) {
+        String symbol = "\$";
+        if (currency == "USD") {
+          symbol = "US\$";
+        } else if (currency == "AUD") {
+          symbol = "A\$";
+        } else if (currency == "GBP") {
+          symbol = "£";
+        }
+        
+        parts.add("$symbol${value.toStringAsFixed(2)}");
+      }
+    }
+
+    if (parts.isEmpty) return const SizedBox.shrink();
+
+    return Text(
+      "Holdings: ${parts.join('  •  ')}",
+      style: theme.subtitleStyle.copyWith(
+        fontSize: 11,
+        fontWeight: FontWeight.bold,
+        color: theme.subtext.withValues(alpha: 0.8),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Provider.of<ThemeProvider>(context);
+    final isWide = MediaQuery.of(context).size.width >= 700 || kIsWeb;
 
     return Scaffold(
-      backgroundColor: Colors.transparent,
+      backgroundColor: theme.bg,
       body: theme.buildBackground(
         child: SafeArea(
           child: AnimatedBuilder(
@@ -145,47 +394,248 @@ class _DashboardViewState extends State<DashboardView> {
                 );
               }
 
+              if (isWide) {
+                return Row(
+                  children: [
+                    _buildWebSidePanel(theme),
+                    Expanded(
+                      child: _buildTabContent(theme),
+                    ),
+                  ],
+                );
+              }
+
               return _buildTabContent(theme);
             },
           ),
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentTabIndex,
-        onTap: (index) {
-          setState(() {
-            _currentTabIndex = index;
-          });
-          if (index == 2) {
-            _loadCalendar();
-          }
-        },
-        backgroundColor: theme.card,
-        selectedItemColor: AppColors.positive,
-        unselectedItemColor: theme.subtext,
-        selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 11),
-        unselectedLabelStyle: const TextStyle(fontSize: 10),
-        type: BottomNavigationBarType.fixed,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Text("📊", style: TextStyle(fontSize: 18)),
-            activeIcon: Text("📊", style: TextStyle(fontSize: 18)),
-            label: "Portfolio",
+      bottomNavigationBar: isWide
+          ? null
+          : BottomNavigationBar(
+              currentIndex: _currentTabIndex,
+              onTap: (index) {
+                setState(() {
+                  _currentTabIndex = index;
+                });
+                if (index == 1) {
+                  _viewModel.loadDividendTab();
+                } else if (index == 3) {
+                  _viewModel.loadCalendar();
+                } else if (index == 4) {
+                  _viewModel.loadTransactions();
+                }
+              },
+              backgroundColor: theme.card,
+              selectedItemColor: AppColors.positive,
+              unselectedItemColor: theme.subtext,
+              selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 10),
+              unselectedLabelStyle: const TextStyle(fontSize: 9),
+              type: BottomNavigationBarType.fixed,
+              items: const [
+                BottomNavigationBarItem(
+                  icon: Text("📊", style: TextStyle(fontSize: 18)),
+                  activeIcon: Text("📊", style: TextStyle(fontSize: 18)),
+                  label: "Portfolio",
+                ),
+                BottomNavigationBarItem(
+                  icon: Text("💰", style: TextStyle(fontSize: 18)),
+                  activeIcon: Text("💰", style: TextStyle(fontSize: 18)),
+                  label: "Dividend",
+                ),
+                BottomNavigationBarItem(
+                  icon: Text("🔥", style: TextStyle(fontSize: 18)),
+                  activeIcon: Text("🔥", style: TextStyle(fontSize: 18)),
+                  label: "FIRE",
+                ),
+                BottomNavigationBarItem(
+                  icon: Text("📅", style: TextStyle(fontSize: 18)),
+                  activeIcon: Text("📅", style: TextStyle(fontSize: 18)),
+                  label: "Calendar",
+                ),
+                BottomNavigationBarItem(
+                  icon: Text("📜", style: TextStyle(fontSize: 18)),
+                  activeIcon: Text("📜", style: TextStyle(fontSize: 18)),
+                  label: "History",
+                ),
+                BottomNavigationBarItem(
+                  icon: Text("⚙️", style: TextStyle(fontSize: 18)),
+                  activeIcon: Text("⚙️", style: TextStyle(fontSize: 18)),
+                  label: "Settings",
+                ),
+              ],
+            ),
+    );
+  }
+
+  Widget _buildWebSidePanel(ThemeProvider theme) {
+    final navItems = [
+      {"icon": "📊", "label": "Portfolio", "index": 0},
+      {"icon": "💰", "label": "Dividend", "index": 1},
+      {"icon": "🔥", "label": "FIRE", "index": 2},
+      {"icon": "📅", "label": "Calendar", "index": 3},
+      {"icon": "📜", "label": "History", "index": 4},
+      {"icon": "⚙️", "label": "Settings", "index": 5},
+    ];
+
+    return Container(
+      width: 230,
+      decoration: BoxDecoration(
+        color: theme.card,
+        border: Border(
+          right: BorderSide(color: theme.border, width: 1.5),
+        ),
+      ),
+      child: Column(
+        children: [
+          const SizedBox(height: 24),
+          // App Logo & Branding Header
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 18.0),
+            child: Row(
+              children: [
+                Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColors.positive.withValues(alpha: 0.3),
+                        blurRadius: 10,
+                      ),
+                    ],
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Image.asset(
+                      'assets/images/solorash_logo.jpg',
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) => const Center(
+                        child: Text("⚡", style: TextStyle(fontSize: 20)),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "StockTracker",
+                        style: theme.titleStyle.copyWith(fontSize: 16, fontWeight: FontWeight.w900),
+                      ),
+                      Text(
+                        "Wealth Dashboard",
+                        style: theme.subtitleStyle.copyWith(fontSize: 11),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
-          BottomNavigationBarItem(
-            icon: Text("🔥", style: TextStyle(fontSize: 18)),
-            activeIcon: Text("🔥", style: TextStyle(fontSize: 18)),
-            label: "FIRE",
+          const SizedBox(height: 28),
+
+          // Side Navigation Items List
+          Expanded(
+            child: ListView(
+              padding: const EdgeInsets.symmetric(horizontal: 12.0),
+              children: navItems.map((item) {
+                final int idx = item["index"] as int;
+                final bool isActive = _currentTabIndex == idx;
+
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 6.0),
+                  child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        _currentTabIndex = idx;
+                      });
+                      if (idx == 1) {
+                        _viewModel.loadDividendTab();
+                      } else if (idx == 3) {
+                        _viewModel.loadCalendar();
+                      } else if (idx == 4) {
+                        _viewModel.loadTransactions();
+                      }
+                    },
+                    borderRadius: BorderRadius.circular(14),
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 150),
+                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                      decoration: BoxDecoration(
+                        color: isActive
+                            ? AppColors.positive.withValues(alpha: 0.15)
+                            : Colors.transparent,
+                        borderRadius: BorderRadius.circular(14),
+                        border: Border.all(
+                          color: isActive ? AppColors.positive.withValues(alpha: 0.4) : Colors.transparent,
+                          width: 1.2,
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          Text(
+                            item["icon"] as String,
+                            style: const TextStyle(fontSize: 18),
+                          ),
+                          const SizedBox(width: 12),
+                          Text(
+                            item["label"] as String,
+                            style: TextStyle(
+                              color: isActive ? AppColors.positive : theme.text,
+                              fontWeight: isActive ? FontWeight.bold : FontWeight.w600,
+                              fontSize: 14,
+                            ),
+                          ),
+                          if (isActive) ...[
+                            const Spacer(),
+                            Container(
+                              width: 6,
+                              height: 6,
+                              decoration: const BoxDecoration(
+                                color: AppColors.positive,
+                                shape: BoxShape.circle,
+                              ),
+                            ),
+                          ],
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
           ),
-          BottomNavigationBarItem(
-            icon: Text("📅", style: TextStyle(fontSize: 18)),
-            activeIcon: Text("📅", style: TextStyle(fontSize: 18)),
-            label: "Calendar",
-          ),
-          BottomNavigationBarItem(
-            icon: Text("⚙️", style: TextStyle(fontSize: 18)),
-            activeIcon: Text("⚙️", style: TextStyle(fontSize: 18)),
-            label: "Settings",
+
+          // Bottom Quick Action / User Card
+          Padding(
+            padding: const EdgeInsets.all(14.0),
+            child: Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: theme.isDark ? const Color(0xFF14171C) : const Color(0xFFF3F4F6),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: theme.border),
+              ),
+              child: Row(
+                children: [
+                  const Text("👤", style: TextStyle(fontSize: 18)),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("Solo Rash", style: theme.bodyStyle.copyWith(fontWeight: FontWeight.bold, fontSize: 13)),
+                        Text("PRO Member", style: TextStyle(color: AppColors.positive, fontSize: 10, fontWeight: FontWeight.bold)),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
         ],
       ),
@@ -195,10 +645,14 @@ class _DashboardViewState extends State<DashboardView> {
   Widget _buildTabContent(ThemeProvider theme) {
     switch (_currentTabIndex) {
       case 1:
-        return _buildFireTab(theme);
+        return _buildDividendTab(theme);
       case 2:
-        return _buildCalendarTab(theme);
+        return _buildFireTab(theme);
       case 3:
+        return _buildCalendarTab(theme);
+      case 4:
+        return _buildHistoryTab(theme);
+      case 5:
         return _buildSettingsTab(theme);
       case 0:
       default:
@@ -213,7 +667,7 @@ class _DashboardViewState extends State<DashboardView> {
     return RefreshIndicator(
       onRefresh: () async {
         await _viewModel.loadDashboard();
-        await _loadCalendar();
+        await _viewModel.loadCalendar();
       },
       color: AppColors.positive,
       child: ListView(
@@ -328,7 +782,9 @@ class _DashboardViewState extends State<DashboardView> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 12),
+                _buildMultiCurrencyRow(theme),
+                const SizedBox(height: 12),
                 Divider(color: theme.border),
                 const SizedBox(height: 16),
                 Row(
@@ -538,17 +994,21 @@ class _DashboardViewState extends State<DashboardView> {
         Text("Milestone Targets", style: theme.cardTitleStyle.copyWith(fontSize: 15)),
         const SizedBox(height: 12),
 
-        _buildMilestoneProgressCard("☕ Level 1: Coffee & Snacks", monthlyDividend, _coffeeCost, theme, (newVal) {
-          setState(() => _coffeeCost = newVal);
+        _buildMilestoneProgressCard("☕ Level 1: Coffee & Snacks", monthlyDividend, _viewModel.coffeeCost, theme, (newVal) async {
+          await _viewModel.updateCoffeeCost(newVal);
+          _showSaveFeedback(theme);
         }),
-        _buildMilestoneProgressCard("🔌 Level 2: Utilities & Phone", monthlyDividend, _utilityCost, theme, (newVal) {
-          setState(() => _utilityCost = newVal);
+        _buildMilestoneProgressCard("🔌 Level 2: Utilities & Phone", monthlyDividend, _viewModel.utilityCost, theme, (newVal) async {
+          await _viewModel.updateUtilityCost(newVal);
+          _showSaveFeedback(theme);
         }),
-        _buildMilestoneProgressCard("🏠 Level 3: Housing & Rent", monthlyDividend, _housingCost, theme, (newVal) {
-          setState(() => _housingCost = newVal);
+        _buildMilestoneProgressCard("🏠 Level 3: Housing & Rent", monthlyDividend, _viewModel.housingCost, theme, (newVal) async {
+          await _viewModel.updateHousingCost(newVal);
+          _showSaveFeedback(theme);
         }),
-        _buildMilestoneProgressCard("🚀 Level 4: Lean FIRE Goals", monthlyDividend, _fireCost, theme, (newVal) {
-          setState(() => _fireCost = newVal);
+        _buildMilestoneProgressCard("🚀 Level 4: Lean FIRE Goals", monthlyDividend, _viewModel.fireCost, theme, (newVal) async {
+          await _viewModel.updateFireCost(newVal);
+          _showSaveFeedback(theme);
         }),
       ],
     );
@@ -689,16 +1149,16 @@ class _DashboardViewState extends State<DashboardView> {
 
   // 3. Dividend Calendar Tab
   Widget _buildCalendarTab(ThemeProvider theme) {
-    if (_loadingCalendar) {
+    if (_viewModel.isLoadingCalendar) {
       return const Center(
         child: CircularProgressIndicator(color: AppColors.positive),
       );
     }
 
-    final hasUpcomingExDiv = _calendarEvents.any((e) => e.ticker == "AAPL");
+    final hasUpcomingExDiv = _viewModel.calendarEvents.any((e) => e.ticker == "AAPL");
 
     return RefreshIndicator(
-      onRefresh: _loadCalendar,
+      onRefresh: _viewModel.loadCalendar,
       color: AppColors.positive,
       child: ListView(
         padding: const EdgeInsets.all(20.0),
@@ -932,8 +1392,8 @@ class _DashboardViewState extends State<DashboardView> {
                   final dateStr = "${currentDate.year}-${currentDate.month.toString().padLeft(2, '0')}-${currentDate.day.toString().padLeft(2, '0')}";
 
                   // Match events on this day
-                  final exEvents = _calendarEvents.where((e) => e.exDividendDate == dateStr).toList();
-                  final payEvents = _calendarEvents.where((e) => e.paymentDate == dateStr).toList();
+                  final exEvents = _viewModel.calendarEvents.where((e) => e.exDividendDate == dateStr).toList();
+                  final payEvents = _viewModel.calendarEvents.where((e) => e.paymentDate == dateStr).toList();
                   final totalEvents = exEvents.length + payEvents.length;
                   final hasEvents = totalEvents > 0;
 
@@ -1087,8 +1547,8 @@ class _DashboardViewState extends State<DashboardView> {
     final monthName = _monthNames[_selectedDate!.month - 1];
     final dayName = "$dayOfWeekName, $monthName ${_selectedDate!.day}, ${_selectedDate!.year}";
 
-    final dateExEvents = _calendarEvents.where((e) => e.exDividendDate == dateStr).toList();
-    final datePayEvents = _calendarEvents.where((e) => e.paymentDate == dateStr).toList();
+    final dateExEvents = _viewModel.calendarEvents.where((e) => e.exDividendDate == dateStr).toList();
+    final datePayEvents = _viewModel.calendarEvents.where((e) => e.paymentDate == dateStr).toList();
     final totalDayEvents = dateExEvents.length + datePayEvents.length;
 
     double dayTotalPayout = 0;
@@ -1195,7 +1655,7 @@ class _DashboardViewState extends State<DashboardView> {
 
   // Month Overview Event Cards List
   Widget _buildMonthEventsOverview(ThemeProvider theme) {
-    final monthEvents = _calendarEvents.where((e) {
+    final monthEvents = _viewModel.calendarEvents.where((e) {
       final exMatch = e.exDividendDate != null &&
           e.exDividendDate!.startsWith("${_focusedMonth.year}-${_focusedMonth.month.toString().padLeft(2, '0')}");
       final payMatch = e.paymentDate != null &&
@@ -1361,7 +1821,7 @@ class _DashboardViewState extends State<DashboardView> {
 
   // Agenda List View Mode
   Widget _buildAgendaListView(ThemeProvider theme) {
-    if (_calendarEvents.isEmpty) {
+    if (_viewModel.calendarEvents.isEmpty) {
       return const Padding(
         padding: EdgeInsets.symmetric(vertical: 40.0),
         child: Center(
@@ -1375,7 +1835,7 @@ class _DashboardViewState extends State<DashboardView> {
       children: [
         Text("Upcoming Agenda Schedule", style: theme.cardTitleStyle.copyWith(fontSize: 15)),
         const SizedBox(height: 12),
-        ..._calendarEvents.map((event) {
+        ..._viewModel.calendarEvents.map((event) {
           return _buildCalendarEventCard(theme, event, isExDiv: false);
         }),
       ],
@@ -1478,4 +1938,509 @@ class _DashboardViewState extends State<DashboardView> {
       ],
     );
   }
+
+  // 4. History Tab (Transactions Ledger Table)
+  Widget _buildHistoryTab(ThemeProvider theme) {
+    final transactions = _viewModel.filteredTransactions;
+
+    return RefreshIndicator(
+      onRefresh: () async {
+        await _viewModel.loadTransactions();
+      },
+      color: AppColors.positive,
+      child: ListView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
+        children: [
+          // Header
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("Transactions Ledger", style: theme.titleStyle.copyWith(fontSize: 20, fontWeight: FontWeight.w900)),
+                  Text("Complete record of buys & sells", style: theme.subtitleStyle),
+                ],
+              ),
+              InkWell(
+                onTap: () => _viewModel.loadTransactions(),
+                borderRadius: BorderRadius.circular(12),
+                child: Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: theme.card,
+                    shape: BoxShape.circle,
+                    border: Border.all(color: theme.border),
+                  ),
+                  child: Text("🔄", style: TextStyle(color: theme.text, fontSize: 16)),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 20),
+
+          // Filters Card
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: theme.card,
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: theme.border, width: 1.5),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Search Input Box
+                TextField(
+                  onChanged: (val) => _viewModel.setHistorySearchQuery(val),
+                  style: TextStyle(color: theme.text, fontSize: 13),
+                  decoration: InputDecoration(
+                    hintText: "Filter by ticker symbol or company...",
+                    hintStyle: TextStyle(color: theme.subtext, fontSize: 13),
+                    prefixIcon: Icon(Icons.search, color: theme.subtext, size: 18),
+                    filled: true,
+                    fillColor: theme.isDark ? const Color(0xFF181B20) : const Color(0xFFF3F4F6),
+                    contentPadding: const EdgeInsets.symmetric(vertical: 10),
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
+                  ),
+                ),
+                const SizedBox(height: 12),
+
+                // Type Filter Badges (ALL / BUY / SELL)
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      Text("Type: ", style: theme.subtitleStyle.copyWith(fontWeight: FontWeight.bold, fontSize: 12)),
+                      const SizedBox(width: 8),
+                      _buildFilterBadge("All", "ALL", _viewModel.historyTypeFilter, (type) => _viewModel.setHistoryTypeFilter(type), theme),
+                      const SizedBox(width: 6),
+                      _buildFilterBadge("BUY Only", "BUY", _viewModel.historyTypeFilter, (type) => _viewModel.setHistoryTypeFilter(type), theme, activeColor: AppColors.positive),
+                      const SizedBox(width: 6),
+                      _buildFilterBadge("SELL Only", "SELL", _viewModel.historyTypeFilter, (type) => _viewModel.setHistoryTypeFilter(type), theme, activeColor: AppColors.negative),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 10),
+
+                // Account Filter Badges
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      Text("Account: ", style: theme.subtitleStyle.copyWith(fontWeight: FontWeight.bold, fontSize: 12)),
+                      const SizedBox(width: 8),
+                      _buildFilterBadge("All Accounts", "ALL", _viewModel.historyProfileFilter, (id) => _viewModel.setHistoryProfileFilter(id), theme),
+                      ..._viewModel.profiles.map((p) {
+                        return Padding(
+                          padding: const EdgeInsets.only(left: 6.0),
+                          child: _buildFilterBadge(p.type, p.id, _viewModel.historyProfileFilter, (id) => _viewModel.setHistoryProfileFilter(id), theme),
+                        );
+                      }),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 20),
+
+          // Transactions Table
+          if (_viewModel.isLoadingTransactions)
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 40.0),
+              child: Center(child: CircularProgressIndicator(color: AppColors.positive)),
+            )
+          else if (transactions.isEmpty)
+            Container(
+              padding: const EdgeInsets.all(32),
+              decoration: BoxDecoration(
+                color: theme.card,
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: theme.border),
+              ),
+              child: const Center(
+                child: Text("No transactions match the selected filters", style: TextStyle(color: Colors.grey)),
+              ),
+            )
+          else
+            Container(
+              decoration: BoxDecoration(
+                color: theme.card,
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: theme.border, width: 1.5),
+              ),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: DataTable(
+                  columnSpacing: 24,
+                  headingRowHeight: 44,
+                  dataRowMinHeight: 48,
+                  dataRowMaxHeight: 56,
+                  columns: [
+                    DataColumn(label: Text("Date", style: theme.subtitleStyle.copyWith(fontWeight: FontWeight.bold))),
+                    DataColumn(label: Text("Type", style: theme.subtitleStyle.copyWith(fontWeight: FontWeight.bold))),
+                    DataColumn(label: Text("Asset", style: theme.subtitleStyle.copyWith(fontWeight: FontWeight.bold))),
+                    DataColumn(label: Text("Account", style: theme.subtitleStyle.copyWith(fontWeight: FontWeight.bold))),
+                    DataColumn(label: Text("Shares", style: theme.subtitleStyle.copyWith(fontWeight: FontWeight.bold))),
+                    DataColumn(label: Text("Price", style: theme.subtitleStyle.copyWith(fontWeight: FontWeight.bold))),
+                    DataColumn(label: Text("Total Value", style: theme.subtitleStyle.copyWith(fontWeight: FontWeight.bold))),
+                  ],
+                  rows: transactions.map((tx) {
+                    final isBuy = tx.type == "BUY";
+                    return DataRow(
+                      cells: [
+                        DataCell(Text(tx.date, style: TextStyle(color: theme.text, fontSize: 12, fontWeight: FontWeight.w600))),
+                        DataCell(
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                            decoration: BoxDecoration(
+                              color: (isBuy ? AppColors.positive : AppColors.negative).withValues(alpha: 0.15),
+                              borderRadius: BorderRadius.circular(6),
+                              border: Border.all(color: isBuy ? AppColors.positive : AppColors.negative, width: 0.8),
+                            ),
+                            child: Text(
+                              tx.type,
+                              style: TextStyle(
+                                color: isBuy ? AppColors.positive : AppColors.negative,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 10,
+                              ),
+                            ),
+                          ),
+                        ),
+                        DataCell(
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(tx.ticker, style: theme.cardTitleStyle.copyWith(fontSize: 13)),
+                              Text(tx.stockName, style: theme.subtitleStyle.copyWith(fontSize: 10), maxLines: 1, overflow: TextOverflow.ellipsis),
+                            ],
+                          ),
+                        ),
+                        DataCell(Text(tx.profileName, style: theme.subtitleStyle.copyWith(fontSize: 11))),
+                        DataCell(Text(tx.shares.toStringAsFixed(1), style: TextStyle(color: theme.text, fontSize: 12, fontWeight: FontWeight.bold))),
+                        DataCell(Text("\$${tx.price.toStringAsFixed(2)} ${tx.currency}", style: theme.subtitleStyle.copyWith(fontSize: 11))),
+                        DataCell(
+                          Text(
+                            "\$${tx.totalAmount.toStringAsFixed(2)} ${tx.currency}",
+                            style: TextStyle(
+                              color: isBuy ? theme.text : AppColors.positive,
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  }).toList(),
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFilterBadge(
+    String label,
+    String value,
+    String activeValue,
+    Function(String) onTap,
+    ThemeProvider theme, {
+    Color? activeColor,
+  }) {
+    final isActive = activeValue == value;
+    final color = activeColor ?? AppColors.positive;
+
+    return InkWell(
+      onTap: () => onTap(value),
+      borderRadius: BorderRadius.circular(8),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 150),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+        decoration: BoxDecoration(
+          color: isActive ? color : Colors.transparent,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: isActive ? color : theme.border),
+        ),
+        child: Text(
+          label,
+          style: TextStyle(
+            color: isActive ? Colors.black : theme.subtext,
+            fontWeight: isActive ? FontWeight.bold : FontWeight.w600,
+            fontSize: 11,
+          ),
+        ),
+      ),
+    );
+  }
+
+  // 2. Dedicated Dividend Tab (Expected Dividend Projections with Sliding Windows)
+  Widget _buildDividendTab(ThemeProvider theme) {
+    final activeProfile = _viewModel.selectedDividendProfile;
+    final totalDivCAD = _viewModel.currentSelectedDividendAmount;
+    final monthlyDiv = totalDivCAD / 12;
+
+    return RefreshIndicator(
+      onRefresh: () async {
+        await _viewModel.loadDividendTab();
+      },
+      color: AppColors.positive,
+      child: ListView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
+        children: [
+          // Header
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("Expected Dividends", style: theme.titleStyle.copyWith(fontSize: 20, fontWeight: FontWeight.w900)),
+                  Text("Sliding window dividend projections", style: theme.subtitleStyle),
+                ],
+              ),
+              InkWell(
+                onTap: () => _viewModel.loadDividendTab(),
+                borderRadius: BorderRadius.circular(12),
+                child: Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: theme.card,
+                    shape: BoxShape.circle,
+                    border: Border.all(color: theme.border),
+                  ),
+                  child: Text("🔄", style: TextStyle(color: theme.text, fontSize: 16)),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 20),
+
+          // Profile Filter Selector Pills
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                _buildFilterBadge("All Combined", "ALL", _viewModel.dividendProfileId, (id) => _viewModel.setDividendProfileId(id), theme, activeColor: AppColors.positive),
+                ..._viewModel.profiles.map((p) {
+                  return Padding(
+                    padding: const EdgeInsets.only(left: 6.0),
+                    child: _buildFilterBadge(p.name, p.id, _viewModel.dividendProfileId, (id) => _viewModel.setDividendProfileId(id), theme, activeColor: AppColors.positive),
+                  );
+                }),
+              ],
+            ),
+          ),
+          const SizedBox(height: 20),
+
+          // Summary Metrics Card
+          Container(
+            padding: const EdgeInsets.all(22),
+            decoration: BoxDecoration(
+              color: theme.card,
+              borderRadius: BorderRadius.circular(24),
+              border: Border.all(color: theme.border, width: 1.5),
+              boxShadow: const [
+                BoxShadow(color: Colors.black12, blurRadius: 10, offset: Offset(0, 4)),
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      activeProfile != null ? activeProfile.name : "All Portfolios Combined",
+                      style: theme.subtitleStyle.copyWith(fontWeight: FontWeight.bold),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                      decoration: BoxDecoration(
+                        color: AppColors.positive.withValues(alpha: 0.15),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: const Text(
+                        "INCOME PROJECTION",
+                        style: TextStyle(color: AppColors.positive, fontWeight: FontWeight.w900, fontSize: 10),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  "\$${totalDivCAD.toStringAsFixed(2)} CAD / yr",
+                  style: theme.cardTitleStyle.copyWith(
+                    fontSize: 28,
+                    fontWeight: FontWeight.w900,
+                    color: AppColors.positive,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    Text(
+                      "Average: \$${monthlyDiv.toStringAsFixed(2)} CAD / mo",
+                      style: theme.subtitleStyle.copyWith(fontSize: 12, fontWeight: FontWeight.w600),
+                    ),
+                    const SizedBox(width: 12),
+                    Text("•", style: TextStyle(color: theme.subtext)),
+                    const SizedBox(width: 12),
+                    Text(
+                      "Yield: ${(totalDivCAD > 0 ? (totalDivCAD / (_viewModel.totalValuationCAD > 0 ? _viewModel.totalValuationCAD : 1) * 100) : 0).toStringAsFixed(2)}%",
+                      style: theme.subtitleStyle.copyWith(fontSize: 12, color: AppColors.positive, fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 24),
+
+          // Sliding Window Expected Dividend Line Chart
+          Text(
+            "Expected Dividend Sliding Window Chart",
+            style: theme.subtitleStyle.copyWith(fontWeight: FontWeight.bold, letterSpacing: 1.1),
+          ),
+          const SizedBox(height: 12),
+
+          InteractiveHistoryChart(points: _viewModel.dividendChartPoints),
+          const SizedBox(height: 14),
+
+          // Sliding Window Selector (1W, 6M, 1Y, ALL)
+          Container(
+            height: 42,
+            padding: const EdgeInsets.all(3),
+            decoration: BoxDecoration(
+              color: theme.card,
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(color: theme.border, width: 1.5),
+            ),
+            child: Row(
+              children: ["1W", "6M", "1Y", "ALL"].map((interval) {
+                final isActive = _viewModel.activeDividendInterval == interval;
+                String label = interval;
+                if (interval == "1W") label = "1 Week";
+                if (interval == "6M") label = "6 Months";
+                if (interval == "1Y") label = "1 Year";
+                if (interval == "ALL") label = "ALL";
+
+                return Expanded(
+                  child: InkWell(
+                    onTap: () => _viewModel.setActiveDividendInterval(interval),
+                    borderRadius: BorderRadius.circular(10),
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 150),
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: isActive ? AppColors.positive : Colors.transparent,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Text(
+                        label,
+                        style: TextStyle(
+                          color: isActive ? Colors.black : theme.subtext,
+                          fontWeight: isActive ? FontWeight.bold : FontWeight.w600,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
+          ),
+          const SizedBox(height: 24),
+
+          // Expected Dividend Contributors List
+          Text(
+            "Dividend Contributing Stocks",
+            style: theme.subtitleStyle.copyWith(fontWeight: FontWeight.bold, letterSpacing: 1.1),
+          ),
+          const SizedBox(height: 12),
+
+          ..._buildDividendStocksList(theme),
+          const SizedBox(height: 30),
+        ],
+      ),
+    );
+  }
+
+  List<Widget> _buildDividendStocksList(ThemeProvider theme) {
+    List<StockHolding> stocks = [];
+    if (_viewModel.dividendProfileId == "ALL") {
+      for (var p in _viewModel.profiles) {
+        stocks.addAll(p.stocks);
+      }
+    } else {
+      final p = _viewModel.selectedDividendProfile;
+      if (p != null) stocks = p.stocks;
+    }
+
+    if (stocks.isEmpty) {
+      return [
+        Container(
+          padding: const EdgeInsets.all(24),
+          decoration: BoxDecoration(color: theme.card, borderRadius: BorderRadius.circular(20), border: Border.all(color: theme.border)),
+          child: const Center(child: Text("No dividend-paying stocks in this profile", style: TextStyle(color: Colors.grey))),
+        )
+      ];
+    }
+
+    return stocks.map((stock) {
+      final estPayout = stock.shares * 0.75;
+      return Container(
+        margin: const EdgeInsets.only(bottom: 10),
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color: theme.card,
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(color: theme.border, width: 1.2),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                Container(
+                  width: 36,
+                  height: 36,
+                  decoration: BoxDecoration(
+                    color: AppColors.positive.withValues(alpha: 0.15),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Center(child: Text("💰", style: TextStyle(fontSize: 14))),
+                ),
+                const SizedBox(width: 12),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(stock.ticker, style: theme.cardTitleStyle.copyWith(fontSize: 14)),
+                    Text(stock.name, style: theme.subtitleStyle.copyWith(fontSize: 11), maxLines: 1, overflow: TextOverflow.ellipsis),
+                  ],
+                ),
+              ],
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  "+\$${estPayout.toStringAsFixed(2)} ${stock.currency}",
+                  style: theme.cardTitleStyle.copyWith(color: AppColors.positive, fontSize: 13),
+                ),
+                Text("${stock.shares} shares", style: theme.subtitleStyle.copyWith(fontSize: 10)),
+              ],
+            ),
+          ],
+        ),
+      );
+    }).toList();
+  }
 }
+
+

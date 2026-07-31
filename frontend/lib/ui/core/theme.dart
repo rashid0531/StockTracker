@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:ui';
-import 'package:google_fonts/google_fonts.dart';
 
 class AppColors {
   // Common Colors
@@ -42,34 +40,36 @@ class ThemeProvider extends ChangeNotifier {
   Color get subtext => isDark ? AppColors.darkSubtext : AppColors.lightSubtext;
 
   // Custom text styles
-  TextStyle get titleStyle => GoogleFonts.plusJakartaSans(
+  TextStyle get titleStyle => TextStyle(
         color: text,
         fontSize: 22,
         fontWeight: FontWeight.w900,
         letterSpacing: -0.2,
       );
 
-  TextStyle get subtitleStyle => GoogleFonts.plusJakartaSans(
+  TextStyle get subtitleStyle => TextStyle(
         color: subtext,
         fontSize: 12,
         fontWeight: FontWeight.w500,
       );
 
-  TextStyle get cardTitleStyle => GoogleFonts.plusJakartaSans(
+  TextStyle get cardTitleStyle => TextStyle(
         color: text,
         fontSize: 16,
         fontWeight: FontWeight.bold,
         letterSpacing: -0.1,
       );
 
-  TextStyle get bodyStyle => GoogleFonts.plusJakartaSans(
+  TextStyle get bodyStyle => TextStyle(
         color: text,
         fontSize: 14,
       );
 
   Widget buildBackground({required Widget child}) {
-    return PremiumBackground(
-      isDark: isDark,
+    return Container(
+      width: double.infinity,
+      height: double.infinity,
+      color: bg,
       child: child,
     );
   }
@@ -90,126 +90,157 @@ class PremiumBackground extends StatefulWidget {
 }
 
 class _PremiumBackgroundState extends State<PremiumBackground> {
-  Offset? _hoverPosition;
+  final ValueNotifier<Offset?> _hoverPositionNotifier = ValueNotifier<Offset?>(null);
+
+  @override
+  void dispose() {
+    _hoverPositionNotifier.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return MouseRegion(
       hitTestBehavior: HitTestBehavior.opaque,
       onHover: (event) {
-        setState(() {
-          _hoverPosition = event.localPosition;
-        });
+        _hoverPositionNotifier.value = event.localPosition;
       },
       onExit: (event) {
-        setState(() {
-          _hoverPosition = null;
-        });
+        _hoverPositionNotifier.value = null;
       },
       child: Stack(
         children: [
-          // Base gradient background
+          // Base gradient background (opaque)
           Positioned.fill(
             child: Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: widget.isDark
-                      ? const [
-                          Color(0xFF090A0F),
-                          Color(0xFF141724),
-                          Color(0xFF0E1018),
-                        ]
-                      : const [
-                          Color(0xFFF3F5F8),
-                          Color(0xFFEAEEF4),
-                          Color(0xFFF1F4F7),
-                        ],
-                ),
-              ),
-            ),
-          ),
-          // Soft glowing mesh blobs
-          if (widget.isDark) ...[
-            // Green glow for wealth growth
-            Positioned(
-              top: -100,
-              right: -100,
+              color: widget.isDark ? const Color(0xFF090A0F) : const Color(0xFFF3F5F8),
               child: Container(
-                width: 320,
-                height: 320,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Color(0x4D4CAF50), // Brighter green glow
-                ),
-              ),
-            ),
-            // Deep navy/indigo glow for contrast
-            Positioned(
-              bottom: -120,
-              left: -120,
-              child: Container(
-                width: 400,
-                height: 400,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Color(0x405C6BC0), // Brighter indigo/blue glow
-                ),
-              ),
-            ),
-          ] else ...[
-            // Soft green/mint glow in light mode
-            Positioned(
-              top: -120,
-              right: -120,
-              child: Container(
-                width: 350,
-                height: 350,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Color(0x3881C784),
-                ),
-              ),
-            ),
-            // Soft blue/slate glow in light mode
-            Positioned(
-              bottom: -140,
-              left: -140,
-              child: Container(
-                width: 420,
-                height: 420,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Color(0x3890CAF9),
-                ),
-              ),
-            ),
-          ],
-          // Interactive Hover Responsive Glow Blob
-          if (_hoverPosition != null)
-            Positioned(
-              left: _hoverPosition!.dx - 180,
-              top: _hoverPosition!.dy - 180,
-              child: IgnorePointer(
-                child: Container(
-                  width: 360,
-                  height: 360,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: widget.isDark
-                        ? const Color(0x5E00E676) // Bright green interactive glow (37% opacity)
-                        : const Color(0x384CAF50), // Mint green glow in light mode (22% opacity)
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: widget.isDark
+                        ? const [
+                            Color(0xFF090A0F),
+                            Color(0xFF141724),
+                            Color(0xFF0E1018),
+                          ]
+                        : const [
+                            Color(0xFFF3F5F8),
+                            Color(0xFFEAEEF4),
+                            Color(0xFFF1F4F7),
+                          ],
                   ),
                 ),
               ),
             ),
-          // BackdropFilter for a premium smooth blur effect
-          Positioned.fill(
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 45.0, sigmaY: 45.0),
-              child: const SizedBox.shrink(),
+          ),
+          // Soft glowing mesh radial gradient blobs (no BackdropFilter layer bug)
+          if (widget.isDark) ...[
+            // Green radial glow for wealth growth
+            Positioned(
+              top: -100,
+              right: -100,
+              child: Container(
+                width: 450,
+                height: 450,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: RadialGradient(
+                    colors: [
+                      Color(0x404CAF50),
+                      Color(0x004CAF50),
+                    ],
+                  ),
+                ),
+              ),
             ),
+            // Deep navy/indigo radial glow for contrast
+            Positioned(
+              bottom: -120,
+              left: -120,
+              child: Container(
+                width: 500,
+                height: 500,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: RadialGradient(
+                    colors: [
+                      Color(0x385C6BC0),
+                      Color(0x005C6BC0),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ] else ...[
+            // Soft green/mint radial glow in light mode
+            Positioned(
+              top: -120,
+              right: -120,
+              child: Container(
+                width: 450,
+                height: 450,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: RadialGradient(
+                    colors: [
+                      Color(0x3581C784),
+                      Color(0x0081C784),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            // Soft blue/slate radial glow in light mode
+            Positioned(
+              bottom: -140,
+              left: -140,
+              child: Container(
+                width: 520,
+                height: 520,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: RadialGradient(
+                    colors: [
+                      Color(0x3590CAF9),
+                      Color(0x0090CAF9),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+          // Interactive Hover Responsive Radial Glow Blob
+          ValueListenableBuilder<Offset?>(
+            valueListenable: _hoverPositionNotifier,
+            builder: (context, hoverPosition, child) {
+              if (hoverPosition == null) return const SizedBox.shrink();
+              return Positioned(
+                left: hoverPosition.dx - 200,
+                top: hoverPosition.dy - 200,
+                child: IgnorePointer(
+                  child: Container(
+                    width: 400,
+                    height: 400,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      gradient: RadialGradient(
+                        colors: widget.isDark
+                            ? const [
+                                Color(0x4000E676),
+                                Color(0x0000E676),
+                              ]
+                            : const [
+                                Color(0x304CAF50),
+                                Color(0x004CAF50),
+                              ],
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            },
           ),
           // Content overlay
           Positioned.fill(

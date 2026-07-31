@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import 'data/services/api_service.dart';
 import 'ui/core/theme.dart';
-import 'ui/features/splash/splash_view.dart';
 import 'ui/features/login/login_view.dart';
 import 'ui/features/dashboard/dashboard_view.dart';
 import 'ui/features/profile/profile_view.dart';
@@ -14,6 +12,46 @@ import 'ui/features/import/import_view.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  
+  FlutterError.onError = (FlutterErrorDetails details) {
+    FlutterError.presentError(details);
+    debugPrint('=== FLUTTER EXCEPTION DETECTED ===');
+    debugPrint(details.exceptionAsString());
+    debugPrint(details.stack.toString());
+  };
+
+  ErrorWidget.builder = (FlutterErrorDetails details) {
+    return Scaffold(
+      backgroundColor: const Color(0xFF1E1E2C),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  "⚠️ Application Error Caught",
+                  style: TextStyle(color: Colors.redAccent, fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  details.exceptionAsString(),
+                  style: const TextStyle(color: Colors.white, fontSize: 14, fontFamily: 'monospace'),
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  details.stack.toString(),
+                  style: const TextStyle(color: Colors.white70, fontSize: 11, fontFamily: 'monospace'),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  };
+
   runApp(
     MultiProvider(
       providers: [
@@ -34,7 +72,7 @@ class WealthTrackerApp extends StatelessWidget {
     routes: [
       GoRoute(
         path: '/',
-        builder: (context, state) => const SplashView(),
+        builder: (context, state) => const LoginView(),
       ),
       GoRoute(
         path: '/login',
@@ -80,9 +118,6 @@ class WealthTrackerApp extends StatelessWidget {
         scaffoldBackgroundColor: AppColors.darkBg,
         cardColor: AppColors.darkCard,
         dividerColor: AppColors.darkBorder,
-        textTheme: GoogleFonts.plusJakartaSansTextTheme(
-          ThemeData(brightness: Brightness.dark).textTheme,
-        ),
         useMaterial3: true,
       ),
       // Light Theme Data
@@ -91,9 +126,6 @@ class WealthTrackerApp extends StatelessWidget {
         scaffoldBackgroundColor: AppColors.lightBg,
         cardColor: AppColors.lightCard,
         dividerColor: AppColors.lightBorder,
-        textTheme: GoogleFonts.plusJakartaSansTextTheme(
-          ThemeData(brightness: Brightness.light).textTheme,
-        ),
         useMaterial3: true,
       ),
       routerConfig: _router,

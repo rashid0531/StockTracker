@@ -208,9 +208,9 @@ class _ImportViewState extends State<ImportView> {
     final theme = Provider.of<ThemeProvider>(context);
 
     return Scaffold(
-      backgroundColor: Colors.transparent,
+      backgroundColor: theme.bg,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: theme.bg,
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back_rounded, color: theme.text),

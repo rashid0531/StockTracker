@@ -1,42 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import '../../../data/services/api_service.dart';
-import '../../core/theme.dart';
-
-class LoginViewModel extends ChangeNotifier {
-  final ApiService apiService;
-  bool _isLoading = false;
-  String? _errorMessage;
-
-  LoginViewModel({required this.apiService});
-
-  bool get isLoading => _isLoading;
-  String? get errorMessage => _errorMessage;
-
-  Future<bool> signIn(String email, String password) async {
-    if (email.isEmpty) {
-      _errorMessage = "Please enter an email address";
-      notifyListeners();
-      return false;
-    }
-    _isLoading = true;
-    _errorMessage = null;
-    notifyListeners();
-
-    try {
-      await apiService.login(email, password);
-      _isLoading = false;
-      notifyListeners();
-      return true;
-    } catch (e) {
-      _isLoading = false;
-      _errorMessage = "Login failed: ${e.toString()}";
-      notifyListeners();
-      return false;
-    }
-  }
-}
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -48,6 +12,10 @@ class LoginView extends StatefulWidget {
 class _LoginViewState extends State<LoginView> {
   final _emailController = TextEditingController(text: "demo@antigravity.ai");
   final _passwordController = TextEditingController(text: "password123");
+  final ApiService _apiService = ApiService();
+
+  bool _isLoading = false;
+  String? _errorMessage;
 
   @override
   void dispose() {
@@ -56,197 +24,266 @@ class _LoginViewState extends State<LoginView> {
     super.dispose();
   }
 
+  Future<void> _handleSignIn() async {
+    final email = _emailController.text.trim();
+    final password = _passwordController.text.trim();
+
+    if (email.isEmpty) {
+      setState(() {
+        _errorMessage = "Please enter an email address";
+      });
+      return;
+    }
+
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
+
+    try {
+      await _apiService.login(email, password);
+      if (!mounted) return;
+      context.replace("/dashboard");
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _isLoading = false;
+        _errorMessage = "Login failed: ${e.toString()}";
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final theme = Provider.of<ThemeProvider>(context);
-    final apiService = Provider.of<ApiService>(context);
-
     return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: theme.buildBackground(
+      backgroundColor: const Color(0xFF0B0E14),
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color(0xFF0F172A),
+              Color(0xFF090D16),
+              Color(0xFF05070B),
+            ],
+          ),
+        ),
         child: SafeArea(
-          child: ChangeNotifierProvider(
-            create: (_) => LoginViewModel(apiService: apiService),
-            child: Consumer<LoginViewModel>(
-              builder: (context, model, child) {
-                return LayoutBuilder(
-                  builder: (context, viewportConstraints) {
-                    return SingleChildScrollView(
-                      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 32.0),
-                      child: ConstrainedBox(
-                        constraints: BoxConstraints(
-                          minHeight: viewportConstraints.maxHeight - 64.0,
-                        ),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            // Top Logo / Header
-                            Center(
-                              child: Container(
-                                width: 84,
-                                height: 84,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: AppColors.positive.withValues(alpha: 0.3),
-                                      blurRadius: 20,
-                                      spreadRadius: 2,
-                                    ),
-                                  ],
-                                ),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(42),
-                                  child: Image.asset(
-                                    'assets/images/solorash_logo.jpg',
-                                    fit: BoxFit.cover,
-                                    errorBuilder: (context, error, stackTrace) => const Center(
-                                      child: Text("⚡", style: TextStyle(fontSize: 34)),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 18),
-                            Text(
-                              "WealthTracker",
-                              style: theme.titleStyle.copyWith(fontSize: 28, fontWeight: FontWeight.w900),
-                              textAlign: TextAlign.center,
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              "AUTOMATE TODAY. BUILD WEALTH TOMORROW.",
-                              style: TextStyle(
-                                color: const Color(0xFFE5C158),
-                                fontSize: 10,
-                                fontWeight: FontWeight.w800,
-                                letterSpacing: 2.0,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                            const SizedBox(height: 40),
-
-                            // Inputs card
-                            Container(
-                              padding: const EdgeInsets.all(20),
-                              decoration: BoxDecoration(
-                                color: theme.card,
-                                borderRadius: BorderRadius.circular(24),
-                                border: Border.all(color: theme.border, width: 1.5),
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  TextField(
-                                    controller: _emailController,
-                                    style: TextStyle(color: theme.text),
-                                    decoration: InputDecoration(
-                                      labelText: "Email Address",
-                                      labelStyle: TextStyle(color: theme.subtext),
-                                      enabledBorder: UnderlineInputBorder(
-                                        borderSide: BorderSide(color: theme.border),
-                                      ),
-                                      focusedBorder: const UnderlineInputBorder(
-                                        borderSide: BorderSide(color: AppColors.positive),
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(height: 16),
-                                  TextField(
-                                    controller: _passwordController,
-                                    obscureText: true,
-                                    style: TextStyle(color: theme.text),
-                                    decoration: InputDecoration(
-                                      labelText: "Password",
-                                      labelStyle: TextStyle(color: theme.subtext),
-                                      enabledBorder: UnderlineInputBorder(
-                                        borderSide: BorderSide(color: theme.border),
-                                      ),
-                                      focusedBorder: const UnderlineInputBorder(
-                                        borderSide: BorderSide(color: AppColors.positive),
-                                      ),
-                                    ),
-                                  ),
-                                  if (model.errorMessage != null) ...[
-                                    const SizedBox(height: 16),
-                                    Text(
-                                      model.errorMessage!,
-                                      style: const TextStyle(color: AppColors.negative, fontSize: 12),
-                                    ),
-                                  ],
-                                  const SizedBox(height: 24),
-                                  ElevatedButton(
-                                    onPressed: model.isLoading
-                                        ? null
-                                        : () async {
-                                            final success = await model.signIn(
-                                              _emailController.text,
-                                              _passwordController.text,
-                                            );
-                                            if (!context.mounted) return;
-                                            if (success) {
-                                              context.replace("/dashboard");
-                                            }
-                                          },
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: AppColors.positive,
-                                      padding: const EdgeInsets.symmetric(vertical: 16),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(16),
-                                      ),
-                                      elevation: 0,
-                                    ),
-                                    child: model.isLoading
-                                        ? const SizedBox(
-                                            height: 20,
-                                            width: 20,
-                                            child: CircularProgressIndicator(
-                                              color: Colors.white,
-                                              strokeWidth: 2,
-                                            ),
-                                          )
-                                        : const Text(
-                                            "Sign In",
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                  ),
-                                  const SizedBox(height: 12),
-                                  OutlinedButton(
-                                    onPressed: () {
-                                      context.push("/import");
-                                    },
-                                    style: OutlinedButton.styleFrom(
-                                      padding: const EdgeInsets.symmetric(vertical: 14),
-                                      side: BorderSide(color: theme.border),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(16),
-                                      ),
-                                    ),
-                                    child: Text(
-                                      "New User? Create Profile Setup",
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
-                                        color: theme.text,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
+          child: Center(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 32.0),
+              child: Container(
+                constraints: const BoxConstraints(maxWidth: 420),
+                padding: const EdgeInsets.all(28.0),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF131B2E),
+                  borderRadius: BorderRadius.circular(24),
+                  border: Border.all(color: const Color(0xFF2A364F), width: 1.5),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Color(0x66000000),
+                      blurRadius: 30,
+                      offset: Offset(0, 10),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    // Brand Header Logo & Title
+                    Center(
+                      child: Container(
+                        width: 72,
+                        height: 72,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: const Color(0xFF1E293B),
+                          border: Border.all(color: const Color(0xFF4CAF50), width: 2),
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Color(0x404CAF50),
+                              blurRadius: 16,
+                              spreadRadius: 2,
                             ),
                           ],
                         ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(36),
+                          child: Image.asset(
+                            'assets/images/solorash_logo.jpg',
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) => const Center(
+                              child: Text("⚡", style: TextStyle(fontSize: 32)),
+                            ),
+                          ),
+                        ),
                       ),
-                    );
-                  },
-                );
-              },
+                    ),
+                    const SizedBox(height: 16),
+                    const Text(
+                      "WealthTracker",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 26,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: -0.5,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 4),
+                    const Text(
+                      "AUTOMATE TODAY. BUILD WEALTH TOMORROW.",
+                      style: TextStyle(
+                        color: Color(0xFFE5C158),
+                        fontSize: 10,
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: 1.8,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 32),
+
+                    // Title
+                    const Text(
+                      "Sign In",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    const Text(
+                      "Welcome back! Enter your credentials to continue.",
+                      style: TextStyle(
+                        color: Color(0xFF94A3B8),
+                        fontSize: 13,
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+
+                    // Email Field
+                    TextField(
+                      controller: _emailController,
+                      style: const TextStyle(color: Colors.white),
+                      decoration: InputDecoration(
+                        labelText: "Email Address",
+                        labelStyle: const TextStyle(color: Color(0xFF94A3B8)),
+                        prefixIcon: const Icon(Icons.email_outlined, color: Color(0xFF94A3B8)),
+                        filled: true,
+                        fillColor: const Color(0xFF0F172A),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(14),
+                          borderSide: const BorderSide(color: Color(0xFF334155)),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(14),
+                          borderSide: const BorderSide(color: Color(0xFF4CAF50), width: 2),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+
+                    // Password Field
+                    TextField(
+                      controller: _passwordController,
+                      obscureText: true,
+                      style: const TextStyle(color: Colors.white),
+                      decoration: InputDecoration(
+                        labelText: "Password",
+                        labelStyle: const TextStyle(color: Color(0xFF94A3B8)),
+                        prefixIcon: const Icon(Icons.lock_outline, color: Color(0xFF94A3B8)),
+                        filled: true,
+                        fillColor: const Color(0xFF0F172A),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(14),
+                          borderSide: const BorderSide(color: Color(0xFF334155)),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(14),
+                          borderSide: const BorderSide(color: Color(0xFF4CAF50), width: 2),
+                        ),
+                      ),
+                    ),
+
+                    if (_errorMessage != null) ...[
+                      const SizedBox(height: 16),
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: const Color(0x26EF4444),
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: const Color(0xFFEF4444)),
+                        ),
+                        child: Text(
+                          _errorMessage!,
+                          style: const TextStyle(color: Color(0xFFFCA5A5), fontSize: 13),
+                        ),
+                      ),
+                    ],
+
+                    const SizedBox(height: 24),
+
+                    // Sign In Button
+                    ElevatedButton(
+                      onPressed: _isLoading ? null : _handleSignIn,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF4CAF50),
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                        elevation: 0,
+                      ),
+                      child: _isLoading
+                          ? const SizedBox(
+                              height: 20,
+                              width: 20,
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                                strokeWidth: 2,
+                              ),
+                            )
+                          : const Text(
+                              "Sign In",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+                    ),
+
+                    const SizedBox(height: 12),
+
+                    // Create Profile Setup Button
+                    OutlinedButton(
+                      onPressed: () {
+                        context.push("/import");
+                      },
+                      style: OutlinedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        side: const BorderSide(color: Color(0xFF334155)),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                      ),
+                      child: const Text(
+                        "New User? Create Profile Setup",
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
         ),

@@ -150,14 +150,13 @@ class AnalysisView extends StatefulWidget {
 }
 
 class _AnalysisViewState extends State<AnalysisView> {
-  late AnalysisViewModel _viewModel;
+  late final AnalysisViewModel _viewModel;
 
   @override
   void initState() {
     super.initState();
-    final apiService = Provider.of<ApiService>(context, listen: false);
     _viewModel = AnalysisViewModel(
-      apiService: apiService,
+      apiService: ApiService(),
       profileId: widget.profileId,
       type: widget.type,
     );
@@ -173,9 +172,9 @@ class _AnalysisViewState extends State<AnalysisView> {
     final theme = Provider.of<ThemeProvider>(context);
 
     return Scaffold(
-      backgroundColor: Colors.transparent,
+      backgroundColor: theme.bg,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: theme.bg,
         elevation: 0,
         leading: IconButton(
           icon: Text("←", style: TextStyle(color: theme.text, fontSize: 24, fontWeight: FontWeight.bold)),

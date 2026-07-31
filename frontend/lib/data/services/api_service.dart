@@ -318,123 +318,86 @@ class ApiService {
   // Mock historical total valuations
   final Map<String, Map<String, List<Map<String, dynamic>>>> _mockValuationHistory = {
     "a9117be5-4ea5-419f-b778-be75b22b271d": {
-      "NOW": [
-        {"date": "Today", "value": 124500.2}
-      ],
-      "1D": [
-        {"date": "09:30 AM", "value": 123800.0},
-        {"date": "11:00 AM", "value": 124100.0},
-        {"date": "01:00 PM", "value": 123900.0},
-        {"date": "03:00 PM", "value": 124300.0},
-        {"date": "04:00 PM", "value": 124500.2}
-      ],
-      "5D": [
-        {"date": "Mon", "value": 122000.0},
-        {"date": "Tue", "value": 123100.0},
-        {"date": "Wed", "value": 122900.0},
-        {"date": "Thu", "value": 124000.0},
-        {"date": "Fri", "value": 124500.2}
-      ],
       "1W": [
-        {"date": "7d ago", "value": 121000.0},
-        {"date": "5d ago", "value": 122500.0},
-        {"date": "3d ago", "value": 124100.0},
-        {"date": "Today", "value": 124500.2}
-      ],
-      "1M": [
-        {"date": "Wk 1", "value": 119000.0},
-        {"date": "Wk 2", "value": 121500.0},
-        {"date": "Wk 3", "value": 120800.0},
-        {"date": "Wk 4", "value": 124500.2}
-      ],
-      "3M": [
-        {"date": "3m ago", "value": 115000.0},
-        {"date": "2m ago", "value": 118000.0},
-        {"date": "1m ago", "value": 121000.0},
-        {"date": "Today", "value": 124500.2}
+        {"date": "Jul 24", "value": 121000.0},
+        {"date": "Jul 25", "value": 121800.0},
+        {"date": "Jul 26", "value": 122500.0},
+        {"date": "Jul 27", "value": 123200.0},
+        {"date": "Jul 28", "value": 124100.0},
+        {"date": "Jul 29", "value": 123900.0},
+        {"date": "Jul 30", "value": 124500.2}
       ],
       "6M": [
-        {"date": "6m ago", "value": 110000.0},
-        {"date": "4m ago", "value": 114000.0},
-        {"date": "2m ago", "value": 119000.0},
-        {"date": "Today", "value": 124500.2}
+        {"date": "Feb 2026", "value": 110000.0},
+        {"date": "Mar 2026", "value": 112500.0},
+        {"date": "Apr 2026", "value": 115000.0},
+        {"date": "May 2026", "value": 118200.0},
+        {"date": "Jun 2026", "value": 121400.0},
+        {"date": "Jul 2026", "value": 124500.2}
       ],
       "1Y": [
-        {"date": "Q1", "value": 110000.0},
-        {"date": "Q2", "value": 115000.0},
-        {"date": "Q3", "value": 118200.0},
-        {"date": "Q4", "value": 124500.2}
-      ],
-      "5Y": [
-        {"date": "5y ago", "value": 95000.0},
-        {"date": "3y ago", "value": 108000.0},
-        {"date": "1y ago", "value": 124500.2}
+        {"date": "Aug 2025", "value": 102000.0},
+        {"date": "Sep 2025", "value": 104500.0},
+        {"date": "Oct 2025", "value": 106000.0},
+        {"date": "Nov 2025", "value": 108500.0},
+        {"date": "Dec 2025", "value": 110000.0},
+        {"date": "Jan 2026", "value": 111200.0},
+        {"date": "Feb 2026", "value": 113000.0},
+        {"date": "Mar 2026", "value": 115500.0},
+        {"date": "Apr 2026", "value": 117800.0},
+        {"date": "May 2026", "value": 120100.0},
+        {"date": "Jun 2026", "value": 122600.0},
+        {"date": "Jul 2026", "value": 124500.2}
       ],
       "ALL": [
-        {"date": "2021", "value": 50000.0},
-        {"date": "2023", "value": 85000.0},
-        {"date": "2025", "value": 118000.0},
-        {"date": "Today", "value": 124500.2}
+        {"date": "2021", "value": 45000.0},
+        {"date": "2022", "value": 62000.0},
+        {"date": "2023", "value": 84000.0},
+        {"date": "2024", "value": 101000.0},
+        {"date": "2025", "value": 115000.0},
+        {"date": "2026 (Now)", "value": 124500.2}
       ]
     },
     "f90117d3-9bc0-4c28-98e3-4de75b2b271e": {
-      "NOW": [
-        {"date": "Today", "value": 340200.5}
-      ],
-      "1D": [
-        {"date": "09:30 AM", "value": 341000.0},
-        {"date": "11:00 AM", "value": 339500.0},
-        {"date": "01:00 PM", "value": 340100.0},
-        {"date": "03:00 PM", "value": 339800.0},
-        {"date": "04:00 PM", "value": 340200.5}
-      ],
-      "5D": [
-        {"date": "Mon", "value": 338000.0},
-        {"date": "Tue", "value": 339200.0},
-        {"date": "Wed", "value": 340900.0},
-        {"date": "Thu", "value": 339500.0},
-        {"date": "Fri", "value": 340200.5}
-      ],
       "1W": [
-        {"date": "7d ago", "value": 335000.0},
-        {"date": "5d ago", "value": 338000.0},
-        {"date": "3d ago", "value": 339200.0},
-        {"date": "Today", "value": 340200.5}
-      ],
-      "1M": [
-        {"date": "Wk 1", "value": 332000.0},
-        {"date": "Wk 2", "value": 335000.0},
-        {"date": "Wk 3", "value": 338100.0},
-        {"date": "Wk 4", "value": 340200.5}
-      ],
-      "3M": [
-        {"date": "3m ago", "value": 325000.0},
-        {"date": "2m ago", "value": 331000.0},
-        {"date": "1m ago", "value": 336000.0},
-        {"date": "Today", "value": 340200.5}
+        {"date": "Jul 24", "value": 334000.0},
+        {"date": "Jul 25", "value": 335500.0},
+        {"date": "Jul 26", "value": 337000.0},
+        {"date": "Jul 27", "value": 338200.0},
+        {"date": "Jul 28", "value": 339100.0},
+        {"date": "Jul 29", "value": 338900.0},
+        {"date": "Jul 30", "value": 340200.5}
       ],
       "6M": [
-        {"date": "6m ago", "value": 310000.0},
-        {"date": "4m ago", "value": 320000.0},
-        {"date": "2m ago", "value": 335000.0},
-        {"date": "Today", "value": 340200.5}
+        {"date": "Feb 2026", "value": 312000.0},
+        {"date": "Mar 2026", "value": 318000.0},
+        {"date": "Apr 2026", "value": 324000.0},
+        {"date": "May 2026", "value": 330000.0},
+        {"date": "Jun 2026", "value": 335000.0},
+        {"date": "Jul 2026", "value": 340200.5}
       ],
       "1Y": [
-        {"date": "Q1", "value": 310000.0},
-        {"date": "Q2", "value": 322000.0},
-        {"date": "Q3", "value": 331500.0},
-        {"date": "Q4", "value": 340200.5}
-      ],
-      "5Y": [
-        {"date": "5y ago", "value": 270000.0},
-        {"date": "3y ago", "value": 295000.0},
-        {"date": "1y ago", "value": 340200.5}
+        {"date": "Aug 2025", "value": 290000.0},
+        {"date": "Sep 2025", "value": 295000.0},
+        {"date": "Oct 2025", "value": 300000.0},
+        {"date": "Nov 2025", "value": 305000.0},
+        {"date": "Dec 2025", "value": 310000.0},
+        {"date": "Jan 2026", "value": 314000.0},
+        {"date": "Feb 2026", "value": 319000.0},
+        {"date": "Mar 2026", "value": 325000.0},
+        {"date": "Apr 2026", "value": 330000.0},
+        {"date": "May 2026", "value": 334000.0},
+        {"date": "Jun 2026", "value": 338000.0},
+        {"date": "Jul 2026", "value": 340200.5}
       ],
       "ALL": [
-        {"date": "2019", "value": 180000.0},
-        {"date": "2021", "value": 240000.0},
-        {"date": "2023", "value": 310000.0},
-        {"date": "Today", "value": 340200.5}
+        {"date": "2020", "value": 160000.0},
+        {"date": "2021", "value": 195000.0},
+        {"date": "2022", "value": 230000.0},
+        {"date": "2023", "value": 275000.0},
+        {"date": "2024", "value": 310000.0},
+        {"date": "2025", "value": 330000.0},
+        {"date": "2026 (Now)", "value": 340200.5}
       ]
     }
   };
@@ -442,57 +405,86 @@ class ApiService {
   // Mock historical accumulated dividends
   final Map<String, Map<String, List<Map<String, dynamic>>>> _mockDividendHistory = {
     "a9117be5-4ea5-419f-b778-be75b22b271d": {
-      "NOW": [
-        {"date": "Next Yr Proj.", "value": 75.46}
+      "1W": [
+        {"date": "Jul 24", "value": 72.00},
+        {"date": "Jul 25", "value": 72.50},
+        {"date": "Jul 26", "value": 73.10},
+        {"date": "Jul 27", "value": 73.80},
+        {"date": "Jul 28", "value": 74.50},
+        {"date": "Jul 29", "value": 75.00},
+        {"date": "Jul 30", "value": 75.46}
+      ],
+      "6M": [
+        {"date": "Feb 2026", "value": 66.00},
+        {"date": "Mar 2026", "value": 68.00},
+        {"date": "Apr 2026", "value": 70.00},
+        {"date": "May 2026", "value": 72.00},
+        {"date": "Jun 2026", "value": 74.00},
+        {"date": "Jul 2026", "value": 75.46}
       ],
       "1Y": [
-        {"date": "Last Yr Acc.", "value": 65.00},
-        {"date": "Next Yr Proj.", "value": 75.46}
-      ],
-      "3Y": [
-        {"date": "3 yrs ago", "value": 50.00},
-        {"date": "2 yrs ago", "value": 58.00},
-        {"date": "Last Yr", "value": 65.00},
-        {"date": "Next Yr Proj.", "value": 75.46}
-      ],
-      "5Y": [
-        {"date": "5 yrs ago", "value": 38.00},
-        {"date": "3 yrs ago", "value": 50.00},
-        {"date": "Last Yr", "value": 65.00},
-        {"date": "Next Yr Proj.", "value": 75.46}
+        {"date": "Aug 2025", "value": 55.00},
+        {"date": "Sep 2025", "value": 57.00},
+        {"date": "Oct 2025", "value": 59.00},
+        {"date": "Nov 2025", "value": 61.00},
+        {"date": "Dec 2025", "value": 63.00},
+        {"date": "Jan 2026", "value": 65.00},
+        {"date": "Feb 2026", "value": 67.00},
+        {"date": "Mar 2026", "value": 69.00},
+        {"date": "Apr 2026", "value": 71.00},
+        {"date": "May 2026", "value": 73.00},
+        {"date": "Jun 2026", "value": 74.50},
+        {"date": "Jul 2026", "value": 75.46}
       ],
       "ALL": [
-        {"date": "2021 Acc.", "value": 20.00},
-        {"date": "2023 Acc.", "value": 45.00},
-        {"date": "Last Yr", "value": 65.00},
-        {"date": "Next Yr Proj.", "value": 75.46}
+        {"date": "2021", "value": 20.00},
+        {"date": "2022", "value": 35.00},
+        {"date": "2023", "value": 45.00},
+        {"date": "2024", "value": 58.00},
+        {"date": "2025", "value": 68.00},
+        {"date": "2026 (Now)", "value": 75.46}
       ]
     },
     "f90117d3-9bc0-4c28-98e3-4de75b2b271e": {
-      "NOW": [
-        {"date": "Next Yr Proj.", "value": 258.93}
+      "1W": [
+        {"date": "Jul 24", "value": 250.00},
+        {"date": "Jul 25", "value": 251.50},
+        {"date": "Jul 26", "value": 253.00},
+        {"date": "Jul 27", "value": 255.00},
+        {"date": "Jul 28", "value": 256.80},
+        {"date": "Jul 29", "value": 257.50},
+        {"date": "Jul 30", "value": 258.93}
+      ],
+      "6M": [
+        {"date": "Feb 2026", "value": 235.00},
+        {"date": "Mar 2026", "value": 240.00},
+        {"date": "Apr 2026", "value": 245.00},
+        {"date": "May 2026", "value": 250.00},
+        {"date": "Jun 2026", "value": 255.00},
+        {"date": "Jul 2026", "value": 258.93}
       ],
       "1Y": [
-        {"date": "Last Yr Acc.", "value": 230.00},
-        {"date": "Next Yr Proj.", "value": 258.93}
-      ],
-      "3Y": [
-        {"date": "3 yrs ago", "value": 180.00},
-        {"date": "2 yrs ago", "value": 210.00},
-        {"date": "Last Yr", "value": 230.00},
-        {"date": "Next Yr Proj.", "value": 258.93}
-      ],
-      "5Y": [
-        {"date": "5 yrs ago", "value": 150.00},
-        {"date": "3 yrs ago", "value": 180.00},
-        {"date": "Last Yr", "value": 230.00},
-        {"date": "Next Yr Proj.", "value": 258.93}
+        {"date": "Aug 2025", "value": 205.00},
+        {"date": "Sep 2025", "value": 210.00},
+        {"date": "Oct 2025", "value": 215.00},
+        {"date": "Nov 2025", "value": 220.00},
+        {"date": "Dec 2025", "value": 225.00},
+        {"date": "Jan 2026", "value": 230.00},
+        {"date": "Feb 2026", "value": 235.00},
+        {"date": "Mar 2026", "value": 240.00},
+        {"date": "Apr 2026", "value": 245.00},
+        {"date": "May 2026", "value": 250.00},
+        {"date": "Jun 2026", "value": 255.00},
+        {"date": "Jul 2026", "value": 258.93}
       ],
       "ALL": [
-        {"date": "2019 Acc.", "value": 80.00},
-        {"date": "2021 Acc.", "value": 140.00},
-        {"date": "Last Yr", "value": 230.00},
-        {"date": "Next Yr Proj.", "value": 258.93}
+        {"date": "2020", "value": 120.00},
+        {"date": "2021", "value": 150.00},
+        {"date": "2022", "value": 180.00},
+        {"date": "2023", "value": 210.00},
+        {"date": "2024", "value": 235.00},
+        {"date": "2025", "value": 250.00},
+        {"date": "2026 (Now)", "value": 258.93}
       ]
     }
   };
@@ -807,6 +799,7 @@ class ApiService {
       final change = (ticker.hashCode % 10 - 4) * 0.25;
       final changePercent = (change / price) * 100.0;
       tfsaList.add({
+        "stock_id": getDeterministicStockId(ticker),
         "ticker": ticker,
         "name": name,
         "shares": shares,
@@ -827,6 +820,7 @@ class ApiService {
       final change = (ticker.hashCode % 10 - 4) * 0.25;
       final changePercent = (change / price) * 100.0;
       rrspList.add({
+        "stock_id": getDeterministicStockId(ticker),
         "ticker": ticker,
         "name": name,
         "shares": shares,
@@ -874,5 +868,167 @@ class ApiService {
 
     _mockProfiles[1]["totalValue"] = rrspTotalValue;
     _mockProfiles[1]["annualDividend"] = rrspTotalDividend;
+  }
+
+  // Mock Transaction Ledger
+  final List<Map<String, dynamic>> _mockTransactions = [
+    {
+      "id": "tx-1",
+      "profile_id": "a9117be5-4ea5-419f-b778-be75b22b271d",
+      "profile_name": "TFSA Growth Portfolio",
+      "ticker": "AAPL",
+      "stock_name": "Apple Inc.",
+      "transaction_type": "BUY",
+      "quantity": 10.5,
+      "price_per_share": 175.50,
+      "total_amount": 1842.75,
+      "currency": "USD",
+      "transaction_date": "2026-07-28",
+    },
+    {
+      "id": "tx-2",
+      "profile_id": "a9117be5-4ea5-419f-b778-be75b22b271d",
+      "profile_name": "TFSA Growth Portfolio",
+      "ticker": "XIU",
+      "stock_name": "iShares S&P/TSX 60 Index",
+      "transaction_type": "BUY",
+      "quantity": 100.0,
+      "price_per_share": 34.20,
+      "total_amount": 3420.00,
+      "currency": "CAD",
+      "transaction_date": "2026-07-25",
+    },
+    {
+      "id": "tx-3",
+      "profile_id": "f90117d3-9bc0-4c28-98e3-4de75b2b271e",
+      "profile_name": "RRSP Retirement Nest",
+      "ticker": "KO",
+      "stock_name": "The Coca-Cola Company",
+      "transaction_type": "BUY",
+      "quantity": 80.0,
+      "price_per_share": 62.00,
+      "total_amount": 4960.00,
+      "currency": "USD",
+      "transaction_date": "2026-07-20",
+    },
+    {
+      "id": "tx-4",
+      "profile_id": "a9117be5-4ea5-419f-b778-be75b22b271d",
+      "profile_name": "TFSA Growth Portfolio",
+      "ticker": "BHP",
+      "stock_name": "BHP Group Limited",
+      "transaction_type": "SELL",
+      "quantity": 5.0,
+      "price_per_share": 58.00,
+      "total_amount": 290.00,
+      "currency": "USD",
+      "transaction_date": "2026-07-15",
+    },
+  ];
+
+  // Fetch transactions with optional filters
+  Future<List<TransactionRecord>> getTransactions({
+    String? profileId,
+    String? type,
+    String? searchQuery,
+  }) async {
+    await Future.delayed(const Duration(milliseconds: 300));
+    var results = List<Map<String, dynamic>>.from(_mockTransactions);
+
+    if (profileId != null && profileId.isNotEmpty && profileId != "ALL") {
+      results = results.where((t) => t["profile_id"] == profileId).toList();
+    }
+    if (type != null && type.isNotEmpty && type != "ALL") {
+      results = results.where((t) => (t["transaction_type"] as String).toUpperCase() == type.toUpperCase()).toList();
+    }
+    if (searchQuery != null && searchQuery.trim().isNotEmpty) {
+      final q = searchQuery.trim().toLowerCase();
+      results = results.where((t) {
+        final ticker = (t["ticker"] as String).toLowerCase();
+        final name = (t["stock_name"] as String).toLowerCase();
+        return ticker.contains(q) || name.contains(q);
+      }).toList();
+    }
+
+    return results.map((t) => TransactionRecord.fromJson(t)).toList();
+  }
+
+  // Execute Buy / Sell transaction and update stock holding + ledger
+  Future<bool> executeBuySellTransaction({
+    required String profileId,
+    required String ticker,
+    required String type, // "BUY" | "SELL"
+    required double shares,
+    required double price,
+    required String currency,
+    String? date,
+  }) async {
+    await Future.delayed(const Duration(milliseconds: 500));
+
+    final profile = _mockProfiles.firstWhere((p) => p["id"] == profileId, orElse: () => _mockProfiles[0]);
+    final profileName = profile["name"] as String;
+    final stocksList = _mockStocks[profileId] ?? [];
+
+    final existingIdx = stocksList.indexWhere((s) => s["ticker"].toString().toUpperCase() == ticker.toUpperCase());
+
+    if (type.toUpperCase() == "BUY") {
+      if (existingIdx != -1) {
+        final existing = stocksList[existingIdx];
+        final newShares = (existing["shares"] as double) + shares;
+        existing["shares"] = newShares;
+        existing["value"] = newShares * price;
+      } else {
+        stocksList.add({
+          "stock_id": getDeterministicStockId(ticker),
+          "ticker": ticker.toUpperCase(),
+          "name": "$ticker Holding",
+          "shares": shares,
+          "price": price,
+          "change": 0.0,
+          "changePercent": 0.0,
+          "currency": currency,
+          "value": shares * price,
+        });
+      }
+    } else if (type.toUpperCase() == "SELL") {
+      if (existingIdx != -1) {
+        final existing = stocksList[existingIdx];
+        final currentShares = existing["shares"] as double;
+        final newShares = (currentShares - shares).clamp(0.0, double.infinity);
+        if (newShares <= 0) {
+          stocksList.removeAt(existingIdx);
+        } else {
+          existing["shares"] = newShares;
+          existing["value"] = newShares * price;
+        }
+      }
+    }
+
+    // Add entry to transaction ledger
+    final String dateStr = date ?? "2026-07-30";
+    _mockTransactions.insert(0, {
+      "id": "tx-${DateTime.now().millisecondsSinceEpoch}",
+      "profile_id": profileId,
+      "profile_name": profileName,
+      "ticker": ticker.toUpperCase(),
+      "stock_name": "$ticker Holding",
+      "transaction_type": type.toUpperCase(),
+      "quantity": shares,
+      "price_per_share": price,
+      "total_amount": shares * price,
+      "currency": currency,
+      "transaction_date": dateStr,
+    });
+
+    // Update profile total valuation
+    double totalValCAD = 0;
+    for (var s in stocksList) {
+      final val = s["value"] as double;
+      final curr = s["currency"] as String;
+      totalValCAD += convertCurrencyToCAD(val, curr);
+    }
+    profile["totalValue"] = totalValCAD;
+
+    return true;
   }
 }

@@ -197,13 +197,12 @@ class ProfileView extends StatefulWidget {
 }
 
 class _ProfileViewState extends State<ProfileView> {
-  late ProfileViewModel _viewModel;
+  late final ProfileViewModel _viewModel;
 
   @override
   void initState() {
     super.initState();
-    final apiService = Provider.of<ApiService>(context, listen: false);
-    _viewModel = ProfileViewModel(apiService: apiService, profileId: widget.profileId);
+    _viewModel = ProfileViewModel(apiService: ApiService(), profileId: widget.profileId);
     Future.microtask(() => _viewModel.loadProfileDetails());
   }
 
@@ -422,7 +421,7 @@ class _ProfileViewState extends State<ProfileView> {
     final theme = Provider.of<ThemeProvider>(context);
 
     return Scaffold(
-      backgroundColor: Colors.transparent,
+      backgroundColor: theme.bg,
       body: theme.buildBackground(
         child: SafeArea(
           child: AnimatedBuilder(
@@ -545,7 +544,6 @@ class _ProfileViewState extends State<ProfileView> {
     );
   }
 
-  // Performance Tab content: Chart + selector toggles + Stocks list
   Widget _buildPerformanceTab(ThemeProvider theme) {
     final stocks = _viewModel.profile?.stocks ?? [];
 
@@ -555,18 +553,41 @@ class _ProfileViewState extends State<ProfileView> {
         InteractiveHistoryChart(points: _viewModel.chartPoints),
         const SizedBox(height: 16),
 
-        // Valuation vs Dividend Toggle
-        _buildModeToggle(theme),
-        const SizedBox(height: 16),
-
         // Interval scrollselector
         _buildIntervalSelector(theme),
         const SizedBox(height: 24),
 
         // Holdings listings header
-        Text(
-          "Active Allocations",
-          style: theme.subtitleStyle.copyWith(fontWeight: FontWeight.bold, letterSpacing: 1.1),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              "Active Allocations",
+              style: theme.subtitleStyle.copyWith(fontWeight: FontWeight.bold, letterSpacing: 1.1),
+            ),
+            InkWell(
+              onTap: () => _showBuySellModal(context, type: "BUY", theme: theme),
+              borderRadius: BorderRadius.circular(10),
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                decoration: BoxDecoration(
+                  color: AppColors.positive.withValues(alpha: 0.15),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: AppColors.positive, width: 1),
+                ),
+                child: const Row(
+                  children: [
+                    Icon(Icons.add, color: AppColors.positive, size: 14),
+                    SizedBox(width: 4),
+                    Text(
+                      "Add Stock",
+                      style: TextStyle(color: AppColors.positive, fontWeight: FontWeight.bold, fontSize: 11),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
         const SizedBox(height: 12),
 
@@ -607,18 +628,64 @@ class _ProfileViewState extends State<ProfileView> {
                         ),
                       ),
                     ),
-                    const SizedBox(width: 12),
+                    const SizedBox(width: 10),
                     // Ticker text
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(stock.ticker, style: theme.cardTitleStyle.copyWith(fontSize: 14)),
+                          Row(
+                            children: [
+                              Text(stock.ticker, style: theme.cardTitleStyle.copyWith(fontSize: 14)),
+                              const SizedBox(width: 6),
+                              Text("📝", style: TextStyle(fontSize: 12, color: theme.subtext.withValues(alpha: 0.6))),
+                            ],
+                          ),
                           const SizedBox(height: 2),
                           Text(stock.name, style: theme.subtitleStyle, maxLines: 1, overflow: TextOverflow.ellipsis),
                         ],
                       ),
                     ),
+                    // Action buttons: Buy (+) and Sell (-)
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        InkWell(
+                          onTap: () => _showBuySellModal(context, stock: stock, type: "BUY", theme: theme),
+                          borderRadius: BorderRadius.circular(8),
+                          child: Container(
+                            width: 28,
+                            height: 28,
+                            decoration: BoxDecoration(
+                              color: AppColors.positive.withValues(alpha: 0.15),
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(color: AppColors.positive, width: 1),
+                            ),
+                            child: const Center(
+                              child: Icon(Icons.add, color: AppColors.positive, size: 16),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 4),
+                        InkWell(
+                          onTap: () => _showBuySellModal(context, stock: stock, type: "SELL", theme: theme),
+                          borderRadius: BorderRadius.circular(8),
+                          child: Container(
+                            width: 28,
+                            height: 28,
+                            decoration: BoxDecoration(
+                              color: AppColors.negative.withValues(alpha: 0.15),
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(color: AppColors.negative, width: 1),
+                            ),
+                            child: const Center(
+                              child: Icon(Icons.remove, color: AppColors.negative, size: 16),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(width: 10),
                     // Middle shares details
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -628,7 +695,7 @@ class _ProfileViewState extends State<ProfileView> {
                         Text("shares", style: theme.subtitleStyle),
                       ],
                     ),
-                    const SizedBox(width: 20),
+                    const SizedBox(width: 12),
                     // Right: Price & subtotal valuation
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
@@ -659,6 +726,193 @@ class _ProfileViewState extends State<ProfileView> {
           }),
         const SizedBox(height: 40),
       ],
+    );
+  }
+
+  void _showBuySellModal(
+    BuildContext context, {
+    StockHolding? stock,
+    required String type, // "BUY" | "SELL"
+    required ThemeProvider theme,
+  }) {
+    final isBuy = type.toUpperCase() == "BUY";
+    final sharesController = TextEditingController(text: "1.0");
+    final priceController = TextEditingController(text: stock != null ? stock.price.toStringAsFixed(2) : "100.00");
+    final tickerController = TextEditingController(text: stock?.ticker ?? "");
+    final dateController = TextEditingController(text: DateTime.now().toString().substring(0, 10));
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (modalContext) {
+        return Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(modalContext).viewInsets.bottom,
+          ),
+          child: Container(
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              color: theme.card,
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
+              border: Border.all(color: theme.border, width: 1.5),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                          decoration: BoxDecoration(
+                            color: (isBuy ? AppColors.positive : AppColors.negative).withValues(alpha: 0.2),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Text(
+                            isBuy ? "+ BUY SHARES" : "- SELL SHARES",
+                            style: TextStyle(
+                              color: isBuy ? AppColors.positive : AppColors.negative,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Text(
+                          stock != null ? stock.ticker : "New Transaction",
+                          style: theme.cardTitleStyle.copyWith(fontSize: 16),
+                        ),
+                      ],
+                    ),
+                    IconButton(
+                      onPressed: () => Navigator.pop(modalContext),
+                      icon: Icon(Icons.close, color: theme.subtext),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                if (stock == null) ...[
+                  Text("Ticker Symbol", style: theme.subtitleStyle),
+                  const SizedBox(height: 6),
+                  TextField(
+                    controller: tickerController,
+                    style: TextStyle(color: theme.text),
+                    decoration: InputDecoration(
+                      hintText: "e.g. AAPL, XIU",
+                      hintStyle: TextStyle(color: theme.subtext),
+                      filled: true,
+                      fillColor: theme.isDark ? const Color(0xFF191C21) : const Color(0xFFF3F4F6),
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide.none),
+                    ),
+                  ),
+                  const SizedBox(height: 14),
+                ],
+                Text("Number of Shares", style: theme.subtitleStyle),
+                const SizedBox(height: 6),
+                TextField(
+                  controller: sharesController,
+                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                  style: TextStyle(color: theme.text),
+                  decoration: InputDecoration(
+                    hintText: "e.g. 10.0",
+                    hintStyle: TextStyle(color: theme.subtext),
+                    filled: true,
+                    fillColor: theme.isDark ? const Color(0xFF191C21) : const Color(0xFFF3F4F6),
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide.none),
+                  ),
+                ),
+                const SizedBox(height: 14),
+                Text("Price per Share", style: theme.subtitleStyle),
+                const SizedBox(height: 6),
+                TextField(
+                  controller: priceController,
+                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                  style: TextStyle(color: theme.text),
+                  decoration: InputDecoration(
+                    prefixText: stock != null ? "${stock.currency} \$ " : "\$ ",
+                    prefixStyle: TextStyle(color: theme.text, fontWeight: FontWeight.bold),
+                    filled: true,
+                    fillColor: theme.isDark ? const Color(0xFF191C21) : const Color(0xFFF3F4F6),
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide.none),
+                  ),
+                ),
+                const SizedBox(height: 14),
+                Text("Transaction Date", style: theme.subtitleStyle),
+                const SizedBox(height: 6),
+                TextField(
+                  controller: dateController,
+                  style: TextStyle(color: theme.text),
+                  decoration: InputDecoration(
+                    hintText: "YYYY-MM-DD",
+                    hintStyle: TextStyle(color: theme.subtext),
+                    filled: true,
+                    fillColor: theme.isDark ? const Color(0xFF191C21) : const Color(0xFFF3F4F6),
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide.none),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                SizedBox(
+                  width: double.infinity,
+                  height: 48,
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      final ticker = (stock?.ticker ?? tickerController.text).trim();
+                      final shares = double.tryParse(sharesController.text) ?? 0.0;
+                      final price = double.tryParse(priceController.text) ?? 0.0;
+
+                      if (ticker.isEmpty || shares <= 0 || price <= 0) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text("Please enter valid ticker, shares, and price")),
+                        );
+                        return;
+                      }
+
+                      final profileId = _viewModel.profileId;
+                      final currency = stock?.currency ?? "USD";
+
+                      Navigator.pop(modalContext);
+
+                      final success = await ApiService().executeBuySellTransaction(
+                        profileId: profileId,
+                        ticker: ticker,
+                        type: type,
+                        shares: shares,
+                        price: price,
+                        currency: currency,
+                        date: dateController.text,
+                      );
+
+                      if (success) {
+                        await _viewModel.loadProfileDetails();
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text("${type.toUpperCase()} transaction executed for $ticker!"),
+                              backgroundColor: isBuy ? AppColors.positive : AppColors.negative,
+                            ),
+                          );
+                        }
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: isBuy ? AppColors.positive : AppColors.negative,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                    ),
+                    child: Text(
+                      "Confirm ${type.toUpperCase()}",
+                      style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 15),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -798,61 +1052,58 @@ class _ProfileViewState extends State<ProfileView> {
   }
 
   Widget _buildIntervalSelector(ThemeProvider theme) {
-    final intervals = _viewModel.chartMode == "VALUATION"
-        ? ["NOW", "1D", "5D", "1W", "1M", "3M", "6M", "1Y", "5Y", "ALL"]
-        : ["NOW", "1Y", "3Y", "5Y", "ALL"];
-
+    final intervals = ["1W", "6M", "1Y", "ALL"];
     final isValuation = _viewModel.chartMode == "VALUATION";
 
     return Container(
-      height: 44,
+      height: 42,
+      padding: const EdgeInsets.all(3),
       decoration: BoxDecoration(
         color: theme.card,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: theme.border),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: theme.border, width: 1.5),
       ),
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: intervals.length,
-        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
-        itemBuilder: (context, index) {
-          final interval = intervals[index];
+      child: Row(
+        children: intervals.map((interval) {
           final isActive = _viewModel.activeInterval == interval;
+          String label = interval;
+          if (interval == "1W") label = "1 Week";
+          if (interval == "6M") label = "6 Months";
+          if (interval == "1Y") label = "1 Year";
+          if (interval == "ALL") label = "ALL";
 
-          return Padding(
-            padding: const EdgeInsets.only(right: 6.0),
+          return Expanded(
             child: InkWell(
               onTap: () => _viewModel.setActiveInterval(interval),
               borderRadius: BorderRadius.circular(10),
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 14),
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 150),
+                alignment: Alignment.center,
                 decoration: BoxDecoration(
                   color: isActive
                       ? (isValuation ? AppColors.positive : AppColors.dividend)
                       : Colors.transparent,
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: Center(
-                  child: Text(
-                    interval,
-                    style: TextStyle(
-                      color: isActive ? Colors.white : theme.subtext,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 11,
-                    ),
+                child: Text(
+                  label,
+                  style: TextStyle(
+                    color: isActive ? Colors.black : theme.subtext,
+                    fontWeight: isActive ? FontWeight.bold : FontWeight.w600,
+                    fontSize: 12,
                   ),
                 ),
               ),
             ),
           );
-        },
+        }).toList(),
       ),
     );
   }
 }
 
 // -----------------------------------------------------------------------------
-// Interactive 120Hz Snapping Line Chart with Touch Crosshairs
+// Interactive 120Hz Snapping Line Chart with Touch Crosshairs & Bezier Curve
 // -----------------------------------------------------------------------------
 class InteractiveHistoryChart extends StatefulWidget {
   final List<ChartPoint> points;
@@ -871,7 +1122,7 @@ class _InteractiveHistoryChartState extends State<InteractiveHistoryChart> {
 
     if (widget.points.isEmpty) {
       return Container(
-        height: 200,
+        height: 220,
         decoration: BoxDecoration(
           color: theme.card,
           borderRadius: BorderRadius.circular(24),
@@ -887,38 +1138,61 @@ class _InteractiveHistoryChartState extends State<InteractiveHistoryChart> {
         : widget.points.last;
 
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
       decoration: BoxDecoration(
         color: theme.card,
         borderRadius: BorderRadius.circular(24),
         border: Border.all(color: theme.border, width: 1.5),
+        boxShadow: const [
+          BoxShadow(color: Colors.black12, blurRadius: 8, offset: Offset(0, 3)),
+        ],
       ),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          // Snap values HUD display
+          // Active Data Point HUD Display / Tooltip
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                activePoint.date,
-                style: theme.subtitleStyle.copyWith(fontWeight: FontWeight.bold),
+              Row(
+                children: [
+                  Container(
+                    width: 8,
+                    height: 8,
+                    decoration: const BoxDecoration(
+                      color: AppColors.positive,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    activePoint.date,
+                    style: theme.subtitleStyle.copyWith(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 13,
+                      color: theme.text,
+                    ),
+                  ),
+                ],
               ),
               Text(
-                "\$${activePoint.value.toStringAsFixed(2)}",
+                "\$${activePoint.value.toStringAsFixed(2)} CAD",
                 style: theme.cardTitleStyle.copyWith(
                   color: AppColors.positive,
                   fontSize: 18,
+                  fontWeight: FontWeight.w900,
                 ),
               ),
             ],
           ),
           const SizedBox(height: 16),
 
-          // Gesture listener overlaying the canvas
+          // Standard Fixed-Height Smooth Bezier Line Canvas
           GestureDetector(
             onPanStart: (details) => _updateTouchIndex(details.localPosition.dx),
             onPanUpdate: (details) => _updateTouchIndex(details.localPosition.dx),
             onPanEnd: (_) => setState(() => _touchIndex = -1),
+            onTapDown: (details) => _updateTouchIndex(details.localPosition.dx),
             child: SizedBox(
               height: 160,
               width: double.infinity,
@@ -965,85 +1239,159 @@ class _ChartPainter extends CustomPainter {
     if (points.isEmpty) return;
 
     final values = points.map((p) => p.value).toList();
-    final double maxVal = values.reduce(math.max);
-    final double minVal = values.reduce(math.min);
+    double maxVal = values.reduce(math.max);
+    double minVal = values.reduce(math.min);
+    if (maxVal == minVal) {
+      maxVal += 1.0;
+      minVal -= 1.0;
+    }
     final double diff = maxVal - minVal;
 
-    // Draw horizontal grid lines (Y-axis helpers)
+    // 1. Crisp Dashed Background Grid Lines (Y-axis helpers)
     final gridPaint = Paint()
-      ..color = isDark ? const Color(0xFF222429) : const Color(0xFFE5E7EB)
-      ..strokeWidth = 1.0;
+      ..color = isDark ? const Color(0xFF1E2838) : const Color(0xFFE2E8F0)
+      ..strokeWidth = 1.0
+      ..isAntiAlias = true;
 
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i <= 3; i++) {
       final double y = size.height * (i / 3.0);
-      canvas.drawLine(Offset(0, y), Offset(size.width, y), gridPaint);
+      double dashX = 0;
+      const double dashWidth = 4.0;
+      const double dashSpace = 4.0;
+      while (dashX < size.width) {
+        canvas.drawLine(
+          Offset(dashX, y),
+          Offset(math.min(dashX + dashWidth, size.width), y),
+          gridPaint,
+        );
+        dashX += dashWidth + dashSpace;
+      }
     }
 
-    // Map point positions on the canvas
+    // Map point positions on canvas with crisp top & bottom inset padding
     final List<Offset> coordinates = [];
     final double stepX = points.length > 1 ? size.width / (points.length - 1) : size.width;
 
     for (int i = 0; i < points.length; i++) {
       final double x = i * stepX;
-      // Guard against divide by zero (e.g. single NOW point or flat history)
-      final double y = diff > 0
-          ? size.height - ((points[i].value - minVal) / diff) * size.height
-          : size.height / 2;
+      final double y = size.height - ((points[i].value - minVal) / diff) * (size.height - 30) - 15;
       coordinates.add(Offset(x, y));
     }
 
-    // Draw the historical trend line
-    final linePaint = Paint()
-      ..color = AppColors.positive
-      ..strokeWidth = 2.5
-      ..style = PaintingStyle.stroke
-      ..strokeCap = StrokeCap.round;
+    // Smooth Cubic Bezier Path calculation
+    final linePath = Path();
+    linePath.moveTo(coordinates[0].dx, coordinates[0].dy);
 
-    final linePath = Path()..moveTo(coordinates[0].dx, coordinates[0].dy);
-    for (int i = 1; i < coordinates.length; i++) {
-      linePath.lineTo(coordinates[i].dx, coordinates[i].dy);
+    for (int i = 0; i < coordinates.length - 1; i++) {
+      final p0 = coordinates[i];
+      final p1 = coordinates[i + 1];
+
+      final control1 = Offset(p0.dx + (p1.dx - p0.dx) / 2, p0.dy);
+      final control2 = Offset(p0.dx + (p1.dx - p0.dx) / 2, p1.dy);
+
+      linePath.cubicTo(
+        control1.dx, control1.dy,
+        control2.dx, control2.dy,
+        p1.dx, p1.dy,
+      );
     }
-    canvas.drawPath(linePath, linePaint);
 
-    // Draw fading gradient below trend line
-    final gradientPaint = Paint()
+    // 2. Dual-Layer Ambient Neon Glow Line
+    final ambientGlowPaint = Paint()
+      ..color = AppColors.positive.withValues(alpha: 0.22)
+      ..strokeWidth = 6.5
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round
+      ..isAntiAlias = true;
+
+    final primaryLinePaint = Paint()
+      ..color = AppColors.positive
+      ..strokeWidth = 2.8
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round
+      ..isAntiAlias = true;
+
+    canvas.drawPath(linePath, ambientGlowPaint);
+    canvas.drawPath(linePath, primaryLinePaint);
+
+    // 3. Multi-Stop Fading Ambient Gradient Below Line
+    final fillPath = Path.from(linePath);
+    fillPath.lineTo(coordinates.last.dx, size.height);
+    fillPath.lineTo(coordinates.first.dx, size.height);
+    fillPath.close();
+
+    final fillPaint = Paint()
       ..shader = LinearGradient(
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
         colors: [
-          AppColors.positive.withValues(alpha: 0.20),
+          AppColors.positive.withValues(alpha: 0.32),
+          AppColors.positive.withValues(alpha: 0.08),
           AppColors.positive.withValues(alpha: 0.00),
         ],
+        stops: const [0.0, 0.6, 1.0],
       ).createShader(Rect.fromLTWH(0, 0, size.width, size.height))
-      ..style = PaintingStyle.fill;
+      ..style = PaintingStyle.fill
+      ..isAntiAlias = true;
 
-    final gradPath = Path()
-      ..moveTo(coordinates[0].dx, coordinates[0].dy);
-    for (int i = 1; i < coordinates.length; i++) {
-      gradPath.lineTo(coordinates[i].dx, coordinates[i].dy);
+    canvas.drawPath(fillPath, fillPaint);
+
+    // 4. Sharp Dual-Ring Data Point Nodes
+    final dotCenterPaint = Paint()
+      ..color = AppColors.positive
+      ..style = PaintingStyle.fill
+      ..isAntiAlias = true;
+
+    final dotBorderPaint = Paint()
+      ..color = isDark ? const Color(0xFF0F172A) : Colors.white
+      ..strokeWidth = 2.0
+      ..style = PaintingStyle.stroke
+      ..isAntiAlias = true;
+
+    for (int i = 0; i < coordinates.length; i++) {
+      canvas.drawCircle(coordinates[i], 4.5, dotCenterPaint);
+      canvas.drawCircle(coordinates[i], 4.5, dotBorderPaint);
     }
-    gradPath.lineTo(coordinates.last.dx, size.height);
-    gradPath.lineTo(coordinates.first.dx, size.height);
-    gradPath.close();
-    canvas.drawPath(gradPath, gradientPaint);
 
-    // Render Snapping Crosshair and Node badge if active
-    final int activeIdx = touchIndex >= 0 ? touchIndex : points.length - 1;
+    // 5. Active Touch Highlighting Crosshair & Snapping Node
+    final int activeIdx = touchIndex >= 0 ? touchIndex : coordinates.length - 1;
     final Offset node = coordinates[activeIdx];
 
-    // Vertical indicator line
+    // Dashed vertical crosshair indicator line
     final crossPaint = Paint()
-      ..color = isDark ? Colors.white30 : Colors.black26
-      ..strokeWidth = 1.0
-      ..style = PaintingStyle.stroke;
-    canvas.drawLine(Offset(node.dx, 0), Offset(node.dx, size.height), crossPaint);
+      ..color = isDark ? Colors.white60 : Colors.black45
+      ..strokeWidth = 1.2
+      ..style = PaintingStyle.stroke
+      ..isAntiAlias = true;
 
-    // Snapping node circle
-    final outerNodePaint = Paint()..color = AppColors.positive.withValues(alpha: 0.2);
-    final innerNodePaint = Paint()..color = AppColors.positive;
+    double dashY = 0;
+    const double lineDashHeight = 4.0;
+    const double lineDashSpace = 3.0;
+    while (dashY < size.height) {
+      canvas.drawLine(
+        Offset(node.dx, dashY),
+        Offset(node.dx, math.min(dashY + lineDashHeight, size.height)),
+        crossPaint,
+      );
+      dashY += lineDashHeight + lineDashSpace;
+    }
 
-    canvas.drawCircle(node, 8.0, outerNodePaint);
-    canvas.drawCircle(node, 4.0, innerNodePaint);
+    // Active glowing pulse ring & triple-concentric target node
+    final outerPulsePaint = Paint()
+      ..color = AppColors.positive.withValues(alpha: 0.35)
+      ..isAntiAlias = true;
+
+    final activeNodePaint = Paint()
+      ..color = AppColors.positive
+      ..isAntiAlias = true;
+
+    final innerCorePaint = Paint()
+      ..color = Colors.white
+      ..isAntiAlias = true;
+
+    canvas.drawCircle(node, 12.0, outerPulsePaint);
+    canvas.drawCircle(node, 7.0, activeNodePaint);
+    canvas.drawCircle(node, 3.5, innerCorePaint);
   }
 
   @override

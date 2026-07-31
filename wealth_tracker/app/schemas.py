@@ -158,3 +158,36 @@ class ThesisResponse(BaseModel):
         from_attributes = True
 
 
+class TransactionCreateRequest(BaseModel):
+    profile_id: UUID
+    ticker: str
+    transaction_type: str  # BUY or SELL
+    quantity: Decimal
+    price_per_share: Decimal
+    currency: str = "USD"
+    transaction_date: Optional[str] = None
+
+
+class TransactionItemResponse(BaseModel):
+    id: UUID
+    profile_id: UUID
+    profile_name: str
+    ticker: str
+    stock_name: str
+    transaction_type: str
+    quantity: Decimal
+    price_per_share: Decimal
+    total_amount: Decimal
+    currency: str
+    transaction_date: str
+
+    class Config:
+        from_attributes = True
+
+
+class UserTransactionsResponse(BaseModel):
+    user_id: UUID
+    transactions: List[TransactionItemResponse]
+
+
+

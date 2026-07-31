@@ -1,3 +1,4 @@
+from typing import Optional
 from decimal import Decimal
 from uuid import UUID
 
@@ -6,8 +7,17 @@ from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
-from app.models import User, ViewUserStockHolding, InvestmentProfile, StockRegistry, FXHistoricalRate, DividendSchedule, UserStockThesis
-from app.schemas import UserDividendProjectionsResponse, UserProfileValuesResponse, UserDividendCalendarResponse, ThesisCreateUpdate, ThesisResponse
+from app.models import User, ViewUserStockHolding, InvestmentProfile, StockRegistry, FXHistoricalRate, DividendSchedule, UserStockThesis, StockTransaction, BrokerageAccount
+from app.schemas import (
+    UserDividendProjectionsResponse,
+    UserProfileValuesResponse,
+    UserDividendCalendarResponse,
+    ThesisCreateUpdate,
+    ThesisResponse,
+    TransactionCreateRequest,
+    TransactionItemResponse,
+    UserTransactionsResponse,
+)
 
 router = APIRouter(prefix="/holdings", tags=["Holdings"])
 
@@ -296,4 +306,147 @@ async def create_or_update_investment_thesis(body: ThesisCreateUpdate, db: Async
         "updated_at": thesis.updated_at,
         "needs_review": False
     }
+
+
+@router.post("/transactions", response_model=TransactionItemResponse)
+async def create_stock_transaction(body: TransactionCreateRequest, db: AsyncSession = Depends(get_db)):
+    """Record a new BUY or SELL stock transaction."""
+    from datetime import datetime, timezone
+
+    # 1. Validate profile existence
+    profile_stmt = select(InvestmentProfile).where(InvestmentProfile.id == body.profile_id)
+    profile_res = await db.execute(profile_stmt)
+    profile = profile_res.scalar_one_or_none()
+    if not profile:
+        raise HTTPException(status_code=404, detail="Investment profile not found")
+
+    # 2. Get or create brokerage account for profile
+    account_stmt = select(BrokerageAccount).where(BrokerageAccount.profile_id == body.profile_id)
+    account_res = await db.execute(account_stmt)
+    account = account_res.scalars().first()
+    if not account:
+        account = BrokerageAccount(profile_id=body.profile_id, broker_name="Default Brokerage")
+        db.add(account)
+        await db.flush()
+
+    # 3. Resolve stock in registry
+    ticker_upper = body.ticker.strip().upper()
+    stock_stmt = select(StockRegistry).where(StockRegistry.ticker == ticker_upper)
+    stock_res = await db.execute(stock_stmt)
+    stock = stock_res.scalar_one_or_none()
+    if not stock:
+        stock = StockRegistry(
+            ticker=ticker_upper,
+            name=f"{ticker_upper} Holding",
+            exchange="TSX" if body.currency == "CAD" else "NASDAQ",
+            country="Canada" if body.currency == "CAD" else "USA",
+            currency=body.currency,
+            current_price=body.price_per_share,
+            annualized_dividend_per_share=Decimal("0.0000"),
+        )
+        db.add(stock)
+        await db.flush()
+
+    # 4. Insert transaction
+    tx_date = datetime.now(timezone.utc)
+    if body.transaction_date:
+        try:
+            tx_date = datetime.fromisoformat(body.transaction_date)
+        except Exception:
+            pass
+
+    tx = StockTransaction(
+        account_id=account.id,
+        stock_id=stock.id,
+        transaction_date=tx_date,
+        transaction_type=body.transaction_type.upper(),
+        quantity=body.quantity,
+        price_per_share=body.price_per_share,
+        currency=body.currency,
+    )
+    db.add(tx)
+    await db.commit()
+    await db.refresh(tx)
+
+    total_amount = body.quantity * body.price_per_share
+
+    return {
+        "id": tx.id,
+        "profile_id": profile.id,
+        "profile_name": profile.name,
+        "ticker": stock.ticker,
+        "stock_name": stock.name,
+        "transaction_type": tx.transaction_type,
+        "quantity": tx.quantity,
+        "price_per_share": tx.price_per_share,
+        "total_amount": total_amount,
+        "currency": tx.currency,
+        "transaction_date": tx.transaction_date.strftime("%Y-%m-%d"),
+    }
+
+
+@router.get("/transactions/{user_id}", response_model=UserTransactionsResponse)
+async def get_user_transactions(
+    user_id: UUID,
+    profile_id: Optional[UUID] = None,
+    type: Optional[str] = None,
+    search: Optional[str] = None,
+    db: AsyncSession = Depends(get_db),
+):
+    """Fetch all executed stock transactions for a user with optional filters."""
+    stmt = (
+        select(
+            StockTransaction.id,
+            InvestmentProfile.id.label("profile_id"),
+            InvestmentProfile.name.label("profile_name"),
+            StockRegistry.ticker,
+            StockRegistry.name.label("stock_name"),
+            StockTransaction.transaction_type,
+            StockTransaction.quantity,
+            StockTransaction.price_per_share,
+            StockTransaction.currency,
+            StockTransaction.transaction_date,
+        )
+        .join(BrokerageAccount, StockTransaction.account_id == BrokerageAccount.id)
+        .join(InvestmentProfile, BrokerageAccount.profile_id == InvestmentProfile.id)
+        .join(StockRegistry, StockTransaction.stock_id == StockRegistry.id)
+        .where(InvestmentProfile.user_id == user_id)
+        .order_by(StockTransaction.transaction_date.desc())
+    )
+
+    if profile_id:
+        stmt = stmt.where(InvestmentProfile.id == profile_id)
+    if type and type.upper() in ["BUY", "SELL"]:
+        stmt = stmt.where(StockTransaction.transaction_type == type.upper())
+    if search:
+        search_fmt = f"%{search.strip()}%"
+        stmt = stmt.where(
+            (StockRegistry.ticker.ilike(search_fmt)) | (StockRegistry.name.ilike(search_fmt))
+        )
+
+    res = await db.execute(stmt)
+    rows = res.all()
+
+    tx_list = []
+    for r in rows:
+        total = Decimal(str(r.quantity)) * Decimal(str(r.price_per_share))
+        date_str = r.transaction_date.strftime("%Y-%m-%d") if r.transaction_date else ""
+        tx_list.append(
+            {
+                "id": r.id,
+                "profile_id": r.profile_id,
+                "profile_name": r.profile_name,
+                "ticker": r.ticker,
+                "stock_name": r.stock_name,
+                "transaction_type": r.transaction_type,
+                "quantity": r.quantity,
+                "price_per_share": r.price_per_share,
+                "total_amount": total,
+                "currency": r.currency,
+                "transaction_date": date_str,
+            }
+        )
+
+    return {"user_id": user_id, "transactions": tx_list}
+
 

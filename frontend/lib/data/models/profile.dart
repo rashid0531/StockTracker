@@ -12,6 +12,24 @@ class ChartPoint {
   }
 }
 
+String getDeterministicStockId(String ticker) {
+  const Map<String, String> predefined = {
+    "AAPL": "a7be54ea-5419-fb77-8be7-5b22b271db11",
+    "XIU": "b7be54ea-5419-fb77-8be7-5b22b271db22",
+    "BHP": "c7be54ea-5419-fb77-8be7-5b22b271db33",
+    "BP": "d7be54ea-5419-fb77-8be7-5b22b271db44",
+  };
+  if (predefined.containsKey(ticker)) {
+    return predefined[ticker]!;
+  }
+  int hash = 0;
+  for (int i = 0; i < ticker.length; i++) {
+    hash = (hash * 31 + ticker.codeUnitAt(i)) & 0xFFFFFFFF;
+  }
+  final hex = hash.toRadixString(16).padLeft(8, '0');
+  return "00000000-0000-0000-0000-${hex.padLeft(12, '0')}";
+}
+
 class StockHolding {
   final String stockId;
   final String ticker;
@@ -37,20 +55,7 @@ class StockHolding {
 
   factory StockHolding.fromJson(Map<String, dynamic> json) {
     final tickerStr = json['ticker'] as String;
-    String id = json['stock_id'] as String? ?? '';
-    if (id.isEmpty) {
-      if (tickerStr == 'AAPL') {
-        id = 'a7be54ea-5419-fb77-8be7-5b22b271db11';
-      } else if (tickerStr == 'XIU') {
-        id = 'b7be54ea-5419-fb77-8be7-5b22b271db22';
-      } else if (tickerStr == 'BHP') {
-        id = 'c7be54ea-5419-fb77-8be7-5b22b271db33';
-      } else if (tickerStr == 'BP') {
-        id = 'd7be54ea-5419-fb77-8be7-5b22b271db44';
-      } else {
-        id = '00000000-0000-0000-0000-000000000000';
-      }
-    }
+    final String id = json['stock_id'] as String? ?? getDeterministicStockId(tickerStr);
 
     return StockHolding(
       stockId: id,
@@ -165,6 +170,50 @@ class StockThesis {
       lastReviewedAt: json['last_reviewed_at'] as String,
       updatedAt: json['updated_at'] as String,
       needsReview: json['needs_review'] as bool? ?? false,
+    );
+  }
+}
+
+class TransactionRecord {
+  final String id;
+  final String profileId;
+  final String profileName;
+  final String ticker;
+  final String stockName;
+  final String type; // "BUY" | "SELL"
+  final double shares;
+  final double price;
+  final double totalAmount;
+  final String currency;
+  final String date;
+
+  TransactionRecord({
+    required this.id,
+    required this.profileId,
+    required this.profileName,
+    required this.ticker,
+    required this.stockName,
+    required this.type,
+    required this.shares,
+    required this.price,
+    required this.totalAmount,
+    required this.currency,
+    required this.date,
+  });
+
+  factory TransactionRecord.fromJson(Map<String, dynamic> json) {
+    return TransactionRecord(
+      id: json['id'] as String? ?? DateTime.now().millisecondsSinceEpoch.toString(),
+      profileId: json['profile_id'] as String? ?? '',
+      profileName: json['profile_name'] as String? ?? 'General Profile',
+      ticker: json['ticker'] as String,
+      stockName: json['stock_name'] as String? ?? json['ticker'] as String,
+      type: (json['transaction_type'] as String? ?? 'BUY').toUpperCase(),
+      shares: (json['quantity'] as num? ?? json['shares'] as num? ?? 0).toDouble(),
+      price: (json['price_per_share'] as num? ?? json['price'] as num? ?? 0).toDouble(),
+      totalAmount: (json['total_amount'] as num? ?? 0).toDouble(),
+      currency: json['currency'] as String? ?? 'USD',
+      date: json['transaction_date'] as String? ?? json['date'] as String? ?? 'Today',
     );
   }
 }
