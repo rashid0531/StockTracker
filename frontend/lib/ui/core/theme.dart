@@ -66,12 +66,7 @@ class ThemeProvider extends ChangeNotifier {
       );
 
   Widget buildBackground({required Widget child}) {
-    return Container(
-      width: double.infinity,
-      height: double.infinity,
-      color: bg,
-      child: child,
-    );
+    return PremiumBackground(isDark: isDark, child: child);
   }
 }
 
@@ -89,11 +84,27 @@ class PremiumBackground extends StatefulWidget {
   State<PremiumBackground> createState() => _PremiumBackgroundState();
 }
 
-class _PremiumBackgroundState extends State<PremiumBackground> {
+class _PremiumBackgroundState extends State<PremiumBackground> with SingleTickerProviderStateMixin {
+  late AnimationController _animController;
+  late Animation<double> _pulseAnimation;
   final ValueNotifier<Offset?> _hoverPositionNotifier = ValueNotifier<Offset?>(null);
 
   @override
+  void initState() {
+    super.initState();
+    _animController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 6),
+    )..repeat(reverse: true);
+
+    _pulseAnimation = Tween<double>(begin: 0.88, end: 1.12).animate(
+      CurvedAnimation(parent: _animController, curve: Curves.easeInOut),
+    );
+  }
+
+  @override
   void dispose() {
+    _animController.dispose();
     _hoverPositionNotifier.dispose();
     super.dispose();
   }
@@ -110,130 +121,143 @@ class _PremiumBackgroundState extends State<PremiumBackground> {
       },
       child: Stack(
         children: [
-          // Base gradient background (opaque)
+          // 1. Base gradient background
           Positioned.fill(
             child: Container(
-              color: widget.isDark ? const Color(0xFF090A0F) : const Color(0xFFF3F5F8),
-              child: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: widget.isDark
-                        ? const [
-                            Color(0xFF090A0F),
-                            Color(0xFF141724),
-                            Color(0xFF0E1018),
-                          ]
-                        : const [
-                            Color(0xFFF3F5F8),
-                            Color(0xFFEAEEF4),
-                            Color(0xFFF1F4F7),
-                          ],
-                  ),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: widget.isDark
+                      ? const [
+                          Color(0xFF06080D),
+                          Color(0xFF0C101A),
+                          Color(0xFF111726),
+                          Color(0xFF080B12),
+                        ]
+                      : const [
+                          Color(0xFFF4F6F9),
+                          Color(0xFFEBF0F7),
+                          Color(0xFFF0F4F8),
+                        ],
                 ),
               ),
             ),
           ),
-          // Soft glowing mesh radial gradient blobs (no BackdropFilter layer bug)
-          if (widget.isDark) ...[
-            // Green radial glow for wealth growth
-            Positioned(
-              top: -100,
-              right: -100,
-              child: Container(
-                width: 450,
-                height: 450,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  gradient: RadialGradient(
-                    colors: [
-                      Color(0x404CAF50),
-                      Color(0x004CAF50),
-                    ],
-                  ),
-                ),
-              ),
+
+          // 2. Subtle Tech Grid Pattern
+          Positioned.fill(
+            child: CustomPaint(
+              painter: _SubtleGridPainter(isDark: widget.isDark),
             ),
-            // Deep navy/indigo radial glow for contrast
-            Positioned(
-              bottom: -120,
-              left: -120,
-              child: Container(
-                width: 500,
-                height: 500,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  gradient: RadialGradient(
-                    colors: [
-                      Color(0x385C6BC0),
-                      Color(0x005C6BC0),
-                    ],
+          ),
+
+          // 3. Live Animated Pulsing & Floating Ambient Radial Orbs
+          AnimatedBuilder(
+            animation: _pulseAnimation,
+            builder: (context, child) {
+              final scale = _pulseAnimation.value;
+              return Stack(
+                children: [
+                  // Top-Right Emerald Wealth Glow
+                  Positioned(
+                    top: -100 * scale,
+                    right: -100 * scale,
+                    child: Container(
+                      width: 480 * scale,
+                      height: 480 * scale,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        gradient: RadialGradient(
+                          colors: widget.isDark
+                              ? [
+                                  AppColors.positive.withValues(alpha: 0.28),
+                                  AppColors.positive.withValues(alpha: 0.00),
+                                ]
+                              : [
+                                  AppColors.positive.withValues(alpha: 0.18),
+                                  AppColors.positive.withValues(alpha: 0.00),
+                                ],
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-              ),
-            ),
-          ] else ...[
-            // Soft green/mint radial glow in light mode
-            Positioned(
-              top: -120,
-              right: -120,
-              child: Container(
-                width: 450,
-                height: 450,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  gradient: RadialGradient(
-                    colors: [
-                      Color(0x3581C784),
-                      Color(0x0081C784),
-                    ],
+
+                  // Bottom-Left Cyan / Deep Blue Asset Glow
+                  Positioned(
+                    bottom: -130 * scale,
+                    left: -130 * scale,
+                    child: Container(
+                      width: 520 * scale,
+                      height: 520 * scale,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        gradient: RadialGradient(
+                          colors: widget.isDark
+                              ? [
+                                  const Color(0xFF3B82F6).withValues(alpha: 0.24),
+                                  const Color(0xFF3B82F6).withValues(alpha: 0.00),
+                                ]
+                              : [
+                                  const Color(0xFF60A5FA).withValues(alpha: 0.15),
+                                  const Color(0xFF60A5FA).withValues(alpha: 0.00),
+                                ],
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-              ),
-            ),
-            // Soft blue/slate radial glow in light mode
-            Positioned(
-              bottom: -140,
-              left: -140,
-              child: Container(
-                width: 520,
-                height: 520,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  gradient: RadialGradient(
-                    colors: [
-                      Color(0x3590CAF9),
-                      Color(0x0090CAF9),
-                    ],
+
+                  // Center Gold Ambient Glow
+                  Positioned(
+                    top: MediaQuery.of(context).size.height * 0.4 - (180 * scale),
+                    left: MediaQuery.of(context).size.width * 0.5 - (180 * scale),
+                    child: Container(
+                      width: 360 * scale,
+                      height: 360 * scale,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        gradient: RadialGradient(
+                          colors: widget.isDark
+                              ? [
+                                  const Color(0xFFF59E0B).withValues(alpha: 0.12),
+                                  const Color(0xFFF59E0B).withValues(alpha: 0.00),
+                                ]
+                              : [
+                                  const Color(0xFFF59E0B).withValues(alpha: 0.06),
+                                  const Color(0xFFF59E0B).withValues(alpha: 0.00),
+                                ],
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-              ),
-            ),
-          ],
-          // Interactive Hover Responsive Radial Glow Blob
+                ],
+              );
+            },
+          ),
+
+          // 4. Interactive Hover Spotlight Glow
           ValueListenableBuilder<Offset?>(
             valueListenable: _hoverPositionNotifier,
             builder: (context, hoverPosition, child) {
               if (hoverPosition == null) return const SizedBox.shrink();
               return Positioned(
-                left: hoverPosition.dx - 200,
-                top: hoverPosition.dy - 200,
+                left: hoverPosition.dx - 220,
+                top: hoverPosition.dy - 220,
                 child: IgnorePointer(
                   child: Container(
-                    width: 400,
-                    height: 400,
+                    width: 440,
+                    height: 440,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       gradient: RadialGradient(
                         colors: widget.isDark
-                            ? const [
-                                Color(0x4000E676),
-                                Color(0x0000E676),
+                            ? [
+                                AppColors.positive.withValues(alpha: 0.18),
+                                AppColors.positive.withValues(alpha: 0.00),
                               ]
-                            : const [
-                                Color(0x304CAF50),
-                                Color(0x004CAF50),
+                            : [
+                                AppColors.positive.withValues(alpha: 0.12),
+                                AppColors.positive.withValues(alpha: 0.00),
                               ],
                       ),
                     ),
@@ -242,7 +266,8 @@ class _PremiumBackgroundState extends State<PremiumBackground> {
               );
             },
           ),
-          // Content overlay
+
+          // 5. Content overlay
           Positioned.fill(
             child: widget.child,
           ),
@@ -250,4 +275,27 @@ class _PremiumBackgroundState extends State<PremiumBackground> {
       ),
     );
   }
+}
+
+class _SubtleGridPainter extends CustomPainter {
+  final bool isDark;
+  _SubtleGridPainter({required this.isDark});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final gridPaint = Paint()
+      ..color = isDark ? Colors.white.withValues(alpha: 0.025) : Colors.black.withValues(alpha: 0.02)
+      ..strokeWidth = 0.6;
+
+    const double step = 45.0;
+    for (double x = 0; x < size.width; x += step) {
+      canvas.drawLine(Offset(x, 0), Offset(x, size.height), gridPaint);
+    }
+    for (double y = 0; y < size.height; y += step) {
+      canvas.drawLine(Offset(0, y), Offset(size.width, y), gridPaint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant _SubtleGridPainter oldDelegate) => oldDelegate.isDark != isDark;
 }

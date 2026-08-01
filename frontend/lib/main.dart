@@ -5,7 +5,11 @@ import 'package:go_router/go_router.dart';
 import 'data/services/api_service.dart';
 import 'ui/core/theme.dart';
 import 'ui/features/login/login_view.dart';
+import 'ui/features/hub/hub_view.dart';
 import 'ui/features/dashboard/dashboard_view.dart';
+import 'ui/features/real_estate/real_estate_view.dart';
+import 'ui/features/precious_metals/precious_metals_view.dart';
+import 'ui/features/health/health_view.dart';
 import 'ui/features/profile/profile_view.dart';
 import 'ui/features/analysis/analysis_view.dart';
 import 'ui/features/import/import_view.dart';
@@ -79,8 +83,28 @@ class WealthTrackerApp extends StatelessWidget {
         builder: (context, state) => const LoginView(),
       ),
       GoRoute(
+        path: '/hub',
+        builder: (context, state) => const HubView(),
+      ),
+      GoRoute(
+        path: '/stocks',
+        builder: (context, state) => const DashboardView(),
+      ),
+      GoRoute(
         path: '/dashboard',
         builder: (context, state) => const DashboardView(),
+      ),
+      GoRoute(
+        path: '/real-estate',
+        builder: (context, state) => const RealEstateView(),
+      ),
+      GoRoute(
+        path: '/precious-metals',
+        builder: (context, state) => const PreciousMetalsView(),
+      ),
+      GoRoute(
+        path: '/health',
+        builder: (context, state) => const HealthView(),
       ),
       GoRoute(
         path: '/import',

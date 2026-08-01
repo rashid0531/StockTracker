@@ -330,3 +330,68 @@ class ViewUserStockHolding(Base):
     native_currency: Mapped[str] = mapped_column(String(3))
     annualized_dividend_per_share: Mapped[Decimal] = mapped_column(Numeric(14, 4))
     total_shares: Mapped[Decimal] = mapped_column(Numeric(14, 4))
+
+
+class RealEstateAsset(Base):
+    __tablename__ = "real_estate_assets"
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
+    )
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), nullable=False
+    )
+    property_name: Mapped[str] = mapped_column(String(255), nullable=False)
+    property_type: Mapped[str] = mapped_column(String(100), nullable=False)  # Single Family, Condo, Commercial, Land
+    purchase_price: Mapped[Decimal] = mapped_column(Numeric(14, 2), nullable=False)
+    current_value: Mapped[Decimal] = mapped_column(Numeric(14, 2), nullable=False)
+    mortgage_balance: Mapped[Decimal] = mapped_column(Numeric(14, 2), default=0.0)
+    monthly_rent_income: Mapped[Decimal] = mapped_column(Numeric(14, 2), default=0.0)
+    monthly_expenses: Mapped[Decimal] = mapped_column(Numeric(14, 2), default=0.0)
+    address: Mapped[str] = mapped_column(String(500), nullable=True)
+    purchase_date: Mapped[datetime.date] = mapped_column(Date, nullable=True)
+    created_at: Mapped[datetime.datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+
+
+class PreciousMetalAsset(Base):
+    __tablename__ = "precious_metal_assets"
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
+    )
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), nullable=False
+    )
+    metal_type: Mapped[str] = mapped_column(String(50), nullable=False)  # Gold, Silver, Platinum, Palladium, Bronze
+    form: Mapped[str] = mapped_column(String(100), nullable=False)  # Bullion Bar, Coin, Jewelry, Grain
+    weight_oz: Mapped[Decimal] = mapped_column(Numeric(14, 4), nullable=False)
+    purity_percent: Mapped[Decimal] = mapped_column(Numeric(6, 3), default=99.9)
+    purchase_price_per_oz: Mapped[Decimal] = mapped_column(Numeric(14, 2), nullable=False)
+    current_spot_price_per_oz: Mapped[Decimal] = mapped_column(Numeric(14, 2), nullable=False)
+    storage_location: Mapped[str] = mapped_column(String(255), default="Home Safe")
+    purchase_date: Mapped[datetime.date] = mapped_column(Date, nullable=True)
+    created_at: Mapped[datetime.datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+
+
+class HealthMetricLog(Base):
+    __tablename__ = "health_metric_logs"
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
+    )
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), nullable=False
+    )
+    metric_type: Mapped[str] = mapped_column(String(100), nullable=False)  # Weight, Body Fat %, Resting HR, Sleep Score, Activity
+    value: Mapped[Decimal] = mapped_column(Numeric(14, 2), nullable=False)
+    unit: Mapped[str] = mapped_column(String(50), nullable=False)  # kg, lbs, bpm, %, hours, score
+    notes: Mapped[str] = mapped_column(String(500), nullable=True)
+    logged_at: Mapped[datetime.date] = mapped_column(Date, nullable=False)
+    created_at: Mapped[datetime.datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+

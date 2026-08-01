@@ -43,7 +43,7 @@ class _LoginViewState extends State<LoginView> {
     try {
       await _apiService.login(email, password);
       if (!mounted) return;
-      context.replace("/dashboard");
+      context.replace("/hub");
     } catch (e) {
       if (!mounted) return;
       setState(() {

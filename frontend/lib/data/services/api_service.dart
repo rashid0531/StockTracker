@@ -2,6 +2,9 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import '../models/profile.dart';
+import '../models/real_estate.dart';
+import '../models/precious_metal.dart';
+import '../models/health_metric.dart';
 
 class ApiService {
   static const String baseUrl = "http://localhost:8000";
@@ -1031,4 +1034,224 @@ class ApiService {
 
     return true;
   }
+
+  // --- Mock Stores for New Pillars ---
+  final List<Map<String, dynamic>> _mockRealEstate = [
+    {
+      "id": "re-1",
+      "user_id": mockUserId,
+      "property_name": "Lakeview Modern Condo",
+      "property_type": "Condo",
+      "purchase_price": 550000.0,
+      "current_value": 720000.0,
+      "mortgage_balance": 340000.0,
+      "monthly_rent_income": 3200.0,
+      "monthly_expenses": 1400.0,
+      "address": "450 Harbourfront Way, Toronto, ON",
+      "purchase_date": "2021-04-15",
+    },
+    {
+      "id": "re-2",
+      "user_id": mockUserId,
+      "property_name": "Suburban Family Estate",
+      "property_type": "Single Family",
+      "purchase_price": 890000.0,
+      "current_value": 1150000.0,
+      "mortgage_balance": 520000.0,
+      "monthly_rent_income": 4500.0,
+      "monthly_expenses": 1900.0,
+      "address": "128 Oakridge Heights, Markham, ON",
+      "purchase_date": "2019-09-01",
+    },
+  ];
+
+  final List<Map<String, dynamic>> _mockPreciousMetals = [
+    {
+      "id": "pm-1",
+      "user_id": mockUserId,
+      "metal_type": "Gold",
+      "form": "Bullion Bar (1 oz)",
+      "weight_oz": 10.0,
+      "purity_percent": 99.99,
+      "purchase_price_per_oz": 2150.0,
+      "current_spot_price_per_oz": 2420.0,
+      "storage_location": "Insured Bank Vault",
+      "purchase_date": "2022-03-10",
+    },
+    {
+      "id": "pm-2",
+      "user_id": mockUserId,
+      "metal_type": "Silver",
+      "form": "Silver Maple Leaf Coins",
+      "weight_oz": 250.0,
+      "purity_percent": 99.99,
+      "purchase_price_per_oz": 24.5,
+      "current_spot_price_per_oz": 29.80,
+      "storage_location": "Home Safe",
+      "purchase_date": "2023-01-20",
+    },
+    {
+      "id": "pm-3",
+      "user_id": mockUserId,
+      "metal_type": "Bronze",
+      "form": "Collector Ingot",
+      "weight_oz": 50.0,
+      "purity_percent": 99.5,
+      "purchase_price_per_oz": 4.20,
+      "current_spot_price_per_oz": 5.50,
+      "storage_location": "Private Collection",
+      "purchase_date": "2023-06-15",
+    },
+  ];
+
+  final List<Map<String, dynamic>> _mockHealthMetrics = [
+    {
+      "id": "hm-1",
+      "user_id": mockUserId,
+      "metric_type": "Weight",
+      "value": 78.5,
+      "unit": "kg",
+      "notes": "Post morning workout",
+      "logged_at": "2026-07-30",
+    },
+    {
+      "id": "hm-2",
+      "user_id": mockUserId,
+      "metric_type": "Resting HR",
+      "value": 58.0,
+      "unit": "bpm",
+      "notes": "Measured via Oura Ring",
+      "logged_at": "2026-07-30",
+    },
+    {
+      "id": "hm-3",
+      "user_id": mockUserId,
+      "metric_type": "Sleep Score",
+      "value": 88.0,
+      "unit": "score",
+      "notes": "7.8 hrs deep sleep",
+      "logged_at": "2026-07-30",
+    },
+    {
+      "id": "hm-4",
+      "user_id": mockUserId,
+      "metric_type": "Body Fat %",
+      "value": 14.2,
+      "unit": "%",
+      "notes": "DEXA scan result",
+      "logged_at": "2026-07-25",
+    },
+  ];
+
+  // --- Real Estate Methods ---
+  Future<List<RealEstateAsset>> getRealEstateAssets() async {
+    if (_isUsingMock) {
+      await Future.delayed(const Duration(milliseconds: 150));
+      return _mockRealEstate.map((json) => RealEstateAsset.fromJson(json)).toList();
+    }
+    final response = await http.get(Uri.parse("$baseUrl/real-estate/$mockUserId"));
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      final list = data['properties'] as List;
+      return list.map((json) => RealEstateAsset.fromJson(json)).toList();
+    }
+    throw Exception("Failed to load real estate assets");
+  }
+
+  Future<RealEstateAsset> addRealEstateAsset(Map<String, dynamic> body) async {
+    if (_isUsingMock) {
+      await Future.delayed(const Duration(milliseconds: 150));
+      final newAsset = {
+        "id": "re-${DateTime.now().millisecondsSinceEpoch}",
+        "user_id": mockUserId,
+        ...body,
+      };
+      _mockRealEstate.insert(0, newAsset);
+      return RealEstateAsset.fromJson(newAsset);
+    }
+    final response = await http.post(
+      Uri.parse("$baseUrl/real-estate"),
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode({"user_id": mockUserId, ...body}),
+    );
+    if (response.statusCode == 201) {
+      return RealEstateAsset.fromJson(jsonDecode(response.body));
+    }
+    throw Exception("Failed to add real estate asset");
+  }
+
+  // --- Precious Metals Methods ---
+  Future<List<PreciousMetalAsset>> getPreciousMetals() async {
+    if (_isUsingMock) {
+      await Future.delayed(const Duration(milliseconds: 150));
+      return _mockPreciousMetals.map((json) => PreciousMetalAsset.fromJson(json)).toList();
+    }
+    final response = await http.get(Uri.parse("$baseUrl/precious-metals/$mockUserId"));
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      final list = data['metals'] as List;
+      return list.map((json) => PreciousMetalAsset.fromJson(json)).toList();
+    }
+    throw Exception("Failed to load precious metals");
+  }
+
+  Future<PreciousMetalAsset> addPreciousMetalAsset(Map<String, dynamic> body) async {
+    if (_isUsingMock) {
+      await Future.delayed(const Duration(milliseconds: 150));
+      final newAsset = {
+        "id": "pm-${DateTime.now().millisecondsSinceEpoch}",
+        "user_id": mockUserId,
+        ...body,
+      };
+      _mockPreciousMetals.insert(0, newAsset);
+      return PreciousMetalAsset.fromJson(newAsset);
+    }
+    final response = await http.post(
+      Uri.parse("$baseUrl/precious-metals"),
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode({"user_id": mockUserId, ...body}),
+    );
+    if (response.statusCode == 201) {
+      return PreciousMetalAsset.fromJson(jsonDecode(response.body));
+    }
+    throw Exception("Failed to add precious metal asset");
+  }
+
+  // --- Health Metrics Methods ---
+  Future<List<HealthMetricLog>> getHealthMetrics() async {
+    if (_isUsingMock) {
+      await Future.delayed(const Duration(milliseconds: 150));
+      return _mockHealthMetrics.map((json) => HealthMetricLog.fromJson(json)).toList();
+    }
+    final response = await http.get(Uri.parse("$baseUrl/health/$mockUserId"));
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      final list = data['metrics'] as List;
+      return list.map((json) => HealthMetricLog.fromJson(json)).toList();
+    }
+    throw Exception("Failed to load health metrics");
+  }
+
+  Future<HealthMetricLog> addHealthMetric(Map<String, dynamic> body) async {
+    if (_isUsingMock) {
+      await Future.delayed(const Duration(milliseconds: 150));
+      final newMetric = {
+        "id": "hm-${DateTime.now().millisecondsSinceEpoch}",
+        "user_id": mockUserId,
+        ...body,
+      };
+      _mockHealthMetrics.insert(0, newMetric);
+      return HealthMetricLog.fromJson(newMetric);
+    }
+    final response = await http.post(
+      Uri.parse("$baseUrl/health"),
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode({"user_id": mockUserId, ...body}),
+    );
+    if (response.statusCode == 201) {
+      return HealthMetricLog.fromJson(jsonDecode(response.body));
+    }
+    throw Exception("Failed to add health metric");
+  }
 }
+

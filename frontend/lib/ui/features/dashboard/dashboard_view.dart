@@ -713,20 +713,36 @@ class _DashboardViewState extends State<DashboardView> {
                   ),
                 ],
               ),
-              IconButton(
-                onPressed: () => context.push("/import"),
-                icon: Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: theme.card,
-                    shape: BoxShape.circle,
-                    border: Border.all(color: theme.border),
+              Row(
+                children: [
+                  IconButton(
+                    onPressed: () => context.go("/hub"),
+                    tooltip: "Back to Hub",
+                    icon: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: theme.card,
+                        shape: BoxShape.circle,
+                        border: Border.all(color: theme.border),
+                      ),
+                      child: Text("🏡", style: TextStyle(color: theme.text, fontSize: 16)),
+                    ),
                   ),
-                  child: Text(
-                    "➕",
-                    style: TextStyle(color: theme.text, fontSize: 16),
+                  const SizedBox(width: 4),
+                  IconButton(
+                    onPressed: () => context.push("/import"),
+                    tooltip: "Import CSV",
+                    icon: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: theme.card,
+                        shape: BoxShape.circle,
+                        border: Border.all(color: theme.border),
+                      ),
+                      child: Text("📥", style: TextStyle(color: theme.text, fontSize: 16)),
+                    ),
                   ),
-                ),
+                ],
               ),
             ],
           ),
