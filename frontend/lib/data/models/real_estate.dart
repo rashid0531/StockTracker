@@ -2,7 +2,11 @@ class RealEstateAsset {
   final String id;
   final String userId;
   final String propertyName;
-  final String propertyType; // Single Family, Condo, Commercial, Land
+  final String propertyType;
+  final String region;
+  final String propertyCategory;
+  final String structuralType;
+  final String tenureModel;
   final double purchasePrice;
   final double currentValue;
   final double mortgageBalance;
@@ -16,6 +20,10 @@ class RealEstateAsset {
     required this.userId,
     required this.propertyName,
     required this.propertyType,
+    this.region = "North America (NA)",
+    this.propertyCategory = "Single-Family",
+    this.structuralType = "Single-Family Detached",
+    this.tenureModel = "Freehold",
     required this.purchasePrice,
     required this.currentValue,
     required this.mortgageBalance,
@@ -35,6 +43,10 @@ class RealEstateAsset {
       userId: json['user_id'] as String,
       propertyName: json['property_name'] as String,
       propertyType: json['property_type'] as String,
+      region: json['region'] as String? ?? "North America (NA)",
+      propertyCategory: json['property_category'] as String? ?? "Single-Family",
+      structuralType: json['structural_type'] as String? ?? json['property_type'] as String? ?? "Single-Family Detached",
+      tenureModel: json['tenure_model'] as String? ?? "Freehold",
       purchasePrice: (json['purchase_price'] as num).toDouble(),
       currentValue: (json['current_value'] as num).toDouble(),
       mortgageBalance: (json['mortgage_balance'] as num? ?? 0.0).toDouble(),
@@ -51,6 +63,10 @@ class RealEstateAsset {
       'user_id': userId,
       'property_name': propertyName,
       'property_type': propertyType,
+      'region': region,
+      'property_category': propertyCategory,
+      'structural_type': structuralType,
+      'tenure_model': tenureModel,
       'purchase_price': purchasePrice,
       'current_value': currentValue,
       'mortgage_balance': mortgageBalance,

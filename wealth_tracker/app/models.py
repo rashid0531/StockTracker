@@ -343,7 +343,11 @@ class RealEstateAsset(Base):
         UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), nullable=False
     )
     property_name: Mapped[str] = mapped_column(String(255), nullable=False)
-    property_type: Mapped[str] = mapped_column(String(100), nullable=False)  # Single Family, Condo, Commercial, Land
+    property_type: Mapped[str] = mapped_column(String(100), nullable=False)  # Structural type or label
+    region: Mapped[str] = mapped_column(String(50), default="North America (NA)", nullable=False)
+    property_category: Mapped[str] = mapped_column(String(100), default="Single-Family", nullable=False)
+    structural_type: Mapped[str] = mapped_column(String(100), default="Single-Family Detached", nullable=False)
+    tenure_model: Mapped[str] = mapped_column(String(100), default="Freehold", nullable=False)
     purchase_price: Mapped[Decimal] = mapped_column(Numeric(14, 2), nullable=False)
     current_value: Mapped[Decimal] = mapped_column(Numeric(14, 2), nullable=False)
     mortgage_balance: Mapped[Decimal] = mapped_column(Numeric(14, 2), default=0.0)

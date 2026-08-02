@@ -196,6 +196,10 @@ class RealEstateCreateRequest(BaseModel):
     user_id: UUID
     property_name: str
     property_type: str
+    region: Optional[str] = "North America (NA)"
+    property_category: Optional[str] = "Single-Family"
+    structural_type: Optional[str] = "Single-Family Detached"
+    tenure_model: Optional[str] = "Freehold"
     purchase_price: Decimal
     current_value: Decimal
     mortgage_balance: Decimal = Decimal("0.0")
@@ -210,6 +214,10 @@ class RealEstateResponse(BaseModel):
     user_id: UUID
     property_name: str
     property_type: str
+    region: Optional[str] = "North America (NA)"
+    property_category: Optional[str] = "Single-Family"
+    structural_type: Optional[str] = "Single-Family Detached"
+    tenure_model: Optional[str] = "Freehold"
     purchase_price: Decimal
     current_value: Decimal
     mortgage_balance: Decimal

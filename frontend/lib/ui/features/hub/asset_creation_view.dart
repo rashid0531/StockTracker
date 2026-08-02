@@ -22,14 +22,133 @@ class _AssetCreationViewState extends State<AssetCreationView> {
   String _stockType = "TFSA";
   String _stockCountry = "Canada";
 
-  // Real Estate Form Controllers
+  // Real Estate Form Controllers & State
   final _reNameCtrl = TextEditingController();
-  final String _reType = "Condo";
   final _reValCtrl = TextEditingController();
   final _reMortCtrl = TextEditingController();
   final _reRentCtrl = TextEditingController();
   final _reExpCtrl = TextEditingController();
   final _reAddrCtrl = TextEditingController();
+
+  String _reRegion = "North America (NA)";
+  String _rePropertyCategory = "Single-Family & Standalone Dwellings";
+  String _reStructuralType = "Single-Family Detached (NA) / Detached House (UK/AU)";
+  String _reTenureModel = "Freehold";
+
+  final List<String> _reRegions = [
+    "North America (NA)",
+    "UK / Europe (UK/EU)",
+    "Australia / Oceania (AU)",
+  ];
+
+  final Map<String, List<Map<String, String>>> _reStructuralTaxonomy = {
+    "Single-Family & Standalone Dwellings": [
+      {
+        "name": "Single-Family Detached (NA) / Detached House (UK/AU)",
+        "desc": "Standalone single-dwelling building without shared structural walls."
+      },
+      {
+        "name": "Bungalow",
+        "desc": "Single-story or story-and-a-half house with a low-pitched roof."
+      },
+      {
+        "name": "Villa (AU/UK)",
+        "desc": "Single-story attached home in complex (AU) or holiday residence (UK/EU)."
+      },
+      {
+        "name": "Cottage",
+        "desc": "Small rustic single-family home or vacation property."
+      },
+      {
+        "name": "Ranch / Single-Story House (NA)",
+        "desc": "Wide single-story house with open-concept layout and attached garage."
+      },
+    ],
+    "Attached & Semi-Attached Dwellings": [
+      {
+        "name": "Townhouse (NA/AU) / Terraced House (UK)",
+        "desc": "Multi-story row house sharing side party walls on both sides."
+      },
+      {
+        "name": "End-of-Terrace (UK) / End-Unit Townhouse (NA)",
+        "desc": "Townhouse at end of row sharing a party wall on only one side."
+      },
+      {
+        "name": "Semi-Detached House (UK/NA/AU) / Duplex (AU)",
+        "desc": "Single building split vertically into two dwellings sharing central wall."
+      },
+      {
+        "name": "Semi-Detached Duplex (NA)",
+        "desc": "Single building with two self-contained units stacked vertically or side-by-side."
+      },
+      {
+        "name": "Triplex / Quadplex (NA)",
+        "desc": "Residential building divided into three or four separate living units."
+      },
+    ],
+    "Multi-Family & High-Density Dwellings": [
+      {
+        "name": "Condominium (NA) / Strata Unit (AU) / Share of Freehold Flat (UK)",
+        "desc": "Individually owned unit in larger building with shared common elements."
+      },
+      {
+        "name": "Apartment / Flat (UK)",
+        "desc": "Self-contained housing unit occupying part of a multi-unit building."
+      },
+      {
+        "name": "Maisonette (UK/Europe)",
+        "desc": "Multi-story apartment inside larger building with private exterior front door."
+      },
+      {
+        "name": "Penthouse",
+        "desc": "Premium luxury unit on top floor(s) of high-rise building."
+      },
+      {
+        "name": "Studio Apartment / Bedsit (UK)",
+        "desc": "Single-room living space integrating bedroom, living, and kitchen area."
+      },
+      {
+        "name": "Micro-Apartment",
+        "desc": "Ultra-compact apartment (<350 sq ft / 32 sqm) with space-saving features."
+      },
+    ],
+    "Specialized & Alternate Dwellings": [
+      {
+        "name": "Accessory Dwelling Unit (ADU) / Granny Flat (AU/UK)",
+        "desc": "Secondary smaller self-contained unit on same lot as primary home."
+      },
+      {
+        "name": "Co-Living / House in Multiple Occupation (HMO - UK)",
+        "desc": "Property where non-related tenants rent individual bedrooms with shared spaces."
+      },
+      {
+        "name": "Loft",
+        "desc": "Apartment converted from former commercial space with high ceilings."
+      },
+      {
+        "name": "Manufactured / Mobile Home",
+        "desc": "Prefabricated dwelling built off-site on permanent chassis."
+      },
+      {
+        "name": "Floating Home / Houseboat",
+        "desc": "Residential structure designed to float on water, permanently moored."
+      },
+    ],
+    "Raw / Vacant Land": [
+      {
+        "name": "Raw / Vacant Land",
+        "desc": "Unimproved raw land or buildable vacant lot."
+      },
+    ],
+  };
+
+  final List<String> _reTenureModels = [
+    "Freehold",
+    "Leasehold",
+    "Condominium / Strata Title",
+    "Share of Freehold",
+    "Co-op / Housing Cooperative",
+  ];
 
   // Precious Metals Form Controllers
   String _pmMetalType = "Gold";
@@ -57,7 +176,7 @@ class _AssetCreationViewState extends State<AssetCreationView> {
       "icon": "🏠",
       "color": const Color(0xFF3B82F6),
       "label": "Real-Estate Property",
-      "subtitle": "Add Condo, Rental, Commercial, or REIT property asset",
+      "subtitle": "Add Single-Family, Townhouse, Condo, Maisonette, or Land",
       "route": "/real-estate",
     },
     "Precious Metals": {
@@ -113,7 +232,11 @@ class _AssetCreationViewState extends State<AssetCreationView> {
         if (_reNameCtrl.text.trim().isEmpty || _reValCtrl.text.trim().isEmpty) return;
         await _apiService.addRealEstateAsset({
           "property_name": _reNameCtrl.text.trim(),
-          "property_type": _reType,
+          "property_type": _reStructuralType,
+          "region": _reRegion,
+          "property_category": _rePropertyCategory,
+          "structural_type": _reStructuralType,
+          "tenure_model": _reTenureModel,
           "purchase_price": double.tryParse(_reValCtrl.text) ?? 0.0,
           "current_value": double.tryParse(_reValCtrl.text) ?? 0.0,
           "mortgage_balance": double.tryParse(_reMortCtrl.text) ?? 0.0,
@@ -190,7 +313,7 @@ class _AssetCreationViewState extends State<AssetCreationView> {
             child: SingleChildScrollView(
               padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 32.0),
               child: Container(
-                constraints: const BoxConstraints(maxWidth: 580),
+                constraints: const BoxConstraints(maxWidth: 640),
                 padding: const EdgeInsets.all(28.0),
                 decoration: BoxDecoration(
                   color: theme.card,
@@ -376,14 +499,143 @@ class _AssetCreationViewState extends State<AssetCreationView> {
     );
   }
 
-  // Real Estate Form
+  // Real Estate Form with Global Taxonomy & Tenure Models
   Widget _buildRealEstateForm(ThemeProvider theme) {
+    final List<Map<String, String>> currentTypes = _reStructuralTaxonomy[_rePropertyCategory] ?? [];
+
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        // 1. Region Selector
+        Text("1. Property Region / Market", style: theme.cardTitleStyle.copyWith(fontSize: 13, fontWeight: FontWeight.bold)),
+        const SizedBox(height: 8),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: _reRegions.map((r) {
+            final isSelected = _reRegion == r;
+            return ChoiceChip(
+              label: Text(r, style: TextStyle(color: isSelected ? Colors.white : theme.text, fontSize: 12, fontWeight: isSelected ? FontWeight.bold : FontWeight.normal)),
+              selected: isSelected,
+              selectedColor: const Color(0xFF3B82F6),
+              backgroundColor: theme.bg,
+              onSelected: (val) {
+                if (val) setState(() => _reRegion = r);
+              },
+            );
+          }).toList(),
+        ),
+        const SizedBox(height: 18),
+
+        // 2. Structural Category Dropdown
+        Text("2. Structural Category", style: theme.cardTitleStyle.copyWith(fontSize: 13, fontWeight: FontWeight.bold)),
+        const SizedBox(height: 8),
+        DropdownButtonFormField<String>(
+          initialValue: _rePropertyCategory,
+          dropdownColor: theme.card,
+          style: TextStyle(color: theme.text, fontSize: 13),
+          decoration: InputDecoration(
+            filled: true,
+            fillColor: theme.bg,
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide(color: theme.border)),
+          ),
+          items: _reStructuralTaxonomy.keys.map((cat) => DropdownMenuItem(value: cat, child: Text(cat))).toList(),
+          onChanged: (v) {
+            if (v != null) {
+              setState(() {
+                _rePropertyCategory = v;
+                _reStructuralType = _reStructuralTaxonomy[v]!.first["name"]!;
+              });
+            }
+          },
+        ),
+        const SizedBox(height: 18),
+
+        // 3. Structural Type Selector
+        Text("3. Structural Type", style: theme.cardTitleStyle.copyWith(fontSize: 13, fontWeight: FontWeight.bold)),
+        const SizedBox(height: 8),
+        Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: theme.bg,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: theme.border),
+          ),
+          child: Column(
+            children: currentTypes.map((t) {
+              final isSelected = _reStructuralType == t["name"];
+              return InkWell(
+                onTap: () {
+                  setState(() => _reStructuralType = t["name"]!);
+                },
+                borderRadius: BorderRadius.circular(12),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                  margin: const EdgeInsets.only(bottom: 6),
+                  decoration: BoxDecoration(
+                    color: isSelected ? const Color(0xFF3B82F6).withValues(alpha: 0.12) : Colors.transparent,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: isSelected ? const Color(0xFF3B82F6) : Colors.transparent),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(
+                        isSelected ? Icons.radio_button_checked_rounded : Icons.radio_button_unchecked_rounded,
+                        color: isSelected ? const Color(0xFF3B82F6) : theme.subtext,
+                        size: 20,
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(t["name"]!, style: theme.cardTitleStyle.copyWith(fontSize: 13, fontWeight: isSelected ? FontWeight.bold : FontWeight.normal)),
+                            const SizedBox(height: 2),
+                            Text(t["desc"]!, style: theme.subtitleStyle.copyWith(fontSize: 11)),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
+        ),
+        const SizedBox(height: 18),
+
+        // 4. Tenure & Ownership Model
+        Text("4. Tenure & Ownership Model", style: theme.cardTitleStyle.copyWith(fontSize: 13, fontWeight: FontWeight.bold)),
+        const SizedBox(height: 8),
+        DropdownButtonFormField<String>(
+          initialValue: _reTenureModel,
+          dropdownColor: theme.card,
+          style: TextStyle(color: theme.text, fontSize: 13),
+          decoration: InputDecoration(
+            filled: true,
+            fillColor: theme.bg,
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide(color: theme.border)),
+          ),
+          items: _reTenureModels.map((tm) => DropdownMenuItem(value: tm, child: Text(tm))).toList(),
+          onChanged: (v) {
+            if (v != null) setState(() => _reTenureModel = v);
+          },
+        ),
+        const SizedBox(height: 18),
+
+        // 5. Property Name & Financial Details
+        Text("5. Financial Valuation & Details", style: theme.cardTitleStyle.copyWith(fontSize: 13, fontWeight: FontWeight.bold)),
+        const SizedBox(height: 10),
         TextField(
           controller: _reNameCtrl,
           style: TextStyle(color: theme.text),
-          decoration: InputDecoration(labelText: "Property Name (e.g. Waterfront Condo)", labelStyle: TextStyle(color: theme.subtext)),
+          decoration: InputDecoration(
+            labelText: "Property Name (e.g. Waterfront Penthouse, London Terrace)",
+            labelStyle: TextStyle(color: theme.subtext, fontSize: 12),
+            filled: true,
+            fillColor: theme.bg,
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide(color: theme.border)),
+          ),
         ),
         const SizedBox(height: 14),
         Row(
@@ -393,7 +645,13 @@ class _AssetCreationViewState extends State<AssetCreationView> {
                 controller: _reValCtrl,
                 keyboardType: TextInputType.number,
                 style: TextStyle(color: theme.text),
-                decoration: InputDecoration(labelText: "Current Valuation (\$)", labelStyle: TextStyle(color: theme.subtext)),
+                decoration: InputDecoration(
+                  labelText: "Current Valuation (\$)",
+                  labelStyle: TextStyle(color: theme.subtext, fontSize: 12),
+                  filled: true,
+                  fillColor: theme.bg,
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide(color: theme.border)),
+                ),
               ),
             ),
             const SizedBox(width: 14),
@@ -402,7 +660,13 @@ class _AssetCreationViewState extends State<AssetCreationView> {
                 controller: _reMortCtrl,
                 keyboardType: TextInputType.number,
                 style: TextStyle(color: theme.text),
-                decoration: InputDecoration(labelText: "Mortgage Balance (\$)", labelStyle: TextStyle(color: theme.subtext)),
+                decoration: InputDecoration(
+                  labelText: "Mortgage Balance (\$)",
+                  labelStyle: TextStyle(color: theme.subtext, fontSize: 12),
+                  filled: true,
+                  fillColor: theme.bg,
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide(color: theme.border)),
+                ),
               ),
             ),
           ],
@@ -415,7 +679,13 @@ class _AssetCreationViewState extends State<AssetCreationView> {
                 controller: _reRentCtrl,
                 keyboardType: TextInputType.number,
                 style: TextStyle(color: theme.text),
-                decoration: InputDecoration(labelText: "Monthly Rent Income (\$)", labelStyle: TextStyle(color: theme.subtext)),
+                decoration: InputDecoration(
+                  labelText: "Monthly Rent (\$)",
+                  labelStyle: TextStyle(color: theme.subtext, fontSize: 12),
+                  filled: true,
+                  fillColor: theme.bg,
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide(color: theme.border)),
+                ),
               ),
             ),
             const SizedBox(width: 14),
@@ -424,7 +694,13 @@ class _AssetCreationViewState extends State<AssetCreationView> {
                 controller: _reExpCtrl,
                 keyboardType: TextInputType.number,
                 style: TextStyle(color: theme.text),
-                decoration: InputDecoration(labelText: "Monthly Expenses (\$)", labelStyle: TextStyle(color: theme.subtext)),
+                decoration: InputDecoration(
+                  labelText: "Monthly Expenses (\$)",
+                  labelStyle: TextStyle(color: theme.subtext, fontSize: 12),
+                  filled: true,
+                  fillColor: theme.bg,
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide(color: theme.border)),
+                ),
               ),
             ),
           ],
@@ -433,7 +709,13 @@ class _AssetCreationViewState extends State<AssetCreationView> {
         TextField(
           controller: _reAddrCtrl,
           style: TextStyle(color: theme.text),
-          decoration: InputDecoration(labelText: "Property Address / Location", labelStyle: TextStyle(color: theme.subtext)),
+          decoration: InputDecoration(
+            labelText: "Property Address / Location",
+            labelStyle: TextStyle(color: theme.subtext, fontSize: 12),
+            filled: true,
+            fillColor: theme.bg,
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide(color: theme.border)),
+          ),
         ),
       ],
     );
