@@ -297,6 +297,7 @@ class ApiService {
     required String name,
     required String country,
     required String type,
+    String pillarCategory = "Stocks",
   }) async {
     await Future.delayed(const Duration(milliseconds: 400));
     final newId = "prof-${DateTime.now().millisecondsSinceEpoch}";
@@ -305,6 +306,7 @@ class ApiService {
       "name": name,
       "country": country,
       "type": type,
+      "pillarCategory": pillarCategory,
       "totalValue": 0.0,
       "totalChange": 0.0,
       "totalChangePercent": 0.0,

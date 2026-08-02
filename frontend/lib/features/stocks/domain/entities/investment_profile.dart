@@ -6,6 +6,7 @@ class InvestmentProfile {
   final String type;
   final String country;
   final String currency;
+  final String pillarCategory;
   final double totalValue;
   final double totalChange;
   final double totalChangePercent;
@@ -17,6 +18,7 @@ class InvestmentProfile {
     required this.type,
     required this.country,
     required this.currency,
+    this.pillarCategory = 'Stocks',
     required this.totalValue,
     required this.totalChange,
     required this.totalChangePercent,
@@ -31,11 +33,12 @@ class InvestmentProfile {
       id: json['id'] as String,
       name: json['name'] as String,
       type: json['type'] as String,
-      country: json['country'] as String,
-      currency: json['currency'] as String,
-      totalValue: (json['totalValue'] as num).toDouble(),
-      totalChange: (json['totalChange'] as num).toDouble(),
-      totalChangePercent: (json['totalChangePercent'] as num).toDouble(),
+      country: json['country'] as String? ?? 'Canada',
+      currency: json['currency'] as String? ?? 'CAD',
+      pillarCategory: json['pillarCategory'] as String? ?? json['pillar_category'] as String? ?? 'Stocks',
+      totalValue: (json['totalValue'] as num? ?? 0.0).toDouble(),
+      totalChange: (json['totalChange'] as num? ?? 0.0).toDouble(),
+      totalChangePercent: (json['totalChangePercent'] as num? ?? 0.0).toDouble(),
       stocks: stockList,
     );
   }
@@ -47,6 +50,7 @@ class InvestmentProfile {
       'type': type,
       'country': country,
       'currency': currency,
+      'pillarCategory': pillarCategory,
       'totalValue': totalValue,
       'totalChange': totalChange,
       'totalChangePercent': totalChangePercent,

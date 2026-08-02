@@ -44,6 +44,7 @@ class InvestmentProfile(Base):
     name: Mapped[str] = mapped_column(String(255), nullable=False)
     country: Mapped[str] = mapped_column(String(50), default="Canada", nullable=False)
     account_type: Mapped[str] = mapped_column(String(100), default="TFSA", nullable=False)
+    pillar_category: Mapped[str] = mapped_column(String(50), default="Stocks", nullable=False)
     created_at: Mapped[datetime.datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
     )

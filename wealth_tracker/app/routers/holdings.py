@@ -17,9 +17,26 @@ from app.schemas import (
     TransactionCreateRequest,
     TransactionItemResponse,
     UserTransactionsResponse,
+    ProfileCreate,
+    ProfileResponse,
 )
 
 router = APIRouter(prefix="/holdings", tags=["Holdings"])
+
+
+@router.post("/profiles/", response_model=ProfileResponse)
+async def create_profile(body: ProfileCreate, db: AsyncSession = Depends(get_db)):
+    profile = InvestmentProfile(
+        user_id=body.user_id,
+        name=body.name,
+        country=body.country,
+        account_type=body.account_type,
+        pillar_category=body.pillar_category,
+    )
+    db.add(profile)
+    await db.commit()
+    await db.refresh(profile)
+    return profile
 
 
 @router.get("/projections/{user_id}", response_model=UserDividendProjectionsResponse)

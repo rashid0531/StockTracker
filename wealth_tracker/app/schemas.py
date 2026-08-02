@@ -24,9 +24,10 @@ class UserResponse(UserBase):
 
 
 class ProfileBase(BaseModel):
-    name: str  # e.g., 'TFSA', 'RRSP'
+    name: str  # e.g., 'TFSA Growth', 'Primary Residence'
     country: str = "Canada"  # Jurisdiction country
-    account_type: str = "TFSA"  # Country-specific account type
+    account_type: str = "TFSA"  # Account type
+    pillar_category: str = "Stocks"  # Stocks, Real-Estate, Precious Metals, Health
 
 
 class ProfileCreate(ProfileBase):
