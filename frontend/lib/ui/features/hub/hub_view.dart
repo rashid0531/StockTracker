@@ -2,22 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/theme.dart';
-import '../../core/widgets/create_profile_modal.dart';
 
-class HubView extends StatefulWidget {
+class HubView extends StatelessWidget {
   const HubView({super.key});
-
-  @override
-  State<HubView> createState() => _HubViewState();
-}
-
-class _HubViewState extends State<HubView> {
-  void _onProfileCreated() {
-    setState(() {});
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("New Pillar Profile Created Successfully! 🎉")),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -113,7 +100,7 @@ class _HubViewState extends State<HubView> {
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
                         ),
-                        onPressed: () => CreatePillarProfileModal.show(context, onProfileCreated: _onProfileCreated),
+                        onPressed: () => context.push("/create-asset"),
                         icon: const Icon(Icons.add_rounded, color: Colors.white, size: 18),
                         label: const Text("New Profile", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13)),
                       ),

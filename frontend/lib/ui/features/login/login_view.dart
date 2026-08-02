@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../data/services/api_service.dart';
-import '../../core/widgets/create_profile_modal.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -77,19 +76,7 @@ class _LoginViewState extends State<LoginView> {
     try {
       await _apiService.login(email, password); // Register user session
       if (!mounted) return;
-      setState(() => _isLoading = false);
-
-      // Greet new user with the 4-Pillar Asset Creation Wizard
-      CreatePillarProfileModal.show(
-        context,
-        onProfileCreated: () {
-          if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text("Welcome to WealthTracker! Your first asset profile is created 🎉")),
-            );
-          }
-        },
-      );
+      context.go("/create-asset");
     } catch (e) {
       if (!mounted) return;
       setState(() {

@@ -6,6 +6,7 @@ import 'data/services/api_service.dart';
 import 'ui/core/theme.dart';
 import 'ui/features/login/login_view.dart';
 import 'ui/features/hub/hub_view.dart';
+import 'ui/features/hub/asset_creation_view.dart';
 import 'ui/features/dashboard/dashboard_view.dart';
 import 'ui/features/real_estate/real_estate_view.dart';
 import 'ui/features/precious_metals/precious_metals_view.dart';
@@ -85,6 +86,10 @@ class WealthTrackerApp extends StatelessWidget {
       GoRoute(
         path: '/hub',
         builder: (context, state) => const HubView(),
+      ),
+      GoRoute(
+        path: '/create-asset',
+        builder: (context, state) => const AssetCreationView(),
       ),
       GoRoute(
         path: '/stocks',

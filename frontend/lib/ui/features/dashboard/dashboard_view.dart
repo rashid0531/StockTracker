@@ -6,7 +6,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../data/models/profile.dart';
 import '../../../data/services/api_service.dart';
 import '../../core/theme.dart';
-import '../../core/widgets/create_profile_modal.dart';
 import '../profile/profile_view.dart';
 
 const List<String> _monthNames = [
@@ -861,11 +860,7 @@ class _DashboardViewState extends State<DashboardView> {
                 ),
               ),
               InkWell(
-                onTap: () {
-                  CreatePillarProfileModal.show(context, onProfileCreated: () {
-                    _viewModel.loadDashboard();
-                  });
-                },
+                onTap: () => context.push("/create-asset"),
                 borderRadius: BorderRadius.circular(8),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
