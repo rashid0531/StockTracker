@@ -298,5 +298,18 @@ class UserHealthMetricsResponse(BaseModel):
     metrics: List[HealthMetricResponse]
 
 
+class PortfolioSummaryResponse(BaseModel):
+    total_net_worth_cad: Decimal
+    stocks_valuation_cad: Decimal
+    real_estate_equity_cad: Decimal
+    precious_metals_valuation_cad: Decimal
+    health_wellness_score: int
+    last_updated: str
+
+    class Config:
+        from_attributes = True
+
+
+
 
 
