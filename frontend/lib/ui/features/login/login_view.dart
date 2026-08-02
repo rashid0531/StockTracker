@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../data/services/api_service.dart';
+import '../../core/widgets/create_profile_modal.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -10,15 +11,18 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
+  final _nameController = TextEditingController();
   final _emailController = TextEditingController(text: "demo@antigravity.ai");
   final _passwordController = TextEditingController(text: "password123");
   final ApiService _apiService = ApiService();
 
+  bool _isSignUp = false;
   bool _isLoading = false;
   String? _errorMessage;
 
   @override
   void dispose() {
+    _nameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
@@ -29,9 +33,7 @@ class _LoginViewState extends State<LoginView> {
     final password = _passwordController.text.trim();
 
     if (email.isEmpty) {
-      setState(() {
-        _errorMessage = "Please enter an email address";
-      });
+      setState(() => _errorMessage = "Please enter an email address");
       return;
     }
 
@@ -49,6 +51,50 @@ class _LoginViewState extends State<LoginView> {
       setState(() {
         _isLoading = false;
         _errorMessage = "Login failed: ${e.toString()}";
+      });
+    }
+  }
+
+  Future<void> _handleSignUp() async {
+    final name = _nameController.text.trim();
+    final email = _emailController.text.trim();
+    final password = _passwordController.text.trim();
+
+    if (name.isEmpty) {
+      setState(() => _errorMessage = "Please enter your full name");
+      return;
+    }
+    if (email.isEmpty) {
+      setState(() => _errorMessage = "Please enter an email address");
+      return;
+    }
+
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
+
+    try {
+      await _apiService.login(email, password); // Register user session
+      if (!mounted) return;
+      setState(() => _isLoading = false);
+
+      // Greet new user with the 4-Pillar Asset Creation Wizard
+      CreatePillarProfileModal.show(
+        context,
+        onProfileCreated: () {
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text("Welcome to WealthTracker! Your first asset profile is created 🎉")),
+            );
+          }
+        },
+      );
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _isLoading = false;
+        _errorMessage = "Sign up failed: ${e.toString()}";
       });
     }
   }
@@ -76,7 +122,7 @@ class _LoginViewState extends State<LoginView> {
             child: SingleChildScrollView(
               padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 32.0),
               child: Container(
-                constraints: const BoxConstraints(maxWidth: 420),
+                constraints: const BoxConstraints(maxWidth: 440),
                 padding: const EdgeInsets.all(28.0),
                 decoration: BoxDecoration(
                   color: const Color(0xFF131B2E),
@@ -145,26 +191,116 @@ class _LoginViewState extends State<LoginView> {
                       ),
                       textAlign: TextAlign.center,
                     ),
-                    const SizedBox(height: 32),
+                    const SizedBox(height: 28),
 
-                    // Title
-                    const Text(
-                      "Sign In",
-                      style: TextStyle(
+                    // Sign In / Sign Up Segmented Switch
+                    Container(
+                      padding: const EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF0F172A),
+                        borderRadius: BorderRadius.circular(14),
+                        border: Border.all(color: const Color(0xFF1E293B)),
+                      ),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: InkWell(
+                              onTap: () => setState(() {
+                                _isSignUp = false;
+                                _errorMessage = null;
+                              }),
+                              borderRadius: BorderRadius.circular(10),
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(vertical: 10),
+                                decoration: BoxDecoration(
+                                  color: !_isSignUp ? const Color(0xFF4CAF50) : Colors.transparent,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Text(
+                                  "Sign In",
+                                  style: TextStyle(
+                                    color: !_isSignUp ? Colors.black : Colors.white70,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: InkWell(
+                              onTap: () => setState(() {
+                                _isSignUp = true;
+                                _errorMessage = null;
+                              }),
+                              borderRadius: BorderRadius.circular(10),
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(vertical: 10),
+                                decoration: BoxDecoration(
+                                  color: _isSignUp ? const Color(0xFF4CAF50) : Colors.transparent,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Text(
+                                  "Sign Up",
+                                  style: TextStyle(
+                                    color: _isSignUp ? Colors.black : Colors.white70,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+
+                    Text(
+                      _isSignUp ? "Create Your Account" : "Sign In",
+                      style: const TextStyle(
                         color: Colors.white,
-                        fontSize: 20,
+                        fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     const SizedBox(height: 4),
-                    const Text(
-                      "Welcome back! Enter your credentials to continue.",
-                      style: TextStyle(
+                    Text(
+                      _isSignUp
+                          ? "Select what type of asset you want to add first upon signup."
+                          : "Welcome back! Enter your credentials to continue.",
+                      style: const TextStyle(
                         color: Color(0xFF94A3B8),
-                        fontSize: 13,
+                        fontSize: 12,
                       ),
                     ),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 20),
+
+                    // Name Field (Sign Up Only)
+                    if (_isSignUp) ...[
+                      TextField(
+                        controller: _nameController,
+                        style: const TextStyle(color: Colors.white),
+                        decoration: InputDecoration(
+                          labelText: "Full Name",
+                          labelStyle: const TextStyle(color: Color(0xFF94A3B8)),
+                          prefixIcon: const Icon(Icons.person_outline, color: Color(0xFF94A3B8)),
+                          filled: true,
+                          fillColor: const Color(0xFF0F172A),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(14),
+                            borderSide: const BorderSide(color: Color(0xFF334155)),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(14),
+                            borderSide: const BorderSide(color: Color(0xFF4CAF50), width: 2),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 14),
+                    ],
 
                     // Email Field
                     TextField(
@@ -186,7 +322,7 @@ class _LoginViewState extends State<LoginView> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 14),
 
                     // Password Field
                     TextField(
@@ -228,9 +364,11 @@ class _LoginViewState extends State<LoginView> {
 
                     const SizedBox(height: 24),
 
-                    // Sign In Button
+                    // Submit Button
                     ElevatedButton(
-                      onPressed: _isLoading ? null : _handleSignIn,
+                      onPressed: _isLoading
+                          ? null
+                          : (_isSignUp ? _handleSignUp : _handleSignIn),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF4CAF50),
                         padding: const EdgeInsets.symmetric(vertical: 16),
@@ -248,38 +386,14 @@ class _LoginViewState extends State<LoginView> {
                                 strokeWidth: 2,
                               ),
                             )
-                          : const Text(
-                              "Sign In",
-                              style: TextStyle(
-                                fontSize: 16,
+                          : Text(
+                              _isSignUp ? "Sign Up & Select First Asset 🚀" : "Sign In",
+                              style: const TextStyle(
+                                fontSize: 15,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black,
                               ),
                             ),
-                    ),
-
-                    const SizedBox(height: 12),
-
-                    // Create Profile Setup Button
-                    OutlinedButton(
-                      onPressed: () {
-                        context.push("/import");
-                      },
-                      style: OutlinedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                        side: const BorderSide(color: Color(0xFF334155)),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(14),
-                        ),
-                      ),
-                      child: const Text(
-                        "New User? Create Profile Setup",
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
                     ),
                   ],
                 ),
