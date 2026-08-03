@@ -211,7 +211,8 @@ class _RealEstateViewState extends State<RealEstateView> {
                             children: [
                               _buildMetricItem("Property Value", "\$${_totalValue.toStringAsFixed(0)}", theme),
                               _buildMetricItem("Mortgages", "\$${_totalMortgage.toStringAsFixed(0)}", theme),
-                              _buildMetricItem("Monthly Cash Flow", "+\$${_totalMonthlyCashFlow.toStringAsFixed(0)}/mo", theme, color: AppColors.positive),
+                              _buildMetricItem("LTV Ratio", "${_totalValue > 0 ? (_totalMortgage / _totalValue * 100).toStringAsFixed(1) : 0}%", theme),
+                              _buildMetricItem("Monthly Cashflow", "+\$${_totalMonthlyCashFlow.toStringAsFixed(0)}/mo", theme, color: AppColors.positive),
                             ],
                           ),
                         ],

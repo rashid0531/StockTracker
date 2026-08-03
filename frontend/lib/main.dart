@@ -14,6 +14,7 @@ import 'ui/features/health/health_view.dart';
 import 'ui/features/profile/profile_view.dart';
 import 'ui/features/analysis/analysis_view.dart';
 import 'ui/features/import/import_view.dart';
+import 'core/providers/pillar_preferences_provider.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -61,6 +62,7 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
+        ChangeNotifierProvider(create: (_) => PillarPreferencesProvider()),
         Provider(create: (_) => ApiService()),
       ],
       child: const WealthTrackerApp(),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import '../../../data/services/api_service.dart';
+import '../../../core/providers/pillar_preferences_provider.dart';
 import '../../core/theme.dart';
 
 class AssetCreationView extends StatefulWidget {
@@ -359,8 +360,10 @@ class _AssetCreationViewState extends State<AssetCreationView> {
                       Text("Select one of the 4 Pillars below to configure your asset profile.", style: theme.subtitleStyle),
                       const SizedBox(height: 24),
 
-                      // 4 Pillars Grid/List Selection Cards
-                      ..._pillarMeta.keys.map((key) {
+                      // Active Pillars Grid/List Selection Cards
+                      ..._pillarMeta.keys
+                          .where((key) => Provider.of<PillarPreferencesProvider>(context, listen: false).isPillarEnabled(key))
+                          .map((key) {
                         final meta = _pillarMeta[key]!;
                         final Color color = meta["color"] as Color;
                         final bool isSelected = _selectedPillar == key;
