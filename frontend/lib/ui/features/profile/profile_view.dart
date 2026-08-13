@@ -519,50 +519,6 @@ class _ProfileViewState extends State<ProfileView> {
       divItems[i].color = _donutColors[(i + 4) % _donutColors.length];
     }
 
-    final isValuation = _viewModel.chartMode == "VALUATION";
-
-    Widget pieContent = Column(
-      children: [
-        _buildModeToggle(theme, subtitleText: false),
-        const SizedBox(height: 16),
-        if (isValuation) ...[
-          if (stockItems.isNotEmpty)
-            GridDonutCard(
-              items: stockItems,
-              title: "Stock Weight",
-              subtitle: "${stockItems.length} Assets",
-              centerLabel: "Stocks",
-              onPress: () => context.push(
-                "/analysis?id=${widget.profileId}&type=stock",
-              ),
-            ),
-          if (sectorItems.isNotEmpty) ...[
-            const SizedBox(height: 16),
-            GridDonutCard(
-              items: sectorItems,
-              title: "Sector Weight",
-              subtitle: "${sectorItems.length} Sectors",
-              centerLabel: "Sectors",
-              onPress: () => context.push(
-                "/analysis?id=${widget.profileId}&type=sector",
-              ),
-            ),
-          ]
-        ] else ...[
-          if (divItems.isNotEmpty)
-            GridDonutCard(
-              items: divItems,
-              title: "Dividend Contribution",
-              subtitle: "${divItems.length} Payers",
-              centerLabel: "Dividends",
-              onPress: () => context.push(
-                "/analysis?id=${widget.profileId}&type=dividend",
-              ),
-            ),
-        ]
-      ],
-    );
-
     return ListView(
       children: [
         // Touch Interactive History Line Chart
@@ -573,7 +529,7 @@ class _ProfileViewState extends State<ProfileView> {
         _buildIntervalSelector(theme),
         const SizedBox(height: 24),
 
-        // Custom Toggles
+        // Action Buttons
         Container(
           margin: const EdgeInsets.symmetric(horizontal: 16),
           padding: const EdgeInsets.all(4),
@@ -585,27 +541,31 @@ class _ProfileViewState extends State<ProfileView> {
           child: Row(
             children: [
               Expanded(
-                child: _buildPillToggle("Analytics", "ANALYTICS", theme),
+                child: _buildActionButton(
+                  "Analytics",
+                  () => context.push('/profile/${widget.profileId}/analytics'),
+                  false,
+                  theme,
+                ),
               ),
               Expanded(
-                child: _buildPillToggle("Suggestions", "SUGGESTIONS", theme),
+                child: _buildActionButton(
+                  "Suggestions",
+                  () {}, // Always active below
+                  true,
+                  theme,
+                ),
               ),
             ],
           ),
         ),
         const SizedBox(height: 24),
 
-        // Expanded Bottom Content
-        if (_viewModel.activeTab == "ANALYTICS")
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: pieContent,
-          )
-        else
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: AiSuggestionsView(profileId: widget.profileId, theme: theme),
-          ),
+        // Suggestions Content Always Shown
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: AiSuggestionsView(profileId: widget.profileId, theme: theme),
+        ),
         const SizedBox(height: 24),
 
         // Holdings listings header
@@ -780,10 +740,9 @@ class _ProfileViewState extends State<ProfileView> {
     );
   }
 
-  Widget _buildPillToggle(String label, String tabKey, ThemeProvider theme) {
-    final isActive = _viewModel.activeTab == tabKey;
+  Widget _buildActionButton(String label, VoidCallback onTap, bool isActive, ThemeProvider theme) {
     return InkWell(
-      onTap: () => _viewModel.setActiveTab(tabKey),
+      onTap: onTap,
       borderRadius: BorderRadius.circular(24),
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 12),
@@ -991,8 +950,6 @@ class _ProfileViewState extends State<ProfileView> {
       },
     );
   }
-
-
 
   Widget _buildModeToggle(ThemeProvider theme, {bool subtitleText = false}) {
     final isValuation = _viewModel.chartMode == "VALUATION";
