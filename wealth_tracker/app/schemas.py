@@ -11,6 +11,7 @@ class UserBase(BaseModel):
     primary_country: Optional[str] = "Canada"
     primary_currency: Optional[str] = "CAD"
     active_modules: Optional[List[str]] = Field(default_factory=lambda: ["STOCKS"])
+    is_premium: Optional[bool] = False
 
 
 class UserCreate(UserBase):

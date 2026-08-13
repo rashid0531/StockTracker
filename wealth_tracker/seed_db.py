@@ -54,6 +54,7 @@ async def seed_data(session: AsyncSession):
         primary_country="Canada",
         primary_currency="CAD",
         active_modules=["STOCKS", "REAL_ESTATE", "CRYPTO", "BUSINESS"],
+        is_premium=False,
     )
     session.add(user)
 

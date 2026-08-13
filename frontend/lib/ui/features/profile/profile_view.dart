@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import '../../../data/models/profile.dart';
 import '../../../data/services/api_service.dart';
 import '../../core/theme.dart';
+import 'widgets/ai_suggestions_view.dart';
 
 // Top-level mock sector list helper
 Map<String, dynamic> _getStockMetadata(String ticker) {
@@ -34,7 +35,7 @@ class ProfileViewModel extends ChangeNotifier {
   bool _isLoading = true;
   String _activeInterval = "1Y";
   String _chartMode = "VALUATION"; // "VALUATION" | "DIVIDEND"
-  String _activeTab = "PERFORMANCE"; // "PERFORMANCE" | "ANALYTICS"
+  String _activeTab = "ANALYTICS"; // "ANALYTICS" | "SUGGESTIONS"
 
   ProfileViewModel({required this.apiService, required this.profileId});
 
@@ -520,77 +521,91 @@ class _ProfileViewState extends State<ProfileView> {
 
     final isValuation = _viewModel.chartMode == "VALUATION";
 
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final isWide = constraints.maxWidth > 800;
-        
-        Widget chartContent = InteractiveHistoryChart(points: _viewModel.chartPoints);
-        
-        Widget pieContent = Column(
-          children: [
-            _buildModeToggle(theme, subtitleText: false),
-            const SizedBox(height: 16),
-            if (isValuation) ...[
-              if (stockItems.isNotEmpty)
-                GridDonutCard(
-                  items: stockItems,
-                  title: "Stock Weight",
-                  subtitle: "${stockItems.length} Assets",
-                  centerLabel: "Stocks",
-                  onPress: () => context.push(
-                    "/analysis?id=${widget.profileId}&type=stock",
-                  ),
-                ),
-              if (sectorItems.isNotEmpty) ...[
-                const SizedBox(height: 16),
-                GridDonutCard(
-                  items: sectorItems,
-                  title: "Sector Weight",
-                  subtitle: "${sectorItems.length} Sectors",
-                  centerLabel: "Sectors",
-                  onPress: () => context.push(
-                    "/analysis?id=${widget.profileId}&type=sector",
-                  ),
-                ),
-              ]
-            ] else ...[
-              if (divItems.isNotEmpty)
-                GridDonutCard(
-                  items: divItems,
-                  title: "Dividend Contribution",
-                  subtitle: "${divItems.length} Payers",
-                  centerLabel: "Dividends",
-                  onPress: () => context.push(
-                    "/analysis?id=${widget.profileId}&type=dividend",
-                  ),
-                ),
-            ]
-          ],
-        );
-
-        return ListView(
-          children: [
-            if (isWide)
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(flex: 2, child: chartContent),
-                  const SizedBox(width: 24),
-                  Expanded(flex: 1, child: pieContent),
-                ],
-              )
-            else
-              Column(
-                children: [
-                  chartContent,
-                  const SizedBox(height: 24),
-                  pieContent,
-                ],
+    Widget pieContent = Column(
+      children: [
+        _buildModeToggle(theme, subtitleText: false),
+        const SizedBox(height: 16),
+        if (isValuation) ...[
+          if (stockItems.isNotEmpty)
+            GridDonutCard(
+              items: stockItems,
+              title: "Stock Weight",
+              subtitle: "${stockItems.length} Assets",
+              centerLabel: "Stocks",
+              onPress: () => context.push(
+                "/analysis?id=${widget.profileId}&type=stock",
               ),
+            ),
+          if (sectorItems.isNotEmpty) ...[
             const SizedBox(height: 16),
+            GridDonutCard(
+              items: sectorItems,
+              title: "Sector Weight",
+              subtitle: "${sectorItems.length} Sectors",
+              centerLabel: "Sectors",
+              onPress: () => context.push(
+                "/analysis?id=${widget.profileId}&type=sector",
+              ),
+            ),
+          ]
+        ] else ...[
+          if (divItems.isNotEmpty)
+            GridDonutCard(
+              items: divItems,
+              title: "Dividend Contribution",
+              subtitle: "${divItems.length} Payers",
+              centerLabel: "Dividends",
+              onPress: () => context.push(
+                "/analysis?id=${widget.profileId}&type=dividend",
+              ),
+            ),
+        ]
+      ],
+    );
+
+    return ListView(
+      children: [
+        // Touch Interactive History Line Chart
+        InteractiveHistoryChart(points: _viewModel.chartPoints),
+        const SizedBox(height: 16),
 
         // Interval scrollselector
         _buildIntervalSelector(theme),
+        const SizedBox(height: 24),
+
+        // Custom Toggles
+        Container(
+          margin: const EdgeInsets.symmetric(horizontal: 16),
+          padding: const EdgeInsets.all(4),
+          decoration: BoxDecoration(
+            color: theme.card,
+            borderRadius: BorderRadius.circular(30),
+            border: Border.all(color: theme.border),
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: _buildPillToggle("Analytics", "ANALYTICS", theme),
+              ),
+              Expanded(
+                child: _buildPillToggle("Suggestions", "SUGGESTIONS", theme),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 24),
+
+        // Expanded Bottom Content
+        if (_viewModel.activeTab == "ANALYTICS")
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: pieContent,
+          )
+        else
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: AiSuggestionsView(profileId: widget.profileId, theme: theme),
+          ),
         const SizedBox(height: 24),
 
         // Holdings listings header
@@ -763,7 +778,30 @@ class _ProfileViewState extends State<ProfileView> {
         const SizedBox(height: 40),
       ],
     );
-      },
+  }
+
+  Widget _buildPillToggle(String label, String tabKey, ThemeProvider theme) {
+    final isActive = _viewModel.activeTab == tabKey;
+    return InkWell(
+      onTap: () => _viewModel.setActiveTab(tabKey),
+      borderRadius: BorderRadius.circular(24),
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        decoration: BoxDecoration(
+          color: isActive ? AppColors.positive.withValues(alpha: 0.15) : Colors.transparent,
+          borderRadius: BorderRadius.circular(24),
+        ),
+        child: Center(
+          child: Text(
+            label,
+            style: TextStyle(
+              color: isActive ? AppColors.positive : theme.subtext,
+              fontWeight: FontWeight.bold,
+              fontSize: 14,
+            ),
+          ),
+        ),
+      ),
     );
   }
 

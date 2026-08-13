@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.routers import holdings, real_estate, precious_metals, health, portfolio
+from app.routers import holdings, real_estate, precious_metals, health, portfolio, ai_suggestions
 
 app = FastAPI(
     title="Wealth & Dividend Tracking Engine",
@@ -23,6 +23,7 @@ app.include_router(holdings.router)
 app.include_router(real_estate.router)
 app.include_router(precious_metals.router)
 app.include_router(health.router)
+app.include_router(ai_suggestions.router)
 
 
 @app.get("/")

@@ -231,6 +231,8 @@ class ApiService {
     _userPrimaryCountry = country;
     _userPrimaryCurrency = currency;
   }
+  
+  bool isPremium = false; // Mock paywall status
 
   // Country-specific investment account types lookup
   static const Map<String, List<String>> countryAccountTypes = {
@@ -577,6 +579,19 @@ class ApiService {
     final points = profileData[interval] ?? profileData["1Y"] ?? [];
     
     return points.map((pt) => ChartPoint.fromJson(pt)).toList();
+  }
+
+  // Fetch AI Suggestions (Mock microservice)
+  Future<Map<String, dynamic>> fetchAiSuggestions(String profileId) async {
+    await Future.delayed(const Duration(seconds: 1)); // Simulate LLM latency
+    if (!isPremium) {
+      throw Exception("PAYMENT_REQUIRED");
+    }
+    return {
+      "strongest_side": "Technology",
+      "weakest_side": "Consumer Staples",
+      "risk_mitigation": "Your portfolio is heavily skewed towards high-growth tech assets. Consider diversifying into defensive sectors like Utilities or Healthcare to mitigate future downside risks during market corrections."
+    };
   }
 
   // Add Buy Transaction (Import Form submission)

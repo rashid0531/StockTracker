@@ -3,7 +3,7 @@ from decimal import Decimal
 from typing import List, Optional
 import uuid
 
-from sqlalchemy import Date, DateTime, ForeignKey, Numeric, String, UniqueConstraint, Text, JSON
+from sqlalchemy import Date, DateTime, ForeignKey, Numeric, String, UniqueConstraint, Text, JSON, Boolean
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
@@ -22,6 +22,7 @@ class User(Base):
     primary_country: Mapped[str] = mapped_column(String(50), default="Canada", nullable=False)
     primary_currency: Mapped[str] = mapped_column(String(3), default="CAD", nullable=False)
     active_modules: Mapped[list[str]] = mapped_column(JSON, default=lambda: ["STOCKS"], nullable=False)
+    is_premium: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
     created_at: Mapped[datetime.datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
     )
