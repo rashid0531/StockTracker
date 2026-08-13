@@ -1255,5 +1255,191 @@ class ApiService {
     }
     throw Exception("Failed to add health metric");
   }
-}
 
+  // --- Dividend Received (Actual Income Log) ---
+  final List<Map<String, dynamic>> _mockReceivedDividends = [
+    {
+      "id": "dr-1",
+      "ticker": "RY",
+      "stock_name": "Royal Bank of Canada",
+      "payment_date": "2026-07-25",
+      "amount_per_share": 1.38,
+      "shares_at_payment": 20.0,
+      "total_received": 27.60,
+      "currency": "CAD",
+      "notes": "Q3 2026 dividend",
+    },
+    {
+      "id": "dr-2",
+      "ticker": "ENB",
+      "stock_name": "Enbridge Inc.",
+      "payment_date": "2026-07-15",
+      "amount_per_share": 0.915,
+      "shares_at_payment": 80.0,
+      "total_received": 73.20,
+      "currency": "CAD",
+      "notes": null,
+    },
+    {
+      "id": "dr-3",
+      "ticker": "FTS",
+      "stock_name": "Fortis Inc.",
+      "payment_date": "2026-06-01",
+      "amount_per_share": 0.59,
+      "shares_at_payment": 60.0,
+      "total_received": 35.40,
+      "currency": "CAD",
+      "notes": null,
+    },
+    {
+      "id": "dr-4",
+      "ticker": "TD",
+      "stock_name": "Toronto-Dominion Bank",
+      "payment_date": "2026-04-30",
+      "amount_per_share": 1.02,
+      "shares_at_payment": 30.0,
+      "total_received": 30.60,
+      "currency": "CAD",
+      "notes": null,
+    },
+    {
+      "id": "dr-5",
+      "ticker": "AAPL",
+      "stock_name": "Apple Inc.",
+      "payment_date": "2026-05-14",
+      "amount_per_share": 0.25,
+      "shares_at_payment": 12.0,
+      "total_received": 3.00,
+      "currency": "USD",
+      "notes": "Q2 2026",
+    },
+  ];
+
+  double get totalReceivedAllTimeMockCAD {
+    double total = 0;
+    for (final r in _mockReceivedDividends) {
+      total += convertCurrencyToCAD(r['total_received'] as double, r['currency'] as String);
+    }
+    return total;
+  }
+
+  double get currentYearReceivedMockCAD {
+    final currentYear = DateTime.now().year;
+    double total = 0;
+    for (final r in _mockReceivedDividends) {
+      final dateStr = r['payment_date'] as String;
+      final year = int.tryParse(dateStr.split('-')[0]) ?? 0;
+      if (year == currentYear) {
+        total += convertCurrencyToCAD(r['total_received'] as double, r['currency'] as String);
+      }
+    }
+    return total;
+  }
+
+  Future<Map<String, dynamic>> getReceivedDividends() async {
+    await Future.delayed(const Duration(milliseconds: 300));
+
+    if (!_isUsingMock) {
+      try {
+        final res = await http
+            .get(Uri.parse("$baseUrl/holdings/dividends/received/$mockUserId"))
+            .timeout(const Duration(seconds: 3));
+        if (res.statusCode == 200) {
+          return jsonDecode(res.body) as Map<String, dynamic>;
+        }
+      } catch (e) {
+        debugPrint("Error fetching received dividends: $e");
+      }
+    }
+
+    return {
+      "user_id": mockUserId,
+      "total_received_all_time": totalReceivedAllTimeMockCAD,
+      "current_year_received": currentYearReceivedMockCAD,
+      "records": _mockReceivedDividends,
+    };
+  }
+
+  Future<bool> logDividendReceived({
+    required String ticker,
+    required String paymentDate,
+    required double amountPerShare,
+    required double sharesAtPayment,
+    required double totalReceived,
+    required String currency,
+    String? notes,
+  }) async {
+    await Future.delayed(const Duration(milliseconds: 500));
+
+    if (!_isUsingMock) {
+      try {
+        final res = await http.post(
+          Uri.parse("$baseUrl/holdings/dividends/received"),
+          headers: {"Content-Type": "application/json"},
+          body: jsonEncode({
+            "user_id": mockUserId,
+            "ticker": ticker,
+            "payment_date": paymentDate,
+            "amount_per_share": amountPerShare,
+            "shares_at_payment": sharesAtPayment,
+            "total_received": totalReceived,
+            "currency": currency,
+            "notes": notes,
+          }),
+        ).timeout(const Duration(seconds: 3));
+        if (res.statusCode == 200) return true;
+      } catch (e) {
+        debugPrint("Error logging dividend received: $e");
+      }
+    }
+
+    // Mock fallback — add to local list
+    _mockReceivedDividends.insert(0, {
+      "id": "dr-${DateTime.now().millisecondsSinceEpoch}",
+      "ticker": ticker.toUpperCase(),
+      "stock_name": "$ticker (logged)",
+      "payment_date": paymentDate,
+      "amount_per_share": amountPerShare,
+      "shares_at_payment": sharesAtPayment,
+      "total_received": totalReceived,
+      "currency": currency,
+      "notes": notes,
+    });
+    return true;
+  }
+
+  Future<bool> updateStockDividend({
+    required String ticker,
+    required double annualizedDividendPerShare,
+    String frequency = "quarterly",
+  }) async {
+    await Future.delayed(const Duration(milliseconds: 400));
+
+    if (!_isUsingMock) {
+      try {
+        final res = await http.patch(
+          Uri.parse("$baseUrl/holdings/stocks/$ticker/dividend"),
+          headers: {"Content-Type": "application/json"},
+          body: jsonEncode({
+            "annualized_dividend_per_share": annualizedDividendPerShare,
+            "dividend_frequency": frequency,
+          }),
+        ).timeout(const Duration(seconds: 3));
+        if (res.statusCode == 200) return true;
+      } catch (e) {
+        debugPrint("Error updating stock dividend: $e");
+      }
+    }
+
+    // Mock fallback — update the mock profile dividend data
+    final tickerUpper = ticker.toUpperCase();
+    for (final profileStocks in _mockStocks.values) {
+      for (final stock in profileStocks) {
+        if ((stock['ticker'] as String) == tickerUpper) {
+          stock['annual_dividend_per_share'] = annualizedDividendPerShare;
+        }
+      }
+    }
+    return true;
+  }
+}

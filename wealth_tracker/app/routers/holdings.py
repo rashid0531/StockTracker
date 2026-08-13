@@ -7,7 +7,7 @@ from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
-from app.models import User, ViewUserStockHolding, InvestmentProfile, StockRegistry, FXHistoricalRate, DividendSchedule, UserStockThesis, StockTransaction, BrokerageAccount
+from app.models import User, ViewUserStockHolding, InvestmentProfile, StockRegistry, FXHistoricalRate, DividendSchedule, UserStockThesis, StockTransaction, BrokerageAccount, DividendReceived
 from app.schemas import (
     UserDividendProjectionsResponse,
     UserProfileValuesResponse,
@@ -19,6 +19,10 @@ from app.schemas import (
     UserTransactionsResponse,
     ProfileCreate,
     ProfileResponse,
+    DividendReceivedCreate,
+    DividendReceivedResponse,
+    UserDividendReceivedResponse,
+    UpdateStockDividendRequest,
 )
 
 router = APIRouter(prefix="/holdings", tags=["Holdings"])
@@ -467,3 +471,116 @@ async def get_user_transactions(
     return {"user_id": user_id, "transactions": tx_list}
 
 
+@router.post("/dividends/received", response_model=DividendReceivedResponse)
+async def log_dividend_received(body: DividendReceivedCreate, db: AsyncSession = Depends(get_db)):
+    """Log an actual dividend payment received by the user."""
+    # Resolve ticker to stock
+    ticker_upper = body.ticker.strip().upper()
+    stock_stmt = select(StockRegistry).where(StockRegistry.ticker == ticker_upper)
+    stock_res = await db.execute(stock_stmt)
+    stock = stock_res.scalar_one_or_none()
+    if not stock:
+        raise HTTPException(status_code=404, detail=f"Stock '{ticker_upper}' not found in registry. Add a BUY transaction first.")
+
+    record = DividendReceived(
+        user_id=body.user_id,
+        stock_id=stock.id,
+        account_id=body.account_id,
+        payment_date=body.payment_date,
+        amount_per_share=body.amount_per_share,
+        shares_at_payment=body.shares_at_payment,
+        total_received=body.total_received,
+        currency=body.currency,
+        notes=body.notes,
+    )
+    db.add(record)
+    await db.commit()
+    await db.refresh(record)
+
+    return {
+        "id": record.id,
+        "user_id": record.user_id,
+        "ticker": stock.ticker,
+        "stock_name": stock.name,
+        "payment_date": record.payment_date,
+        "amount_per_share": record.amount_per_share,
+        "shares_at_payment": record.shares_at_payment,
+        "total_received": record.total_received,
+        "currency": record.currency,
+        "notes": record.notes,
+        "created_at": record.created_at,
+    }
+
+
+@router.get("/dividends/received/{user_id}", response_model=UserDividendReceivedResponse)
+async def get_received_dividends(user_id: UUID, db: AsyncSession = Depends(get_db)):
+    """Get all actual dividend payments logged by the user, with year-to-date totals."""
+    from datetime import date
+
+    # Validate user
+    user_stmt = select(User).where(User.id == user_id)
+    user_res = await db.execute(user_stmt)
+    user = user_res.scalar_one_or_none()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    stmt = (
+        select(DividendReceived, StockRegistry)
+        .join(StockRegistry, DividendReceived.stock_id == StockRegistry.id)
+        .where(DividendReceived.user_id == user_id)
+        .order_by(DividendReceived.payment_date.desc())
+    )
+    result = await db.execute(stmt)
+    rows = result.all()
+
+    current_year = date.today().year
+    total_all_time = Decimal("0")
+    current_year_total = Decimal("0")
+    records = []
+
+    for received, stock in rows:
+        total_all_time += received.total_received
+        if received.payment_date.year == current_year:
+            current_year_total += received.total_received
+        records.append({
+            "id": received.id,
+            "user_id": received.user_id,
+            "ticker": stock.ticker,
+            "stock_name": stock.name,
+            "payment_date": received.payment_date,
+            "amount_per_share": received.amount_per_share,
+            "shares_at_payment": received.shares_at_payment,
+            "total_received": received.total_received,
+            "currency": received.currency,
+            "notes": received.notes,
+            "created_at": received.created_at,
+        })
+
+    return {
+        "user_id": user_id,
+        "total_received_all_time": total_all_time,
+        "current_year_received": current_year_total,
+        "records": records,
+    }
+
+
+@router.patch("/stocks/{ticker}/dividend", response_model=dict)
+async def update_stock_dividend(ticker: str, body: UpdateStockDividendRequest, db: AsyncSession = Depends(get_db)):
+    """Update the annualized dividend per share for a stock in the registry."""
+    ticker_upper = ticker.strip().upper()
+    stmt = select(StockRegistry).where(StockRegistry.ticker == ticker_upper)
+    result = await db.execute(stmt)
+    stock = result.scalar_one_or_none()
+    if not stock:
+        raise HTTPException(status_code=404, detail=f"Stock '{ticker_upper}' not found")
+
+    stock.annualized_dividend_per_share = body.annualized_dividend_per_share
+    await db.commit()
+    await db.refresh(stock)
+
+    return {
+        "ticker": stock.ticker,
+        "annualized_dividend_per_share": str(stock.annualized_dividend_per_share),
+        "dividend_frequency": body.dividend_frequency,
+        "message": f"Dividend for {ticker_upper} updated successfully"
+    }

@@ -47,6 +47,12 @@ class DashboardViewModel extends ChangeNotifier {
   List<ChartPoint> _dividendChartPoints = [];
   bool _isLoadingDividend = false;
 
+  // Actual Income State
+  List<DividendReceived> _receivedDividends = [];
+  double _totalReceivedAllTime = 0.0;
+  double _currentYearReceived = 0.0;
+  bool _isLoadingReceived = false;
+
   DashboardViewModel({required this.apiService});
 
   List<InvestmentProfile> get profiles => _profiles;
@@ -70,6 +76,11 @@ class DashboardViewModel extends ChangeNotifier {
   String get activeDividendInterval => _activeDividendInterval;
   List<ChartPoint> get dividendChartPoints => _dividendChartPoints;
   bool get isLoadingDividend => _isLoadingDividend;
+
+  List<DividendReceived> get receivedDividends => _receivedDividends;
+  double get totalReceivedAllTime => _totalReceivedAllTime;
+  double get currentYearReceived => _currentYearReceived;
+  bool get isLoadingReceived => _isLoadingReceived;
 
   InvestmentProfile? get selectedDividendProfile {
     if (_dividendProfileId == "ALL" || _profiles.isEmpty) return null;
@@ -100,7 +111,9 @@ class DashboardViewModel extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final pid = _dividendProfileId == "ALL" ? "a9117be5-4ea5-419f-b778-be75b22b271d" : _dividendProfileId;
+      // Use the first profile id as fallback (no more hardcoded UUID)
+      final fallbackId = _profiles.isNotEmpty ? _profiles[0].id : ApiService.mockUserId;
+      final pid = _dividendProfileId == "ALL" ? fallbackId : _dividendProfileId;
       _dividendChartPoints = await apiService.getChartPoints(
         pid,
         _activeDividendInterval,
@@ -112,6 +125,45 @@ class DashboardViewModel extends ChangeNotifier {
       _isLoadingDividend = false;
       notifyListeners();
     }
+  }
+
+  Future<void> loadReceivedDividends() async {
+    _isLoadingReceived = true;
+    notifyListeners();
+    try {
+      final data = await apiService.getReceivedDividends();
+      _totalReceivedAllTime = (data['total_received_all_time'] as num?)?.toDouble() ?? 0.0;
+      _currentYearReceived = (data['current_year_received'] as num?)?.toDouble() ?? 0.0;
+      final records = data['records'] as List? ?? [];
+      _receivedDividends = records.map((r) => DividendReceived.fromJson(r as Map<String, dynamic>)).toList();
+    } catch (e) {
+      debugPrint("Error loading received dividends: $e");
+    } finally {
+      _isLoadingReceived = false;
+      notifyListeners();
+    }
+  }
+
+  Future<bool> logDividendReceived({
+    required String ticker,
+    required String paymentDate,
+    required double amountPerShare,
+    required double sharesAtPayment,
+    required double totalReceived,
+    required String currency,
+    String? notes,
+  }) async {
+    final ok = await apiService.logDividendReceived(
+      ticker: ticker,
+      paymentDate: paymentDate,
+      amountPerShare: amountPerShare,
+      sharesAtPayment: sharesAtPayment,
+      totalReceived: totalReceived,
+      currency: currency,
+      notes: notes,
+    );
+    if (ok) await loadReceivedDividends();
+    return ok;
   }
 
   double get totalValuationCAD {
@@ -310,6 +362,7 @@ class _DashboardViewState extends State<DashboardView> {
     Future.microtask(() async {
       await _viewModel.loadDashboard();
       await _viewModel.loadCalendar();
+      await _viewModel.loadReceivedDividends();
     });
   }
 
@@ -2215,13 +2268,12 @@ class _DashboardViewState extends State<DashboardView> {
 
   // 2. Dedicated Dividend Tab (Expected Dividend Projections with Sliding Windows)
   Widget _buildDividendTab(ThemeProvider theme) {
-    final activeProfile = _viewModel.selectedDividendProfile;
     final totalDivCAD = _viewModel.currentSelectedDividendAmount;
-    final monthlyDiv = totalDivCAD / 12;
 
     return RefreshIndicator(
       onRefresh: () async {
         await _viewModel.loadDividendTab();
+        await _viewModel.loadReceivedDividends();
       },
       color: AppColors.positive,
       child: ListView(
@@ -2235,12 +2287,15 @@ class _DashboardViewState extends State<DashboardView> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Expected Dividends", style: theme.titleStyle.copyWith(fontSize: 20, fontWeight: FontWeight.w900)),
-                  Text("Sliding window dividend projections", style: theme.subtitleStyle),
+                  Text("Dividend Income", style: theme.titleStyle.copyWith(fontSize: 20, fontWeight: FontWeight.w900)),
+                  Text("Track projected vs actual income", style: theme.subtitleStyle),
                 ],
               ),
               InkWell(
-                onTap: () => _viewModel.loadDividendTab(),
+                onTap: () {
+                  _viewModel.loadDividendTab();
+                  _viewModel.loadReceivedDividends();
+                },
                 borderRadius: BorderRadius.circular(12),
                 child: Container(
                   padding: const EdgeInsets.all(8),
@@ -2253,6 +2308,31 @@ class _DashboardViewState extends State<DashboardView> {
                 ),
               ),
             ],
+          ),
+          const SizedBox(height: 20),
+
+          // Action Button: Log Dividend Payment
+          InkWell(
+            onTap: () => _showLogDividendSheet(theme),
+            borderRadius: BorderRadius.circular(16),
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 14),
+              decoration: BoxDecoration(
+                color: AppColors.positive,
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(color: AppColors.positive.withValues(alpha: 0.3), blurRadius: 10, offset: const Offset(0, 4)),
+                ],
+              ),
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.add, color: Colors.black, size: 20),
+                  SizedBox(width: 8),
+                  Text("Log Dividend Received", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 14)),
+                ],
+              ),
+            ),
           ),
           const SizedBox(height: 20),
 
@@ -2273,73 +2353,63 @@ class _DashboardViewState extends State<DashboardView> {
           ),
           const SizedBox(height: 20),
 
-          // Summary Metrics Card
-          Container(
-            padding: const EdgeInsets.all(22),
-            decoration: BoxDecoration(
-              color: theme.card,
-              borderRadius: BorderRadius.circular(24),
-              border: Border.all(color: theme.border, width: 1.5),
-              boxShadow: const [
-                BoxShadow(color: Colors.black12, blurRadius: 10, offset: Offset(0, 4)),
-              ],
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      activeProfile != null ? activeProfile.name : "All Portfolios Combined",
-                      style: theme.subtitleStyle.copyWith(fontWeight: FontWeight.bold),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                      decoration: BoxDecoration(
-                        color: AppColors.positive.withValues(alpha: 0.15),
-                        borderRadius: BorderRadius.circular(8),
+          // Summary Metrics Cards (Projected vs Actual)
+          Row(
+            children: [
+              Expanded(
+                child: Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: theme.card,
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(color: theme.border, width: 1.5),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Projected (Annual)", style: theme.subtitleStyle.copyWith(fontSize: 12, fontWeight: FontWeight.bold)),
+                      const SizedBox(height: 8),
+                      Text(
+                        "\$${totalDivCAD.toStringAsFixed(0)}",
+                        style: theme.cardTitleStyle.copyWith(fontSize: 22, color: AppColors.positive),
                       ),
-                      child: const Text(
-                        "INCOME PROJECTION",
-                        style: TextStyle(color: AppColors.positive, fontWeight: FontWeight.w900, fontSize: 10),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  "\$${totalDivCAD.toStringAsFixed(2)} CAD / yr",
-                  style: theme.cardTitleStyle.copyWith(
-                    fontSize: 28,
-                    fontWeight: FontWeight.w900,
-                    color: AppColors.positive,
+                      const SizedBox(height: 4),
+                      Text("Yield: ${(totalDivCAD > 0 ? (totalDivCAD / (_viewModel.totalValuationCAD > 0 ? _viewModel.totalValuationCAD : 1) * 100) : 0).toStringAsFixed(2)}%", style: theme.subtitleStyle.copyWith(fontSize: 10)),
+                    ],
                   ),
                 ),
-                const SizedBox(height: 8),
-                Row(
-                  children: [
-                    Text(
-                      "Average: \$${monthlyDiv.toStringAsFixed(2)} CAD / mo",
-                      style: theme.subtitleStyle.copyWith(fontSize: 12, fontWeight: FontWeight.w600),
-                    ),
-                    const SizedBox(width: 12),
-                    Text("•", style: TextStyle(color: theme.subtext)),
-                    const SizedBox(width: 12),
-                    Text(
-                      "Yield: ${(totalDivCAD > 0 ? (totalDivCAD / (_viewModel.totalValuationCAD > 0 ? _viewModel.totalValuationCAD : 1) * 100) : 0).toStringAsFixed(2)}%",
-                      style: theme.subtitleStyle.copyWith(fontSize: 12, color: AppColors.positive, fontWeight: FontWeight.bold),
-                    ),
-                  ],
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(color: AppColors.positive.withValues(alpha: 0.3), width: 1.5),
+                    color: AppColors.positive.withValues(alpha: 0.05),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Actual YTD", style: theme.subtitleStyle.copyWith(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.positive)),
+                      const SizedBox(height: 8),
+                      Text(
+                        "\$${_viewModel.currentYearReceived.toStringAsFixed(0)}",
+                        style: theme.cardTitleStyle.copyWith(fontSize: 22, color: AppColors.positive),
+                      ),
+                      const SizedBox(height: 4),
+                      Text("All-Time: \$${_viewModel.totalReceivedAllTime.toStringAsFixed(0)}", style: theme.subtitleStyle.copyWith(fontSize: 10, color: AppColors.positive.withValues(alpha: 0.8))),
+                    ],
+                  ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
           const SizedBox(height: 24),
 
           // Sliding Window Expected Dividend Line Chart
           Text(
-            "Expected Dividend Sliding Window Chart",
+            "Projected Income Trend",
             style: theme.subtitleStyle.copyWith(fontWeight: FontWeight.bold, letterSpacing: 1.1),
           ),
           const SizedBox(height: 12),
@@ -2394,7 +2464,7 @@ class _DashboardViewState extends State<DashboardView> {
 
           // Expected Dividend Contributors List
           Text(
-            "Dividend Contributing Stocks",
+            "My Holdings",
             style: theme.subtitleStyle.copyWith(fontWeight: FontWeight.bold, letterSpacing: 1.1),
           ),
           const SizedBox(height: 12),
@@ -2417,6 +2487,30 @@ class _DashboardViewState extends State<DashboardView> {
       if (p != null) stocks = p.stocks;
     }
 
+    // Deduplicate stocks by ticker if we're showing ALL
+    final Map<String, StockHolding> uniqueStocks = {};
+    for (var s in stocks) {
+      if (uniqueStocks.containsKey(s.ticker)) {
+        final existing = uniqueStocks[s.ticker]!;
+        uniqueStocks[s.ticker] = StockHolding(
+          stockId: existing.stockId,
+          ticker: existing.ticker,
+          name: existing.name,
+          shares: existing.shares + s.shares,
+          price: existing.price,
+          change: existing.change,
+          changePercent: existing.changePercent,
+          currency: existing.currency,
+          value: existing.value + s.value,
+        );
+      } else {
+        uniqueStocks[s.ticker] = s;
+      }
+    }
+    
+    stocks = uniqueStocks.values.toList();
+    stocks.sort((a, b) => b.value.compareTo(a.value)); // Sort by total value
+
     if (stocks.isEmpty) {
       return [
         Container(
@@ -2428,7 +2522,9 @@ class _DashboardViewState extends State<DashboardView> {
     }
 
     return stocks.map((stock) {
-      final estPayout = stock.shares * 0.75;
+      final estPayout = stock.shares * 0.75; // Using mock logic temporarily
+      final yoc = (estPayout * 4 / stock.value) * 100; // Mock YOC calculation
+      
       return Container(
         margin: const EdgeInsets.only(bottom: 10),
         padding: const EdgeInsets.all(14),
@@ -2455,7 +2551,20 @@ class _DashboardViewState extends State<DashboardView> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(stock.ticker, style: theme.cardTitleStyle.copyWith(fontSize: 14)),
+                    Row(
+                      children: [
+                        Text(stock.ticker, style: theme.cardTitleStyle.copyWith(fontSize: 14)),
+                        const SizedBox(width: 6),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                          decoration: BoxDecoration(
+                            color: AppColors.positive.withValues(alpha: 0.2),
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: Text("YOC ${yoc.toStringAsFixed(1)}%", style: TextStyle(color: AppColors.positive, fontSize: 8, fontWeight: FontWeight.bold)),
+                        ),
+                      ],
+                    ),
                     Text(stock.name, style: theme.subtitleStyle.copyWith(fontSize: 11), maxLines: 1, overflow: TextOverflow.ellipsis),
                   ],
                 ),
@@ -2465,16 +2574,86 @@ class _DashboardViewState extends State<DashboardView> {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                  "+\$${estPayout.toStringAsFixed(2)} ${stock.currency}",
+                  "Est. \$${(estPayout * 4).toStringAsFixed(2)} ${stock.currency} /yr",
                   style: theme.cardTitleStyle.copyWith(color: AppColors.positive, fontSize: 13),
                 ),
-                Text("${stock.shares} shares", style: theme.subtitleStyle.copyWith(fontSize: 10)),
+                Row(
+                  children: [
+                    Text("${stock.shares} shs", style: theme.subtitleStyle.copyWith(fontSize: 10)),
+                    const SizedBox(width: 8),
+                    InkWell(
+                      onTap: () => _showEditDividendSheet(theme, stock),
+                      child: Text("Edit Div", style: theme.subtitleStyle.copyWith(fontSize: 10, color: AppColors.positive, decoration: TextDecoration.underline)),
+                    ),
+                  ],
+                ),
               ],
             ),
           ],
         ),
       );
     }).toList();
+  }
+  void _showLogDividendSheet(ThemeProvider theme) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: theme.bg,
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
+      builder: (context) {
+        return Padding(
+          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom, left: 24, right: 24, top: 24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("Log Dividend Received", style: theme.titleStyle.copyWith(fontSize: 20)),
+              const SizedBox(height: 16),
+              Text("Select Stock and Amount", style: theme.subtitleStyle),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text("Save Log"),
+              ),
+              const SizedBox(height: 32),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void _showEditDividendSheet(ThemeProvider theme, StockHolding stock) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: theme.bg,
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
+      builder: (context) {
+        return Padding(
+          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom, left: 24, right: 24, top: 24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("Edit Dividend for ${stock.ticker}", style: theme.titleStyle.copyWith(fontSize: 20)),
+              const SizedBox(height: 16),
+              Text("Current Estimated: \$${(stock.shares * 0.75 * 4).toStringAsFixed(2)} / yr", style: theme.subtitleStyle),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text("Save Changes"),
+              ),
+              const SizedBox(height: 32),
+            ],
+          ),
+        );
+      },
+    );
   }
 }
 

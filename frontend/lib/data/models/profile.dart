@@ -145,6 +145,44 @@ class DividendCalendarEvent {
   }
 }
 
+class DividendReceived {
+  final String id;
+  final String ticker;
+  final String stockName;
+  final String paymentDate;
+  final double amountPerShare;
+  final double sharesAtPayment;
+  final double totalReceived;
+  final String currency;
+  final String? notes;
+
+  DividendReceived({
+    required this.id,
+    required this.ticker,
+    required this.stockName,
+    required this.paymentDate,
+    required this.amountPerShare,
+    required this.sharesAtPayment,
+    required this.totalReceived,
+    required this.currency,
+    this.notes,
+  });
+
+  factory DividendReceived.fromJson(Map<String, dynamic> json) {
+    return DividendReceived(
+      id: json['id'] as String? ?? '',
+      ticker: json['ticker'] as String,
+      stockName: json['stock_name'] as String? ?? json['ticker'] as String,
+      paymentDate: json['payment_date'] as String,
+      amountPerShare: (json['amount_per_share'] as num).toDouble(),
+      sharesAtPayment: (json['shares_at_payment'] as num).toDouble(),
+      totalReceived: (json['total_received'] as num).toDouble(),
+      currency: json['currency'] as String,
+      notes: json['notes'] as String?,
+    );
+  }
+}
+
 class StockThesis {
   final String stockId;
   final String thesisText;

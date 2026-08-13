@@ -10,6 +10,7 @@ class UserBase(BaseModel):
     name: str
     primary_country: Optional[str] = "Canada"
     primary_currency: Optional[str] = "CAD"
+    active_modules: Optional[List[str]] = Field(default_factory=lambda: ["STOCKS"])
 
 
 class UserCreate(UserBase):
@@ -189,6 +190,48 @@ class TransactionItemResponse(BaseModel):
 class UserTransactionsResponse(BaseModel):
     user_id: UUID
     transactions: List[TransactionItemResponse]
+
+
+# --- Dividend Received (Actual Income Log) Schemas ---
+class DividendReceivedCreate(BaseModel):
+    user_id: UUID
+    ticker: str
+    account_id: Optional[UUID] = None
+    payment_date: date
+    amount_per_share: Decimal
+    shares_at_payment: Decimal
+    total_received: Decimal
+    currency: str = "CAD"
+    notes: Optional[str] = None
+
+
+class DividendReceivedResponse(BaseModel):
+    id: UUID
+    user_id: UUID
+    ticker: str
+    stock_name: str
+    payment_date: date
+    amount_per_share: Decimal
+    shares_at_payment: Decimal
+    total_received: Decimal
+    currency: str
+    notes: Optional[str] = None
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+
+class UserDividendReceivedResponse(BaseModel):
+    user_id: UUID
+    total_received_all_time: Decimal
+    current_year_received: Decimal
+    records: List[DividendReceivedResponse]
+
+
+class UpdateStockDividendRequest(BaseModel):
+    annualized_dividend_per_share: Decimal
+    dividend_frequency: Optional[str] = "quarterly"  # monthly, quarterly, semi-annual, annual
 
 
 # --- Real Estate Schemas ---

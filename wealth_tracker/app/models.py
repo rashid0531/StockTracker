@@ -3,7 +3,7 @@ from decimal import Decimal
 from typing import List, Optional
 import uuid
 
-from sqlalchemy import Date, DateTime, ForeignKey, Numeric, String, UniqueConstraint, Text
+from sqlalchemy import Date, DateTime, ForeignKey, Numeric, String, UniqueConstraint, Text, JSON
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
@@ -21,6 +21,7 @@ class User(Base):
     name: Mapped[str] = mapped_column(String(255), nullable=False)
     primary_country: Mapped[str] = mapped_column(String(50), default="Canada", nullable=False)
     primary_currency: Mapped[str] = mapped_column(String(3), default="CAD", nullable=False)
+    active_modules: Mapped[list[str]] = mapped_column(JSON, default=lambda: ["STOCKS"], nullable=False)
     created_at: Mapped[datetime.datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
     )
@@ -258,6 +259,42 @@ class DividendSchedule(Base):
         DateTime(timezone=True), server_default=func.now()
     )
 
+    stock: Mapped["StockRegistry"] = relationship()
+
+
+class DividendReceived(Base):
+    """Log of actual dividend payments received by the user."""
+    __tablename__ = "dividend_received"
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
+    )
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("users.id", ondelete="CASCADE"),
+        nullable=False,
+    )
+    stock_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("stock_registry.id", ondelete="CASCADE"),
+        nullable=False,
+    )
+    account_id: Mapped[Optional[uuid.UUID]] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("brokerage_accounts.id", ondelete="SET NULL"),
+        nullable=True,
+    )
+    payment_date: Mapped[datetime.date] = mapped_column(Date, nullable=False)
+    amount_per_share: Mapped[Decimal] = mapped_column(Numeric(14, 4), nullable=False)
+    shares_at_payment: Mapped[Decimal] = mapped_column(Numeric(14, 4), nullable=False)
+    total_received: Mapped[Decimal] = mapped_column(Numeric(14, 2), nullable=False)
+    currency: Mapped[str] = mapped_column(String(3), nullable=False)
+    notes: Mapped[Optional[str]] = mapped_column(String(500), nullable=True)
+    created_at: Mapped[datetime.datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+
+    user: Mapped["User"] = relationship()
     stock: Mapped["StockRegistry"] = relationship()
 
 

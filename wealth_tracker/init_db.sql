@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS users (
     name VARCHAR(255) NOT NULL,
     primary_country VARCHAR(50) DEFAULT 'Canada' NOT NULL,
     primary_currency VARCHAR(3) DEFAULT 'CAD' NOT NULL,
+    active_modules JSONB DEFAULT '["STOCKS"]'::jsonb NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 

@@ -484,25 +484,11 @@ class _ProfileViewState extends State<ProfileView> {
                     ),
                   ),
 
-                  // Horizontal Tabs (Performance / Analytics)
-                  Container(
-                    decoration: BoxDecoration(
-                      border: Border(bottom: BorderSide(color: theme.border, width: 1.5)),
-                    ),
-                    child: Row(
-                      children: [
-                        _buildTabButton("Performance", "PERFORMANCE", theme),
-                        _buildTabButton("Analytics", "ANALYTICS", theme),
-                      ],
-                    ),
-                  ),
                   const SizedBox(height: 16),
 
-                  // Tab Swapping views
+                  // Content
                   Expanded(
-                    child: _viewModel.activeTab == "PERFORMANCE"
-                        ? _buildPerformanceTab(theme)
-                        : _buildAnalyticsTab(theme),
+                    child: _buildPerformanceTab(theme),
                   ),
                 ],
               ),
@@ -514,44 +500,94 @@ class _ProfileViewState extends State<ProfileView> {
   );
 }
 
-  Widget _buildTabButton(String label, String tabKey, ThemeProvider theme) {
-    final isActive = _viewModel.activeTab == tabKey;
-    return Expanded(
-      child: InkWell(
-        onTap: () => _viewModel.setActiveTab(tabKey),
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 12),
-          decoration: BoxDecoration(
-            border: Border(
-              bottom: BorderSide(
-                color: isActive ? AppColors.positive : Colors.transparent,
-                width: 2.0,
-              ),
-            ),
-          ),
-          child: Center(
-            child: Text(
-              label,
-              style: TextStyle(
-                color: isActive ? theme.text : theme.subtext,
-                fontWeight: FontWeight.bold,
-                fontSize: 14,
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
   Widget _buildPerformanceTab(ThemeProvider theme) {
     final stocks = _viewModel.profile?.stocks ?? [];
+    
+    final stockItems = _viewModel.stockAllocItems;
+    final sectorItems = _viewModel.sectorAllocItems;
+    final divItems = _viewModel.dividendContribItems;
 
-    return ListView(
-      children: [
-        // Touch Interactive History Line Chart
-        InteractiveHistoryChart(points: _viewModel.chartPoints),
-        const SizedBox(height: 16),
+    // Apply colors to items
+    for (int i = 0; i < stockItems.length; i++) {
+      stockItems[i].color = _donutColors[i % _donutColors.length];
+    }
+    for (int i = 0; i < sectorItems.length; i++) {
+      sectorItems[i].color = _donutColors[(i + 2) % _donutColors.length];
+    }
+    for (int i = 0; i < divItems.length; i++) {
+      divItems[i].color = _donutColors[(i + 4) % _donutColors.length];
+    }
+
+    final isValuation = _viewModel.chartMode == "VALUATION";
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isWide = constraints.maxWidth > 800;
+        
+        Widget chartContent = InteractiveHistoryChart(points: _viewModel.chartPoints);
+        
+        Widget pieContent = Column(
+          children: [
+            _buildModeToggle(theme, subtitleText: false),
+            const SizedBox(height: 16),
+            if (isValuation) ...[
+              if (stockItems.isNotEmpty)
+                GridDonutCard(
+                  items: stockItems,
+                  title: "Stock Weight",
+                  subtitle: "${stockItems.length} Assets",
+                  centerLabel: "Stocks",
+                  onPress: () => context.push(
+                    "/analysis?id=${widget.profileId}&type=stock",
+                  ),
+                ),
+              if (sectorItems.isNotEmpty) ...[
+                const SizedBox(height: 16),
+                GridDonutCard(
+                  items: sectorItems,
+                  title: "Sector Weight",
+                  subtitle: "${sectorItems.length} Sectors",
+                  centerLabel: "Sectors",
+                  onPress: () => context.push(
+                    "/analysis?id=${widget.profileId}&type=sector",
+                  ),
+                ),
+              ]
+            ] else ...[
+              if (divItems.isNotEmpty)
+                GridDonutCard(
+                  items: divItems,
+                  title: "Dividend Contribution",
+                  subtitle: "${divItems.length} Payers",
+                  centerLabel: "Dividends",
+                  onPress: () => context.push(
+                    "/analysis?id=${widget.profileId}&type=dividend",
+                  ),
+                ),
+            ]
+          ],
+        );
+
+        return ListView(
+          children: [
+            if (isWide)
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(flex: 2, child: chartContent),
+                  const SizedBox(width: 24),
+                  Expanded(flex: 1, child: pieContent),
+                ],
+              )
+            else
+              Column(
+                children: [
+                  chartContent,
+                  const SizedBox(height: 24),
+                  pieContent,
+                ],
+              ),
+            const SizedBox(height: 16),
 
         // Interval scrollselector
         _buildIntervalSelector(theme),
@@ -916,86 +952,6 @@ class _ProfileViewState extends State<ProfileView> {
     );
   }
 
-  // Analytics Tab content: Toggles + Clickable Grid Cards
-  Widget _buildAnalyticsTab(ThemeProvider theme) {
-    final stockItems = _viewModel.stockAllocItems;
-    final sectorItems = _viewModel.sectorAllocItems;
-    final divItems = _viewModel.dividendContribItems;
-
-    // Apply colors to items
-    for (int i = 0; i < stockItems.length; i++) {
-      stockItems[i].color = _donutColors[i % _donutColors.length];
-    }
-    for (int i = 0; i < sectorItems.length; i++) {
-      sectorItems[i].color = _donutColors[(i + 2) % _donutColors.length];
-    }
-    for (int i = 0; i < divItems.length; i++) {
-      divItems[i].color = _donutColors[(i + 4) % _donutColors.length];
-    }
-
-    final isValuation = _viewModel.chartMode == "VALUATION";
-
-    return ListView(
-      children: [
-        // Mode toggle Valuation Breakdown vs Dividend Contribution
-        _buildModeToggle(theme, subtitleText: true),
-        const SizedBox(height: 24),
-
-        if (isValuation) ...[
-          // Grid containing Stock allocations & Sector allocations
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (stockItems.isNotEmpty)
-                Expanded(
-                  child: GridDonutCard(
-                    items: stockItems,
-                    title: "Stock Weight",
-                    subtitle: "${stockItems.length} Assets",
-                    centerLabel: "Stocks",
-                    onPress: () => context.push(
-                      "/analysis?id=${widget.profileId}&type=stock",
-                    ),
-                  ),
-                )
-              else
-                const Expanded(child: SizedBox()),
-              const SizedBox(width: 16),
-              if (sectorItems.isNotEmpty)
-                Expanded(
-                  child: GridDonutCard(
-                    items: sectorItems,
-                    title: "Sector Weight",
-                    subtitle: "${sectorItems.length} Sectors",
-                    centerLabel: "Sectors",
-                    onPress: () => context.push(
-                      "/analysis?id=${widget.profileId}&type=sector",
-                    ),
-                  ),
-                )
-              else
-                const Expanded(child: SizedBox()),
-            ],
-          ),
-        ] else ...[
-          // Centered Dividend Yield donut card
-          if (divItems.isNotEmpty)
-            Center(
-              child: SizedBox(
-                width: MediaQuery.of(context).size.width * 0.50,
-                child: GridDonutCard(
-                  items: divItems,
-                  title: "Dividend Yield",
-                  subtitle: "${divItems.length} Contributors",
-                  centerLabel: "Dividends",
-                  onPress: () => context.push(
-                    "/analysis?id=${widget.profileId}&type=dividend",
-                  ),
-                ),
-              ),
-            )
-          else
-            const Center(child: Text("No dividend allocations found", style: TextStyle(color: Colors.grey))),
         ],
         const SizedBox(height: 40),
       ],
