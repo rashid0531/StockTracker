@@ -763,6 +763,8 @@ class _ProfileViewState extends State<ProfileView> {
         const SizedBox(height: 40),
       ],
     );
+      },
+    );
   }
 
   void _showBuySellModal(
@@ -952,11 +954,7 @@ class _ProfileViewState extends State<ProfileView> {
     );
   }
 
-        ],
-        const SizedBox(height: 40),
-      ],
-    );
-  }
+
 
   Widget _buildModeToggle(ThemeProvider theme, {bool subtitleText = false}) {
     final isValuation = _viewModel.chartMode == "VALUATION";
