@@ -15,6 +15,7 @@ import 'ui/features/profile/profile_view.dart';
 import 'ui/features/analysis/analysis_view.dart';
 import 'ui/features/import/import_view.dart';
 import 'ui/features/onboarding/module_selection_view.dart';
+import 'ui/features/profile/analytics_view.dart';
 import 'core/providers/pillar_preferences_provider.dart';
 
 void main() {
@@ -127,6 +128,13 @@ class WealthTrackerApp extends StatelessWidget {
         builder: (context, state) {
           final profileId = state.pathParameters['id'] ?? '';
           return ProfileView(profileId: profileId);
+        },
+      ),
+      GoRoute(
+        path: '/profile/:id/analytics',
+        builder: (context, state) {
+          final profileId = state.pathParameters['id'] ?? '';
+          return AnalyticsView(profileId: profileId);
         },
       ),
       GoRoute(
