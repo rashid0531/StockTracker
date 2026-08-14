@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../data/models/profile.dart';
 import '../../../data/services/api_service.dart';
 import '../../core/theme.dart';
+import '../profile/widgets/modern_history_chart.dart';
 import '../profile/profile_view.dart';
 
 const List<String> _monthNames = [
@@ -2412,9 +2413,7 @@ class _DashboardViewState extends State<DashboardView> {
             "Projected Income Trend",
             style: theme.subtitleStyle.copyWith(fontWeight: FontWeight.bold, letterSpacing: 1.1),
           ),
-          const SizedBox(height: 12),
-
-          InteractiveHistoryChart(points: _viewModel.dividendChartPoints),
+          ModernHistoryChart(points: _viewModel.dividendChartPoints),
           const SizedBox(height: 14),
 
           // Sliding Window Selector (1W, 6M, 1Y, ALL)

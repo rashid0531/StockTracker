@@ -1,0 +1,218 @@
+import 'package:flutter/material.dart';
+import 'package:fl_chart/fl_chart.dart';
+import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
+import '../../../../data/models/profile.dart';
+import '../../../core/theme.dart';
+
+class ModernHistoryChart extends StatelessWidget {
+  final List<ChartPoint> points;
+
+  const ModernHistoryChart({super.key, required this.points});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Provider.of<ThemeProvider>(context);
+
+    if (points.isEmpty) {
+      return Container(
+        height: 220,
+        decoration: BoxDecoration(
+          color: theme.card,
+          borderRadius: BorderRadius.circular(24),
+          border: Border.all(color: theme.border),
+        ),
+        child: const Center(child: Text("No chart data points available", style: TextStyle(color: Colors.grey))),
+      );
+    }
+
+    final values = points.map((p) => p.value).toList();
+    double maxY = values.reduce((a, b) => a > b ? a : b);
+    double minY = values.reduce((a, b) => a < b ? a : b);
+    if (maxY == minY) {
+      maxY += 1;
+      minY -= 1;
+    }
+
+    final double yRange = maxY - minY;
+    maxY += yRange * 0.1; // Add 10% padding top
+    minY -= yRange * 0.1; // Add 10% padding bottom
+    if (minY < 0 && values.every((v) => v >= 0)) {
+      minY = 0; // Don't go below zero if all values are positive
+    }
+
+    final formatCurrency = NumberFormat.simpleCurrency(decimalDigits: 0);
+
+    return Container(
+      height: 250,
+      padding: const EdgeInsets.only(right: 18, left: 6, top: 24, bottom: 12),
+      decoration: BoxDecoration(
+        color: theme.card,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: theme.border, width: 1.5),
+        boxShadow: const [
+          BoxShadow(color: Colors.black12, blurRadius: 8, offset: Offset(0, 3)),
+        ],
+      ),
+      child: LineChart(
+        LineChartData(
+          gridData: FlGridData(
+            show: true,
+            drawVerticalLine: false,
+            horizontalInterval: (maxY - minY) / 4,
+            getDrawingHorizontalLine: (value) {
+              return FlLine(
+                color: theme.isDark ? const Color(0xFF1E2838) : const Color(0xFFE2E8F0),
+                strokeWidth: 1,
+                dashArray: [5, 5],
+              );
+            },
+          ),
+          titlesData: FlTitlesData(
+            show: true,
+            rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+            topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+            bottomTitles: AxisTitles(
+              sideTitles: SideTitles(
+                showTitles: true,
+                reservedSize: 30,
+                interval: points.length > 5 ? (points.length / 5).ceilToDouble() : 1,
+                getTitlesWidget: (value, meta) {
+                  final index = value.toInt();
+                  if (index < 0 || index >= points.length) return const SizedBox();
+                  
+                  // Parse date (assuming YYYY-MM-DD or similar)
+                  String dateStr = points[index].date;
+                  String displayStr = "";
+                  try {
+                    final dt = DateTime.parse(dateStr);
+                    displayStr = "${dt.month}/${dt.day}";
+                  } catch (e) {
+                    displayStr = dateStr; // Fallback
+                  }
+
+                  return Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: Text(
+                      displayStr,
+                      style: TextStyle(color: theme.subtext, fontSize: 10, fontWeight: FontWeight.bold),
+                    ),
+                  );
+                },
+              ),
+            ),
+            leftTitles: AxisTitles(
+              sideTitles: SideTitles(
+                showTitles: true,
+                interval: (maxY - minY) / 4,
+                reservedSize: 42,
+                getTitlesWidget: (value, meta) {
+                  return Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: Text(
+                      formatCurrency.format(value),
+                      style: TextStyle(color: theme.subtext, fontSize: 10, fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.right,
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+          borderData: FlBorderData(show: false),
+          minX: 0,
+          maxX: (points.length - 1).toDouble(),
+          minY: minY,
+          maxY: maxY,
+          lineBarsData: [
+            LineChartBarData(
+              spots: points.asMap().entries.map((entry) {
+                return FlSpot(entry.key.toDouble(), entry.value.value);
+              }).toList(),
+              isCurved: true,
+              curveSmoothness: 0.35,
+              color: AppColors.positive,
+              barWidth: 3,
+              isStrokeCapRound: true,
+              dotData: FlDotData(
+                show: points.length < 20, // Only show dots if there are few points
+                getDotPainter: (spot, percent, barData, index) {
+                  return FlDotCirclePainter(
+                    radius: 4,
+                    color: AppColors.positive,
+                    strokeWidth: 2,
+                    strokeColor: theme.isDark ? const Color(0xFF0F172A) : Colors.white,
+                  );
+                }
+              ),
+              belowBarData: BarAreaData(
+                show: true,
+                gradient: LinearGradient(
+                  colors: [
+                    AppColors.positive.withValues(alpha: 0.3),
+                    AppColors.positive.withValues(alpha: 0.0),
+                  ],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
+              ),
+            ),
+          ],
+          lineTouchData: LineTouchData(
+            touchTooltipData: LineTouchTooltipData(
+              getTooltipColor: (touchedSpot) => theme.isDark ? const Color(0xFF1E2838) : Colors.white,
+              getTooltipItems: (touchedSpots) {
+                return touchedSpots.map((LineBarSpot touchedSpot) {
+                  final textStyle = TextStyle(
+                    color: theme.text,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                  );
+                  return LineTooltipItem(
+                    formatCurrency.format(touchedSpot.y),
+                    textStyle,
+                    children: [
+                      TextSpan(
+                        text: '\n${points[touchedSpot.x.toInt()].date}',
+                        style: TextStyle(
+                          color: theme.subtext,
+                          fontWeight: FontWeight.normal,
+                          fontSize: 12,
+                        ),
+                      )
+                    ]
+                  );
+                }).toList();
+              },
+            ),
+            handleBuiltInTouches: true,
+            getTouchLineEnd: (barData, spotIndex) => double.infinity,
+            getTouchedSpotIndicator: (LineChartBarData barData, List<int> spotIndexes) {
+              return spotIndexes.map((spotIndex) {
+                return TouchedSpotIndicatorData(
+                  FlLine(
+                    color: theme.subtext.withValues(alpha: 0.3),
+                    strokeWidth: 2,
+                    dashArray: [4, 4],
+                  ),
+                  FlDotData(
+                    getDotPainter: (spot, percent, barData, index) {
+                      return FlDotCirclePainter(
+                        radius: 6,
+                        color: AppColors.positive,
+                        strokeWidth: 3,
+                        strokeColor: theme.isDark ? const Color(0xFF0F172A) : Colors.white,
+                      );
+                    },
+                  ),
+                );
+              }).toList();
+            },
+          ),
+        ),
+        duration: const Duration(milliseconds: 250), // Animation duration
+        curve: Curves.easeInOut,
+      ),
+    );
+  }
+}

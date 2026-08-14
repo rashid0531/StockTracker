@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../data/services/api_service.dart';
 import '../../core/theme.dart';
 import 'profile_view.dart';
+import 'widgets/modern_donut_chart.dart';
 
 class AnalyticsView extends StatelessWidget {
   final String profileId;
@@ -94,7 +95,7 @@ class _AnalyticsViewContentState extends State<_AnalyticsViewContent> {
             const SizedBox(height: 24),
             if (isValuation) ...[
               if (stockItems.isNotEmpty)
-                GridDonutCard(
+                ModernGridDonutCard(
                   items: stockItems,
                   title: "Stock Weight",
                   subtitle: "${stockItems.length} Assets",
@@ -105,7 +106,7 @@ class _AnalyticsViewContentState extends State<_AnalyticsViewContent> {
                 ),
               if (sectorItems.isNotEmpty) ...[
                 const SizedBox(height: 16),
-                GridDonutCard(
+                ModernGridDonutCard(
                   items: sectorItems,
                   title: "Sector Weight",
                   subtitle: "${sectorItems.length} Sectors",
@@ -117,7 +118,7 @@ class _AnalyticsViewContentState extends State<_AnalyticsViewContent> {
               ]
             ] else ...[
               if (divItems.isNotEmpty)
-                GridDonutCard(
+                ModernGridDonutCard(
                   items: divItems,
                   title: "Dividend Contribution",
                   subtitle: "${divItems.length} Payers",
