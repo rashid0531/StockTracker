@@ -70,7 +70,8 @@ class _ModernGridDonutCardState extends State<ModernGridDonutCard> {
               style: TextStyle(color: theme.subtext, fontSize: 11),
             ),
             const SizedBox(height: 16),
-            Expanded(
+            SizedBox(
+              height: 140,
               child: Stack(
                 children: [
                   if (hasData)
@@ -116,7 +117,7 @@ class _ModernGridDonutCardState extends State<ModernGridDonutCard> {
                         ),
                         if (touchedIndex != -1 && touchedIndex < widget.items.length)
                           Text(
-                            "${widget.items[touchedIndex].percentage.toStringAsFixed(1)}%",
+                            "${(widget.items[touchedIndex].percentage * 100).toStringAsFixed(1)}%",
                             style: TextStyle(
                               color: theme.subtext,
                               fontSize: 10,
@@ -143,7 +144,7 @@ class _ModernGridDonutCardState extends State<ModernGridDonutCard> {
       return PieChartSectionData(
         color: item.color,
         value: item.value,
-        title: '${item.percentage.toStringAsFixed(0)}%',
+        title: '${(item.percentage * 100).toStringAsFixed(0)}%',
         radius: radius,
         showTitle: false, // Don't show text inside slices because it clutters the small card
         badgeWidget: isTouched

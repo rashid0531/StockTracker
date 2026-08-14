@@ -72,52 +72,8 @@ class ModernHistoryChart extends StatelessWidget {
             show: true,
             rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
             topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-            bottomTitles: AxisTitles(
-              sideTitles: SideTitles(
-                showTitles: true,
-                reservedSize: 30,
-                interval: points.length > 5 ? (points.length / 5).ceilToDouble() : 1,
-                getTitlesWidget: (value, meta) {
-                  final index = value.toInt();
-                  if (index < 0 || index >= points.length) return const SizedBox();
-                  
-                  // Parse date (assuming YYYY-MM-DD or similar)
-                  String dateStr = points[index].date;
-                  String displayStr = "";
-                  try {
-                    final dt = DateTime.parse(dateStr);
-                    displayStr = "${dt.month}/${dt.day}";
-                  } catch (e) {
-                    displayStr = dateStr; // Fallback
-                  }
-
-                  return Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
-                    child: Text(
-                      displayStr,
-                      style: TextStyle(color: theme.subtext, fontSize: 10, fontWeight: FontWeight.bold),
-                    ),
-                  );
-                },
-              ),
-            ),
-            leftTitles: AxisTitles(
-              sideTitles: SideTitles(
-                showTitles: true,
-                interval: (maxY - minY) / 4,
-                reservedSize: 42,
-                getTitlesWidget: (value, meta) {
-                  return Padding(
-                    padding: const EdgeInsets.only(right: 8.0),
-                    child: Text(
-                      formatCurrency.format(value),
-                      style: TextStyle(color: theme.subtext, fontSize: 10, fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.right,
-                    ),
-                  );
-                },
-              ),
-            ),
+            bottomTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+            leftTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
           ),
           borderData: FlBorderData(show: false),
           minX: 0,
