@@ -6,7 +6,6 @@ import 'package:go_router/go_router.dart';
 import '../../../data/models/profile.dart';
 import '../../../data/services/api_service.dart';
 import '../../core/theme.dart';
-import 'widgets/ai_suggestions_view.dart';
 
 // Top-level mock sector list helper
 Map<String, dynamic> _getStockMetadata(String ticker) {
@@ -551,20 +550,13 @@ class _ProfileViewState extends State<ProfileView> {
               Expanded(
                 child: _buildActionButton(
                   "Suggestions",
-                  () {}, // Always active below
-                  true,
+                  () => context.push('/profile/${widget.profileId}/suggestions'),
+                  false,
                   theme,
                 ),
               ),
             ],
           ),
-        ),
-        const SizedBox(height: 24),
-
-        // Suggestions Content Always Shown
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: AiSuggestionsView(profileId: widget.profileId, theme: theme),
         ),
         const SizedBox(height: 24),
 
