@@ -530,30 +530,25 @@ class _ProfileViewState extends State<ProfileView> {
         const SizedBox(height: 24),
 
         // Action Buttons
-        Container(
-          margin: const EdgeInsets.symmetric(horizontal: 16),
-          padding: const EdgeInsets.all(4),
-          decoration: BoxDecoration(
-            color: theme.card,
-            borderRadius: BorderRadius.circular(30),
-            border: Border.all(color: theme.border),
-          ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Row(
             children: [
               Expanded(
-                child: _buildActionButton(
-                  "Analytics",
-                  () => context.push('/profile/${widget.profileId}/analytics'),
-                  false,
-                  theme,
+                child: _HoverButton(
+                  label: "Analytics",
+                  icon: Icons.pie_chart,
+                  onTap: () => context.push('/profile/${widget.profileId}/analytics'),
+                  theme: theme,
                 ),
               ),
+              const SizedBox(width: 16),
               Expanded(
-                child: _buildActionButton(
-                  "Suggestions",
-                  () => context.push('/profile/${widget.profileId}/suggestions'),
-                  false,
-                  theme,
+                child: _HoverButton(
+                  label: "Suggestions",
+                  icon: Icons.lightbulb_outline,
+                  onTap: () => context.push('/profile/${widget.profileId}/suggestions'),
+                  theme: theme,
                 ),
               ),
             ],
@@ -733,29 +728,7 @@ class _ProfileViewState extends State<ProfileView> {
     );
   }
 
-  Widget _buildActionButton(String label, VoidCallback onTap, bool isActive, ThemeProvider theme) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(24),
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 12),
-        decoration: BoxDecoration(
-          color: isActive ? AppColors.positive.withValues(alpha: 0.15) : Colors.transparent,
-          borderRadius: BorderRadius.circular(24),
-        ),
-        child: Center(
-          child: Text(
-            label,
-            style: TextStyle(
-              color: isActive ? AppColors.positive : theme.subtext,
-              fontWeight: FontWeight.bold,
-              fontSize: 14,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
+
 
   void _showBuySellModal(
     BuildContext context, {
@@ -1044,4 +1017,74 @@ class _ProfileViewState extends State<ProfileView> {
   }
 }
 
+class _HoverButton extends StatefulWidget {
+  final String label;
+  final IconData icon;
+  final VoidCallback onTap;
+  final ThemeProvider theme;
 
+  const _HoverButton({
+    required this.label,
+    required this.icon,
+    required this.onTap,
+    required this.theme,
+  });
+
+  @override
+  State<_HoverButton> createState() => _HoverButtonState();
+}
+
+class _HoverButtonState extends State<_HoverButton> {
+  bool _isHovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
+      child: InkWell(
+        onTap: widget.onTap,
+        borderRadius: BorderRadius.circular(30),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          padding: const EdgeInsets.symmetric(vertical: 14),
+          decoration: BoxDecoration(
+            color: _isHovered ? AppColors.positive : widget.theme.card,
+            borderRadius: BorderRadius.circular(30),
+            border: Border.all(
+              color: _isHovered ? AppColors.positive : widget.theme.border,
+            ),
+            boxShadow: _isHovered
+                ? [
+                    BoxShadow(
+                      color: AppColors.positive.withValues(alpha: 0.3),
+                      blurRadius: 8,
+                      offset: const Offset(0, 4),
+                    )
+                  ]
+                : [],
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                widget.icon,
+                size: 18,
+                color: _isHovered ? Colors.white : widget.theme.text,
+              ),
+              const SizedBox(width: 8),
+              Text(
+                widget.label,
+                style: TextStyle(
+                  color: _isHovered ? Colors.white : widget.theme.text,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
