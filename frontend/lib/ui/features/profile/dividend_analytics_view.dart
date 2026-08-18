@@ -15,7 +15,7 @@ class DividendAnalyticsView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) => ProfileViewModel(
-        apiService: ApiService(),
+        apiService: Provider.of<ApiService>(context, listen: false),
         profileId: profileId,
       )..loadProfileDetails(),
       child: const _DividendAnalyticsViewContent(),
@@ -78,21 +78,27 @@ class _DividendAnalyticsViewContentState extends State<_DividendAnalyticsViewCon
         title: Text("Dividend Analytics", style: theme.titleStyle),
       ),
       body: SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.all(16.0),
-          children: [
-            if (divItems.isNotEmpty)
-              ModernGridDonutCard(
-                items: divItems,
-                title: "Dividend Contribution",
-                subtitle: "${divItems.length} Payers",
-                centerLabel: "Dividends",
-                onPress: () => context.push(
-                  "/analysis?id=${viewModel.profileId}&type=dividend",
+        child: divItems.isEmpty
+            ? Center(
+                child: Text(
+                  "No dividend data available",
+                  style: TextStyle(color: theme.subtext, fontSize: 16),
                 ),
+              )
+            : ListView(
+                padding: const EdgeInsets.all(16.0),
+                children: [
+                  ModernGridDonutCard(
+                    items: divItems,
+                    title: "Dividend Contribution",
+                    subtitle: "${divItems.length} Payers",
+                    centerLabel: "Dividends",
+                    onPress: () => context.push(
+                      "/analysis?id=${viewModel.profileId}&type=dividend",
+                    ),
+                  ),
+                ],
               ),
-          ],
-        ),
       ),
     );
   }

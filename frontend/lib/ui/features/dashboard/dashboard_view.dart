@@ -498,11 +498,6 @@ class _DashboardViewState extends State<DashboardView> {
                   label: "Dividend",
                 ),
                 BottomNavigationBarItem(
-                  icon: Text("🔥", style: TextStyle(fontSize: 18)),
-                  activeIcon: Text("🔥", style: TextStyle(fontSize: 18)),
-                  label: "FIRE",
-                ),
-                BottomNavigationBarItem(
                   icon: Text("📜", style: TextStyle(fontSize: 18)),
                   activeIcon: Text("📜", style: TextStyle(fontSize: 18)),
                   label: "History",
@@ -521,7 +516,6 @@ class _DashboardViewState extends State<DashboardView> {
     final navItems = [
       {"icon": "📊", "label": "Portfolio", "index": 0},
       {"icon": "💰", "label": "Dividend", "index": 1},
-      {"icon": "🔥", "label": "FIRE", "index": 2},
       {"icon": "📜", "label": "History", "index": 4},
       {"icon": "⚙️", "label": "Settings", "index": 5},
     ];

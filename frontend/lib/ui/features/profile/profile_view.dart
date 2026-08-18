@@ -66,7 +66,26 @@ class ProfileViewModel extends ChangeNotifier {
     _isLoading = true;
     notifyListeners();
     try {
-      _profile = await apiService.getProfileDetail(profileId);
+      if (profileId == "ALL") {
+        final allProfiles = await apiService.getProfiles();
+        List<StockHolding> allStocks = [];
+        for (var p in allProfiles) {
+          allStocks.addAll(p.stocks);
+        }
+        _profile = InvestmentProfile(
+          id: "ALL",
+          name: "All Portfolios",
+          type: "AGGREGATE",
+          country: "CA",
+          totalValue: 0.0,
+          totalChange: 0.0,
+          totalChangePercent: 0.0,
+          annualDividend: 0.0,
+          stocks: allStocks,
+        );
+      } else {
+        _profile = await apiService.getProfileDetail(profileId);
+      }
       await loadHistoryChart(notify: false);
     } catch (e) {
       debugPrint("Error loading profile details: $e");
@@ -78,6 +97,8 @@ class ProfileViewModel extends ChangeNotifier {
 
   Future<void> loadHistoryChart({bool notify = true}) async {
     try {
+      // If it's ALL, getChartPoints might fail if backend doesn't support ALL. 
+      // Assuming getChartPoints supports "ALL" since dashboard uses it.
       _chartPoints = await apiService.getChartPoints(
         profileId,
         _activeInterval,
@@ -85,7 +106,7 @@ class ProfileViewModel extends ChangeNotifier {
       );
       if (notify) notifyListeners();
     } catch (e) {
-      debugPrint("Error loading history chart: $e");
+      debugPrint("Error loading chart: $e");
     }
   }
 
