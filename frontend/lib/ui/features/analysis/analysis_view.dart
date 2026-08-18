@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
+import '../../../data/models/profile.dart';
 import '../../../data/services/api_service.dart';
 import '../../core/theme.dart';
 import '../profile/profile_view.dart'; // To reuse DonutChartItem and colors
@@ -48,7 +49,28 @@ class AnalysisViewModel extends ChangeNotifier {
 
   Future<void> calculateAllocations() async {
     try {
-      final profile = await apiService.getProfileDetail(profileId);
+      InvestmentProfile profile;
+      if (profileId == "ALL") {
+        final allProfiles = await apiService.getProfiles();
+        List<StockHolding> allStocks = [];
+        for (var p in allProfiles) {
+          allStocks.addAll(p.stocks);
+        }
+        profile = InvestmentProfile(
+          id: "ALL",
+          name: "All Portfolios",
+          type: "AGGREGATE",
+          country: "CA",
+          totalValue: 0.0,
+          totalChange: 0.0,
+          totalChangePercent: 0.0,
+          annualDividend: 0.0,
+          stocks: allStocks,
+        );
+      } else {
+        profile = await apiService.getProfileDetail(profileId);
+      }
+
       final List<Color> colorsList = [
         const Color(0xFF4CAF50),
         const Color(0xFF2196F3),
