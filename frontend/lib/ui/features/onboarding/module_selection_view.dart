@@ -14,7 +14,7 @@ class _ModuleSelectionViewState extends State<ModuleSelectionView> {
     "STOCKS": true, // Always start with Stocks selected
     "REAL_ESTATE": false,
     "BUSINESS": false,
-    "CRYPTO": false,
+    "HEALTH": false,
   };
   
   bool _isLoading = false;
@@ -52,7 +52,7 @@ class _ModuleSelectionViewState extends State<ModuleSelectionView> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 40),
+              const SizedBox(height: 20),
               Text(
                 "What would you like to track?",
                 style: theme.titleStyle.copyWith(fontSize: 32),
@@ -62,42 +62,47 @@ class _ModuleSelectionViewState extends State<ModuleSelectionView> {
                 "You can change this later. We'll customize your dashboard based on your selection.",
                 style: theme.subtitleStyle.copyWith(fontSize: 16),
               ),
-              const SizedBox(height: 40),
+              const SizedBox(height: 20),
               
-              _buildModuleCard(
-                "STOCKS",
-                "Stocks & Dividends",
-                "Track portfolios, dividend yields, and performance.",
-                Icons.trending_up,
-                theme,
-              ),
-              const SizedBox(height: 16),
-              _buildModuleCard(
-                "REAL_ESTATE",
-                "Real Estate",
-                "Manage properties, rental income, and mortgages.",
-                Icons.home_work,
-                theme,
-              ),
-              const SizedBox(height: 16),
-              _buildModuleCard(
-                "BUSINESS",
-                "Business",
-                "Track private equity, startups, or side hustles.",
-                Icons.business_center,
-                theme,
-              ),
-              const SizedBox(height: 16),
-              _buildModuleCard(
-                "CRYPTO",
-                "Crypto & Other",
-                "Track digital assets, cash, or custom holdings.",
-                Icons.currency_bitcoin,
-                theme,
+              Expanded(
+                child: ListView(
+                  children: [
+                    _buildModuleCard(
+                      "STOCKS",
+                      "Stocks & Dividends",
+                      "Track portfolios, dividend yields, and performance.",
+                      Icons.trending_up,
+                      theme,
+                    ),
+                    const SizedBox(height: 16),
+                    _buildModuleCard(
+                      "REAL_ESTATE",
+                      "Real Estate",
+                      "Manage properties, rental income, and mortgages.",
+                      Icons.home_work,
+                      theme,
+                    ),
+                    const SizedBox(height: 16),
+                    _buildModuleCard(
+                      "BUSINESS",
+                      "Business",
+                      "Track private equity, startups, or side hustles.",
+                      Icons.business_center,
+                      theme,
+                    ),
+                    const SizedBox(height: 16),
+                    _buildModuleCard(
+                      "HEALTH",
+                      "Health",
+                      "Track metrics like weight, sleep, and heart rate.",
+                      Icons.favorite,
+                      theme,
+                    ),
+                  ],
+                ),
               ),
               
-              const Spacer(),
-              
+              const SizedBox(height: 16),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
