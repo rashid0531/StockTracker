@@ -938,54 +938,6 @@ class _ProfileViewState extends State<ProfileView> {
     );
   }
 
-  Widget _buildModeToggle(ThemeProvider theme, {bool subtitleText = false}) {
-    final isValuation = _viewModel.chartMode == "VALUATION";
-
-    return Container(
-      padding: const EdgeInsets.all(4),
-      decoration: BoxDecoration(
-        color: theme.card,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: theme.border),
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: ElevatedButton(
-              onPressed: () => _viewModel.setChartMode("VALUATION"),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: isValuation ? AppColors.positive : Colors.transparent,
-                foregroundColor: isValuation ? Colors.white : theme.subtext,
-                elevation: 0,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                padding: const EdgeInsets.symmetric(vertical: 10),
-              ),
-              child: Text(
-                subtitleText ? "Valuation Breakdown" : "Valuation",
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-              ),
-            ),
-          ),
-          Expanded(
-            child: ElevatedButton(
-              onPressed: () => _viewModel.setChartMode("DIVIDEND"),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: !isValuation ? AppColors.dividend : Colors.transparent,
-                foregroundColor: !isValuation ? Colors.white : theme.subtext,
-                elevation: 0,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                padding: const EdgeInsets.symmetric(vertical: 10),
-              ),
-              child: Text(
-                subtitleText ? "Dividend Contribution" : "Dividend Income",
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 
   Widget _buildIntervalSelector(ThemeProvider theme) {
     final intervals = ["1W", "6M", "1Y", "ALL"];
