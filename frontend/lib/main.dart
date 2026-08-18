@@ -9,6 +9,8 @@ import 'ui/features/hub/hub_view.dart';
 import 'ui/features/hub/asset_creation_view.dart';
 import 'ui/features/dashboard/dashboard_view.dart';
 import 'ui/features/real_estate/real_estate_view.dart';
+import 'ui/features/real_estate/real_estate_detail_view.dart';
+import 'data/models/real_estate.dart';
 import 'ui/features/precious_metals/precious_metals_view.dart';
 import 'ui/features/health/health_view.dart';
 import 'ui/features/profile/profile_view.dart';
@@ -112,6 +114,14 @@ class WealthTrackerApp extends StatelessWidget {
       GoRoute(
         path: '/real-estate',
         builder: (context, state) => const RealEstateView(),
+      ),
+      GoRoute(
+        path: '/real-estate/:id',
+        builder: (context, state) {
+          final asset = state.extra as RealEstateAsset?;
+          final id = state.pathParameters['id']!;
+          return RealEstateDetailView(asset: asset, assetId: id);
+        },
       ),
       GoRoute(
         path: '/precious-metals',

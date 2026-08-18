@@ -1066,6 +1066,7 @@ class ApiService {
       "monthly_expenses": 1400.0,
       "address": "450 Harbourfront Way, Toronto, ON",
       "purchase_date": "2021-04-15",
+      "is_primary_residence": false,
     },
     {
       "id": "re-2",
@@ -1075,12 +1076,31 @@ class ApiService {
       "purchase_price": 890000.0,
       "current_value": 1150000.0,
       "mortgage_balance": 520000.0,
-      "monthly_rent_income": 4500.0,
+      "monthly_rent_income": 0.0,
       "monthly_expenses": 1900.0,
       "address": "128 Oakridge Heights, Markham, ON",
       "purchase_date": "2019-09-01",
+      "is_primary_residence": true,
     },
   ];
+
+  Future<List<Map<String, dynamic>>> getRealEstateProjection(String propertyId, double currentValue) async {
+    await Future.delayed(const Duration(milliseconds: 200));
+    // 35-year projection mock (simplistic compound appreciation of 3.5% per year)
+    final int currentYear = DateTime.now().year;
+    List<Map<String, dynamic>> projections = [];
+    double projectedValue = currentValue;
+    
+    for (int i = 0; i <= 35; i++) {
+      projections.add({
+        "year": (currentYear + i).toString(),
+        "projected_value": projectedValue,
+      });
+      projectedValue *= 1.035; // 3.5% annual appreciation
+    }
+    
+    return projections;
+  }
 
   final List<Map<String, dynamic>> _mockPreciousMetals = [
     {

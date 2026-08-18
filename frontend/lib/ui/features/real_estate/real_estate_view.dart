@@ -224,42 +224,51 @@ class _RealEstateViewState extends State<RealEstateView> {
                     const SizedBox(height: 12),
 
                     ..._properties.map((p) {
-                      return Container(
-                        margin: const EdgeInsets.only(bottom: 12),
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: theme.card,
-                          borderRadius: BorderRadius.circular(18),
-                          border: Border.all(color: theme.border),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(p.propertyName, style: theme.cardTitleStyle.copyWith(fontSize: 15)),
-                                Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                                  decoration: BoxDecoration(color: const Color(0xFF3B82F6).withValues(alpha: 0.15), borderRadius: BorderRadius.circular(8)),
-                                  child: Text(p.propertyType, style: const TextStyle(color: Color(0xFF3B82F6), fontWeight: FontWeight.bold, fontSize: 10)),
-                                ),
-                              ],
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 12),
+                        child: Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            borderRadius: BorderRadius.circular(18),
+                            onTap: () => context.push('/real-estate/${p.id}', extra: p),
+                            child: Container(
+                              padding: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                color: theme.card,
+                                borderRadius: BorderRadius.circular(18),
+                                border: Border.all(color: theme.border),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(p.propertyName, style: theme.cardTitleStyle.copyWith(fontSize: 15)),
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                                        decoration: BoxDecoration(color: const Color(0xFF3B82F6).withValues(alpha: 0.15), borderRadius: BorderRadius.circular(8)),
+                                        child: Text(p.propertyType, style: const TextStyle(color: Color(0xFF3B82F6), fontWeight: FontWeight.bold, fontSize: 10)),
+                                      ),
+                                    ],
+                                  ),
+                                  if (p.address != null) ...[
+                                    const SizedBox(height: 4),
+                                    Text(p.address!, style: theme.subtitleStyle.copyWith(fontSize: 11)),
+                                  ],
+                                  const SizedBox(height: 12),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text("Value: \$${p.currentValue.toStringAsFixed(0)}", style: theme.bodyStyle.copyWith(fontSize: 12, fontWeight: FontWeight.bold)),
+                                      Text("Equity: \$${p.netEquity.toStringAsFixed(0)}", style: TextStyle(color: const Color(0xFF3B82F6), fontWeight: FontWeight.bold, fontSize: 12)),
+                                      Text("Rent: \$${p.monthlyRentIncome.toStringAsFixed(0)}/mo", style: TextStyle(color: AppColors.positive, fontWeight: FontWeight.bold, fontSize: 12)),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
-                            if (p.address != null) ...[
-                              const SizedBox(height: 4),
-                              Text(p.address!, style: theme.subtitleStyle.copyWith(fontSize: 11)),
-                            ],
-                            const SizedBox(height: 12),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text("Value: \$${p.currentValue.toStringAsFixed(0)}", style: theme.bodyStyle.copyWith(fontSize: 12, fontWeight: FontWeight.bold)),
-                                Text("Equity: \$${p.netEquity.toStringAsFixed(0)}", style: TextStyle(color: const Color(0xFF3B82F6), fontWeight: FontWeight.bold, fontSize: 12)),
-                                Text("Rent: \$${p.monthlyRentIncome.toStringAsFixed(0)}/mo", style: TextStyle(color: AppColors.positive, fontWeight: FontWeight.bold, fontSize: 12)),
-                              ],
-                            ),
-                          ],
+                          ),
                         ),
                       );
                     }),

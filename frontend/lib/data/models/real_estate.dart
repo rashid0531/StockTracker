@@ -14,6 +14,7 @@ class RealEstateAsset {
   final double monthlyExpenses;
   final String? address;
   final String? purchaseDate;
+  final bool isPrimaryResidence;
 
   RealEstateAsset({
     required this.id,
@@ -31,6 +32,7 @@ class RealEstateAsset {
     required this.monthlyExpenses,
     this.address,
     this.purchaseDate,
+    this.isPrimaryResidence = true,
   });
 
   double get netEquity => currentValue - mortgageBalance;
@@ -54,6 +56,7 @@ class RealEstateAsset {
       monthlyExpenses: (json['monthly_expenses'] as num? ?? 0.0).toDouble(),
       address: json['address'] as String?,
       purchaseDate: json['purchase_date'] as String?,
+      isPrimaryResidence: json['is_primary_residence'] as bool? ?? true,
     );
   }
 
@@ -74,6 +77,7 @@ class RealEstateAsset {
       'monthly_expenses': monthlyExpenses,
       'address': address,
       'purchase_date': purchaseDate,
+      'is_primary_residence': isPrimaryResidence,
     };
   }
 }

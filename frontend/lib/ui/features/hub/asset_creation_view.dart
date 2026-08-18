@@ -35,6 +35,7 @@ class _AssetCreationViewState extends State<AssetCreationView> {
   String _rePropertyCategory = "Single-Family & Standalone Dwellings";
   String _reStructuralType = "Single-Family Detached (NA) / Detached House (UK/AU)";
   String _reTenureModel = "Freehold";
+  bool _isPrimaryResidence = true;
 
   final List<String> _reRegions = [
     "North America (NA)",
@@ -245,6 +246,7 @@ class _AssetCreationViewState extends State<AssetCreationView> {
           "monthly_expenses": double.tryParse(_reExpCtrl.text) ?? 0.0,
           "address": _reAddrCtrl.text.trim(),
           "purchase_date": "2026-01-01",
+          "is_primary_residence": _isPrimaryResidence,
         });
       } else if (_selectedPillar == "Precious Metals") {
         if (_pmWeightCtrl.text.trim().isEmpty || _pmSpotPriceCtrl.text.trim().isEmpty) return;
@@ -719,6 +721,20 @@ class _AssetCreationViewState extends State<AssetCreationView> {
             fillColor: theme.bg,
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide(color: theme.border)),
           ),
+        ),
+        const SizedBox(height: 14),
+        SwitchListTile(
+          title: Text("Primary Residence", style: TextStyle(color: theme.text, fontSize: 14)),
+          subtitle: Text("Turn off if this is an Investment Property", style: TextStyle(color: theme.subtext, fontSize: 12)),
+          value: _isPrimaryResidence,
+          activeTrackColor: AppColors.positive.withValues(alpha: 0.5),
+          activeThumbColor: AppColors.positive,
+          contentPadding: EdgeInsets.zero,
+          onChanged: (bool value) {
+            setState(() {
+              _isPrimaryResidence = value;
+            });
+          },
         ),
       ],
     );
