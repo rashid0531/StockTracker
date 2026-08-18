@@ -9,7 +9,7 @@ import 'widgets/modern_donut_chart.dart';
 class AnalyticsView extends StatelessWidget {
   final String profileId;
 
-  const AnalyticsView({Key? key, required this.profileId}) : super(key: key);
+  const AnalyticsView({super.key, required this.profileId});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,7 @@ class AnalyticsView extends StatelessWidget {
 }
 
 class _AnalyticsViewContent extends StatefulWidget {
-  const _AnalyticsViewContent({Key? key}) : super(key: key);
+  const _AnalyticsViewContent();
 
   @override
   State<_AnalyticsViewContent> createState() => _AnalyticsViewContentState();

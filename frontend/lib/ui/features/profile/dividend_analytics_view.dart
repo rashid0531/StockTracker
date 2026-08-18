@@ -24,7 +24,7 @@ class DividendAnalyticsView extends StatelessWidget {
 }
 
 class _DividendAnalyticsViewContent extends StatefulWidget {
-  const _DividendAnalyticsViewContent({super.key});
+  const _DividendAnalyticsViewContent();
 
   @override
   State<_DividendAnalyticsViewContent> createState() => _DividendAnalyticsViewContentState();

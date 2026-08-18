@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/theme.dart';
-import '../../../data/services/api_service.dart';
 
 class ModuleSelectionView extends StatefulWidget {
   const ModuleSelectionView({super.key});

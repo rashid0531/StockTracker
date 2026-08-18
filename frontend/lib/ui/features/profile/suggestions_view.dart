@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/theme.dart';
@@ -7,9 +6,9 @@ class SuggestionsView extends StatelessWidget {
   final String profileId;
 
   const SuggestionsView({
-    Key? key,
+    super.key,
     required this.profileId,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
