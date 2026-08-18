@@ -16,6 +16,7 @@ import 'ui/features/analysis/analysis_view.dart';
 import 'ui/features/import/import_view.dart';
 import 'ui/features/onboarding/module_selection_view.dart';
 import 'ui/features/profile/analytics_view.dart';
+import 'ui/features/profile/dividend_analytics_view.dart';
 import 'ui/features/profile/suggestions_view.dart';
 import 'core/providers/pillar_preferences_provider.dart';
 
@@ -151,6 +152,13 @@ class WealthTrackerApp extends StatelessWidget {
           final id = state.uri.queryParameters['id'] ?? '';
           final type = state.uri.queryParameters['type'] ?? 'stock';
           return AnalysisView(profileId: id, type: type);
+        },
+      ),
+      GoRoute(
+        path: '/dividend-analytics',
+        builder: (context, state) {
+          final id = state.uri.queryParameters['id'] ?? 'ALL';
+          return DividendAnalyticsView(profileId: id);
         },
       ),
     ],

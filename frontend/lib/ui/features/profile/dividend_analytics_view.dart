@@ -6,10 +6,10 @@ import '../../core/theme.dart';
 import 'profile_view.dart';
 import 'widgets/modern_donut_chart.dart';
 
-class AnalyticsView extends StatelessWidget {
+class DividendAnalyticsView extends StatelessWidget {
   final String profileId;
 
-  const AnalyticsView({Key? key, required this.profileId}) : super(key: key);
+  const DividendAnalyticsView({super.key, required this.profileId});
 
   @override
   Widget build(BuildContext context) {
@@ -18,19 +18,19 @@ class AnalyticsView extends StatelessWidget {
         apiService: ApiService(),
         profileId: profileId,
       )..loadProfileDetails(),
-      child: const _AnalyticsViewContent(),
+      child: const _DividendAnalyticsViewContent(),
     );
   }
 }
 
-class _AnalyticsViewContent extends StatefulWidget {
-  const _AnalyticsViewContent({Key? key}) : super(key: key);
+class _DividendAnalyticsViewContent extends StatefulWidget {
+  const _DividendAnalyticsViewContent({super.key});
 
   @override
-  State<_AnalyticsViewContent> createState() => _AnalyticsViewContentState();
+  State<_DividendAnalyticsViewContent> createState() => _DividendAnalyticsViewContentState();
 }
 
-class _AnalyticsViewContentState extends State<_AnalyticsViewContent> {
+class _DividendAnalyticsViewContentState extends State<_DividendAnalyticsViewContent> {
   final List<Color> _donutColors = const [
     Color(0xFF6366F1), // Indigo
     Color(0xFF8B5CF6), // Purple
@@ -54,20 +54,16 @@ class _AnalyticsViewContentState extends State<_AnalyticsViewContent> {
             icon: Icon(Icons.arrow_back, color: theme.text),
             onPressed: () => context.pop(),
           ),
-          title: Text("Analytics", style: theme.titleStyle),
+          title: Text("Dividend Analytics", style: theme.titleStyle),
         ),
         body: const Center(child: CircularProgressIndicator()),
       );
     }
 
-    final stockItems = viewModel.stockAllocItems;
-    final sectorItems = viewModel.sectorAllocItems;
+    final divItems = viewModel.dividendContribItems;
 
-    for (int i = 0; i < stockItems.length; i++) {
-      stockItems[i].color = _donutColors[i % _donutColors.length];
-    }
-    for (int i = 0; i < sectorItems.length; i++) {
-      sectorItems[i].color = _donutColors[(i + 2) % _donutColors.length];
+    for (int i = 0; i < divItems.length; i++) {
+      divItems[i].color = _donutColors[(i + 4) % _donutColors.length];
     }
 
     return Scaffold(
@@ -79,34 +75,22 @@ class _AnalyticsViewContentState extends State<_AnalyticsViewContent> {
           icon: Icon(Icons.arrow_back, color: theme.text),
           onPressed: () => context.pop(),
         ),
-        title: Text("Analytics", style: theme.titleStyle),
+        title: Text("Dividend Analytics", style: theme.titleStyle),
       ),
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.all(16.0),
           children: [
-            if (stockItems.isNotEmpty)
+            if (divItems.isNotEmpty)
               ModernGridDonutCard(
-                items: stockItems,
-                title: "Stock Weight",
-                subtitle: "${stockItems.length} Assets",
-                centerLabel: "Stocks",
+                items: divItems,
+                title: "Dividend Contribution",
+                subtitle: "${divItems.length} Payers",
+                centerLabel: "Dividends",
                 onPress: () => context.push(
-                  "/analysis?id=${viewModel.profileId}&type=stock",
+                  "/analysis?id=${viewModel.profileId}&type=dividend",
                 ),
               ),
-            if (sectorItems.isNotEmpty) ...[
-              const SizedBox(height: 16),
-              ModernGridDonutCard(
-                items: sectorItems,
-                title: "Sector Weight",
-                subtitle: "${sectorItems.length} Sectors",
-                centerLabel: "Sectors",
-                onPress: () => context.push(
-                  "/analysis?id=${viewModel.profileId}&type=sector",
-                ),
-              ),
-            ]
           ],
         ),
       ),

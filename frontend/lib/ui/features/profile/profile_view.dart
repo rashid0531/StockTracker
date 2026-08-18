@@ -7,6 +7,7 @@ import '../../../data/models/profile.dart';
 import '../../../data/services/api_service.dart';
 import '../../core/theme.dart';
 import 'widgets/modern_history_chart.dart';
+import '../../core/widgets/hover_button.dart';
 
 // Top-level mock sector list helper
 Map<String, dynamic> _getStockMetadata(String ticker) {
@@ -535,7 +536,7 @@ class _ProfileViewState extends State<ProfileView> {
           child: Row(
             children: [
               Expanded(
-                child: _HoverButton(
+                child: HoverButton(
                   label: "Analytics",
                   icon: Icons.pie_chart,
                   onTap: () => context.push('/profile/${widget.profileId}/analytics'),
@@ -544,7 +545,7 @@ class _ProfileViewState extends State<ProfileView> {
               ),
               const SizedBox(width: 16),
               Expanded(
-                child: _HoverButton(
+                child: HoverButton(
                   label: "Suggestions",
                   icon: Icons.lightbulb_outline,
                   onTap: () => context.push('/profile/${widget.profileId}/suggestions'),
@@ -1017,74 +1018,3 @@ class _ProfileViewState extends State<ProfileView> {
   }
 }
 
-class _HoverButton extends StatefulWidget {
-  final String label;
-  final IconData icon;
-  final VoidCallback onTap;
-  final ThemeProvider theme;
-
-  const _HoverButton({
-    required this.label,
-    required this.icon,
-    required this.onTap,
-    required this.theme,
-  });
-
-  @override
-  State<_HoverButton> createState() => _HoverButtonState();
-}
-
-class _HoverButtonState extends State<_HoverButton> {
-  bool _isHovered = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return MouseRegion(
-      onEnter: (_) => setState(() => _isHovered = true),
-      onExit: (_) => setState(() => _isHovered = false),
-      child: InkWell(
-        onTap: widget.onTap,
-        borderRadius: BorderRadius.circular(30),
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          padding: const EdgeInsets.symmetric(vertical: 14),
-          decoration: BoxDecoration(
-            color: _isHovered ? AppColors.positive : widget.theme.card,
-            borderRadius: BorderRadius.circular(30),
-            border: Border.all(
-              color: _isHovered ? AppColors.positive : widget.theme.border,
-            ),
-            boxShadow: _isHovered
-                ? [
-                    BoxShadow(
-                      color: AppColors.positive.withValues(alpha: 0.3),
-                      blurRadius: 8,
-                      offset: const Offset(0, 4),
-                    )
-                  ]
-                : [],
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                widget.icon,
-                size: 18,
-                color: _isHovered ? Colors.white : widget.theme.text,
-              ),
-              const SizedBox(width: 8),
-              Text(
-                widget.label,
-                style: TextStyle(
-                  color: _isHovered ? Colors.white : widget.theme.text,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}

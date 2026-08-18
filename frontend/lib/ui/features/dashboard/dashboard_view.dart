@@ -7,7 +7,7 @@ import '../../../data/models/profile.dart';
 import '../../../data/services/api_service.dart';
 import '../../core/theme.dart';
 import '../profile/widgets/modern_history_chart.dart';
-import '../profile/profile_view.dart';
+import '../../core/widgets/hover_button.dart';
 
 const List<String> _monthNames = [
   "January", "February", "March", "April", "May", "June",
@@ -503,11 +503,6 @@ class _DashboardViewState extends State<DashboardView> {
                   label: "FIRE",
                 ),
                 BottomNavigationBarItem(
-                  icon: Text("📅", style: TextStyle(fontSize: 18)),
-                  activeIcon: Text("📅", style: TextStyle(fontSize: 18)),
-                  label: "Calendar",
-                ),
-                BottomNavigationBarItem(
                   icon: Text("📜", style: TextStyle(fontSize: 18)),
                   activeIcon: Text("📜", style: TextStyle(fontSize: 18)),
                   label: "History",
@@ -527,7 +522,6 @@ class _DashboardViewState extends State<DashboardView> {
       {"icon": "📊", "label": "Portfolio", "index": 0},
       {"icon": "💰", "label": "Dividend", "index": 1},
       {"icon": "🔥", "label": "FIRE", "index": 2},
-      {"icon": "📅", "label": "Calendar", "index": 3},
       {"icon": "📜", "label": "History", "index": 4},
       {"icon": "⚙️", "label": "Settings", "index": 5},
     ];
@@ -2458,6 +2452,39 @@ class _DashboardViewState extends State<DashboardView> {
                 );
               }).toList(),
             ),
+          ),
+          const SizedBox(height: 24),
+
+          // Dividend Action Buttons
+          Row(
+            children: [
+              Expanded(
+                child: HoverButton(
+                  label: "Analytics",
+                  icon: Icons.pie_chart,
+                  onTap: () => context.push('/dividend-analytics?id=${_viewModel.dividendProfileId}'),
+                  theme: theme,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: HoverButton(
+                  label: "Objective",
+                  icon: Icons.local_fire_department,
+                  onTap: () => setState(() => _currentTabIndex = 2),
+                  theme: theme,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: HoverButton(
+                  label: "Calendar",
+                  icon: Icons.calendar_month,
+                  onTap: () => setState(() => _currentTabIndex = 3),
+                  theme: theme,
+                ),
+              ),
+            ],
           ),
           const SizedBox(height: 24),
 
