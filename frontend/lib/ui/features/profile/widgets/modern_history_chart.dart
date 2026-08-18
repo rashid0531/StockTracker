@@ -7,8 +7,13 @@ import '../../../core/theme.dart';
 
 class ModernHistoryChart extends StatelessWidget {
   final List<ChartPoint> points;
+  final bool showXAxis;
 
-  const ModernHistoryChart({super.key, required this.points});
+  const ModernHistoryChart({
+    super.key, 
+    required this.points,
+    this.showXAxis = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +77,29 @@ class ModernHistoryChart extends StatelessWidget {
             show: true,
             rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
             topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-            bottomTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+            bottomTitles: AxisTitles(
+              sideTitles: SideTitles(
+                showTitles: showXAxis,
+                getTitlesWidget: (value, meta) {
+                  final int index = value.toInt();
+                  if (index < 0 || index >= points.length) {
+                    return const SizedBox.shrink();
+                  }
+                  // Only show roughly 5-6 labels across the bottom
+                  if (points.length > 10 && index % (points.length ~/ 5) != 0 && index != points.length - 1) {
+                    return const SizedBox.shrink();
+                  }
+                  return Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: Text(
+                      points[index].date,
+                      style: TextStyle(color: theme.subtext, fontSize: 10),
+                    ),
+                  );
+                },
+                reservedSize: 28,
+              ),
+            ),
             leftTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
           ),
           borderData: FlBorderData(show: false),

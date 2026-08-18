@@ -184,6 +184,7 @@ class _RealEstateDetailViewState extends State<RealEstateDetailView> {
                 ),
                 child: ModernHistoryChart(
                   points: _projectionPoints,
+                  showXAxis: true,
                 ),
               ),
           ],
