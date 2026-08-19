@@ -30,6 +30,10 @@ class _AssetCreationViewState extends State<AssetCreationView> {
   final _reRentCtrl = TextEditingController();
   final _reExpCtrl = TextEditingController();
   final _reAddrCtrl = TextEditingController();
+  final _reRoomsCtrl = TextEditingController();
+  final _reWashroomsCtrl = TextEditingController();
+  final _reGaragesCtrl = TextEditingController();
+  final _reSizeCtrl = TextEditingController();
 
   String _reRegion = "North America (NA)";
   String _rePropertyCategory = "Single-Family & Standalone Dwellings";
@@ -206,6 +210,10 @@ class _AssetCreationViewState extends State<AssetCreationView> {
     _reRentCtrl.dispose();
     _reExpCtrl.dispose();
     _reAddrCtrl.dispose();
+    _reRoomsCtrl.dispose();
+    _reWashroomsCtrl.dispose();
+    _reGaragesCtrl.dispose();
+    _reSizeCtrl.dispose();
     _pmWeightCtrl.dispose();
     _pmBuyPriceCtrl.dispose();
     _pmSpotPriceCtrl.dispose();
@@ -247,6 +255,10 @@ class _AssetCreationViewState extends State<AssetCreationView> {
           "address": _reAddrCtrl.text.trim(),
           "purchase_date": "2026-01-01",
           "is_primary_residence": _isPrimaryResidence,
+          "rooms": int.tryParse(_reRoomsCtrl.text) ?? 0,
+          "washrooms": int.tryParse(_reWashroomsCtrl.text) ?? 0,
+          "garages": int.tryParse(_reGaragesCtrl.text) ?? 0,
+          "size_sqft": int.tryParse(_reSizeCtrl.text) ?? 0,
         });
       } else if (_selectedPillar == "Precious Metals") {
         if (_pmWeightCtrl.text.trim().isEmpty || _pmSpotPriceCtrl.text.trim().isEmpty) return;
@@ -721,6 +733,63 @@ class _AssetCreationViewState extends State<AssetCreationView> {
             fillColor: theme.bg,
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide(color: theme.border)),
           ),
+        ),
+
+        const SizedBox(height: 14),
+        Row(
+          children: [
+            Expanded(child: TextField(
+              controller: _reRoomsCtrl,
+              keyboardType: TextInputType.number,
+              style: TextStyle(color: theme.text),
+              decoration: InputDecoration(
+                labelText: "Rooms", labelStyle: TextStyle(color: theme.subtext, fontSize: 12),
+                filled: true, fillColor: theme.bg,
+                prefixIcon: Icon(Icons.bed_outlined, color: theme.subtext, size: 18),
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide.none),
+              )
+            )),
+            const SizedBox(width: 14),
+            Expanded(child: TextField(
+              controller: _reWashroomsCtrl,
+              keyboardType: TextInputType.number,
+              style: TextStyle(color: theme.text),
+              decoration: InputDecoration(
+                labelText: "Washrooms", labelStyle: TextStyle(color: theme.subtext, fontSize: 12),
+                filled: true, fillColor: theme.bg,
+                prefixIcon: Icon(Icons.bathtub_outlined, color: theme.subtext, size: 18),
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide.none),
+              )
+            )),
+          ],
+        ),
+        const SizedBox(height: 14),
+        Row(
+          children: [
+            Expanded(child: TextField(
+              controller: _reGaragesCtrl,
+              keyboardType: TextInputType.number,
+              style: TextStyle(color: theme.text),
+              decoration: InputDecoration(
+                labelText: "Garages", labelStyle: TextStyle(color: theme.subtext, fontSize: 12),
+                filled: true, fillColor: theme.bg,
+                prefixIcon: Icon(Icons.garage_outlined, color: theme.subtext, size: 18),
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide.none),
+              )
+            )),
+            const SizedBox(width: 14),
+            Expanded(child: TextField(
+              controller: _reSizeCtrl,
+              keyboardType: TextInputType.number,
+              style: TextStyle(color: theme.text),
+              decoration: InputDecoration(
+                labelText: "Size (sq ft)", labelStyle: TextStyle(color: theme.subtext, fontSize: 12),
+                filled: true, fillColor: theme.bg,
+                prefixIcon: Icon(Icons.square_foot_outlined, color: theme.subtext, size: 18),
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide.none),
+              )
+            )),
+          ],
         ),
         const SizedBox(height: 14),
         Material(

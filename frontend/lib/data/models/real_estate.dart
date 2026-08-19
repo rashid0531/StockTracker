@@ -15,6 +15,10 @@ class RealEstateAsset {
   final String? address;
   final String? purchaseDate;
   final bool isPrimaryResidence;
+  final int rooms;
+  final int washrooms;
+  final int garages;
+  final int sizeSqft;
 
   RealEstateAsset({
     required this.id,
@@ -33,6 +37,10 @@ class RealEstateAsset {
     this.address,
     this.purchaseDate,
     this.isPrimaryResidence = true,
+    this.rooms = 0,
+    this.washrooms = 0,
+    this.garages = 0,
+    this.sizeSqft = 0,
   });
 
   double get netEquity => currentValue - mortgageBalance;
@@ -57,6 +65,10 @@ class RealEstateAsset {
       address: json['address'] as String?,
       purchaseDate: json['purchase_date'] as String?,
       isPrimaryResidence: json['is_primary_residence'] as bool? ?? true,
+      rooms: json['rooms'] as int? ?? 0,
+      washrooms: json['washrooms'] as int? ?? 0,
+      garages: json['garages'] as int? ?? 0,
+      sizeSqft: json['size_sqft'] as int? ?? 0,
     );
   }
 
@@ -78,6 +90,10 @@ class RealEstateAsset {
       'address': address,
       'purchase_date': purchaseDate,
       'is_primary_residence': isPrimaryResidence,
+      'rooms': rooms,
+      'washrooms': washrooms,
+      'garages': garages,
+      'size_sqft': sizeSqft,
     };
   }
 }
