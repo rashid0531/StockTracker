@@ -16,7 +16,7 @@ import 'ui/features/health/health_view.dart';
 import 'ui/features/profile/profile_view.dart';
 import 'ui/features/analysis/analysis_view.dart';
 import 'ui/features/import/import_view.dart';
-import 'ui/features/onboarding/module_selection_view.dart';
+
 import 'ui/features/profile/analytics_view.dart';
 import 'ui/features/profile/dividend_analytics_view.dart';
 import 'ui/features/profile/suggestions_view.dart';
@@ -95,10 +95,7 @@ class WealthTrackerApp extends StatelessWidget {
         path: '/hub',
         builder: (context, state) => const HubView(),
       ),
-      GoRoute(
-        path: '/module-selection',
-        builder: (context, state) => const ModuleSelectionView(),
-      ),
+
       GoRoute(
         path: '/create-asset',
         builder: (context, state) => const AssetCreationView(),

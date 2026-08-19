@@ -76,7 +76,7 @@ class _LoginViewState extends State<LoginView> {
     try {
       await _apiService.login(email, password); // Register user session
       if (!mounted) return;
-      context.go("/module-selection");
+      context.go("/create-asset");
     } catch (e) {
       if (!mounted) return;
       setState(() {
