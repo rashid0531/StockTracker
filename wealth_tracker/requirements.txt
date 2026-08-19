@@ -10,3 +10,10 @@ yahooquery
 pandas
 lxml
 cryptography
+alembic
+redis
+apscheduler
+pyjwt
+passlib[bcrypt]
+python-multipart
+structlog

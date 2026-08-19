@@ -3,7 +3,7 @@ from decimal import Decimal
 from typing import List, Optional
 import uuid
 
-from sqlalchemy import Date, DateTime, ForeignKey, Numeric, String, UniqueConstraint, Text, JSON, Boolean
+from sqlalchemy import Date, DateTime, ForeignKey, Numeric, String, UniqueConstraint, Text, JSON, Boolean, Integer
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
@@ -22,6 +22,7 @@ class User(Base):
     primary_country: Mapped[str] = mapped_column(String(50), default="Canada", nullable=False)
     primary_currency: Mapped[str] = mapped_column(String(3), default="CAD", nullable=False)
     active_modules: Mapped[list[str]] = mapped_column(JSON, default=lambda: ["STOCKS"], nullable=False)
+    hashed_password: Mapped[str] = mapped_column(String(255), nullable=True) # Make nullable initially to support existing mock users
     is_premium: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
     created_at: Mapped[datetime.datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
@@ -393,6 +394,11 @@ class RealEstateAsset(Base):
     monthly_expenses: Mapped[Decimal] = mapped_column(Numeric(14, 2), default=0.0)
     address: Mapped[str] = mapped_column(String(500), nullable=True)
     purchase_date: Mapped[datetime.date] = mapped_column(Date, nullable=True)
+    is_primary_residence: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
+    rooms: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
+    washrooms: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
+    garages: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
+    size_sqft: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
     created_at: Mapped[datetime.datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
     )
@@ -438,3 +444,19 @@ class HealthMetricLog(Base):
         DateTime(timezone=True), server_default=func.now()
     )
 
+
+
+class RealEstateProjection(Base):
+    __tablename__ = "real_estate_projections"
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
+    )
+    real_estate_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("real_estate_assets.id", ondelete="CASCADE"), nullable=False
+    )
+    projection_year: Mapped[int] = mapped_column(Integer, nullable=False)
+    projected_value: Mapped[Decimal] = mapped_column(Numeric(14, 4), nullable=False)
+    generated_at: Mapped[datetime.datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )

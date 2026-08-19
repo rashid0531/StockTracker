@@ -251,6 +251,11 @@ class RealEstateCreateRequest(BaseModel):
     monthly_expenses: Decimal = Decimal("0.0")
     address: Optional[str] = None
     purchase_date: Optional[date] = None
+    is_primary_residence: bool = True
+    rooms: int = 0
+    washrooms: int = 0
+    garages: int = 0
+    size_sqft: int = 0
 
 
 class RealEstateResponse(BaseModel):
@@ -269,6 +274,11 @@ class RealEstateResponse(BaseModel):
     monthly_expenses: Decimal
     address: Optional[str] = None
     purchase_date: Optional[date] = None
+    is_primary_residence: bool = True
+    rooms: int = 0
+    washrooms: int = 0
+    garages: int = 0
+    size_sqft: int = 0
     created_at: datetime
 
     class Config:
@@ -295,6 +305,11 @@ class PreciousMetalCreateRequest(BaseModel):
     current_spot_price_per_oz: Decimal
     storage_location: Optional[str] = "Home Safe"
     purchase_date: Optional[date] = None
+    is_primary_residence: bool = True
+    rooms: int = 0
+    washrooms: int = 0
+    garages: int = 0
+    size_sqft: int = 0
 
 
 class PreciousMetalResponse(BaseModel):
@@ -308,6 +323,11 @@ class PreciousMetalResponse(BaseModel):
     current_spot_price_per_oz: Decimal
     storage_location: str
     purchase_date: Optional[date] = None
+    is_primary_residence: bool = True
+    rooms: int = 0
+    washrooms: int = 0
+    garages: int = 0
+    size_sqft: int = 0
     created_at: datetime
 
     class Config:
@@ -366,3 +386,10 @@ class PortfolioSummaryResponse(BaseModel):
 
 
 
+
+
+class RealEstateProjectionResponse(BaseModel):
+    year: int
+    projected_value: Decimal
+
+    model_config = ConfigDict(from_attributes=True)

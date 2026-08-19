@@ -163,3 +163,39 @@ JOIN investment_profiles p ON a.profile_id = p.id
 JOIN users u ON p.user_id = u.id
 JOIN stock_registry s ON vp.stock_id = s.id
 GROUP BY u.id, p.id, p.name, p.country, p.account_type, a.id, a.broker_name, s.id, s.ticker, s.exchange, s.currency, s.annualized_dividend_per_share;
+
+-- 12. Real Estate Assets Table
+CREATE TABLE IF NOT EXISTS real_estate_assets (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id UUID REFERENCES users(id) ON DELETE CASCADE NOT NULL,
+    property_name VARCHAR(255) NOT NULL,
+    property_type VARCHAR(100) NOT NULL,
+    region VARCHAR(100) DEFAULT 'North America (NA)' NOT NULL,
+    property_category VARCHAR(100) DEFAULT 'Single-Family' NOT NULL,
+    structural_type VARCHAR(100) DEFAULT 'Single-Family Detached' NOT NULL,
+    tenure_model VARCHAR(50) DEFAULT 'Freehold' NOT NULL,
+    purchase_price NUMERIC(14, 4) NOT NULL,
+    current_value NUMERIC(14, 4) NOT NULL,
+    mortgage_balance NUMERIC(14, 4) DEFAULT 0.0000 NOT NULL,
+    monthly_rent_income NUMERIC(14, 4) DEFAULT 0.0000 NOT NULL,
+    monthly_expenses NUMERIC(14, 4) DEFAULT 0.0000 NOT NULL,
+    address TEXT,
+    purchase_date DATE,
+    is_primary_residence BOOLEAN DEFAULT TRUE NOT NULL,
+    rooms INT DEFAULT 0 NOT NULL,
+    washrooms INT DEFAULT 0 NOT NULL,
+    garages INT DEFAULT 0 NOT NULL,
+    size_sqft INT DEFAULT 0 NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+-- 13. Real Estate Projections Table
+CREATE TABLE IF NOT EXISTS real_estate_projections (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    real_estate_id UUID REFERENCES real_estate_assets(id) ON DELETE CASCADE NOT NULL,
+    projection_year INT NOT NULL,
+    projected_value NUMERIC(14, 4) NOT NULL,
+    generated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    CONSTRAINT uq_property_year UNIQUE (real_estate_id, projection_year)
+);

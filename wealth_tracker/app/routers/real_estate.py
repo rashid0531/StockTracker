@@ -8,8 +8,11 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
-from app.models import RealEstateAsset
+from app.models import RealEstateAsset, RealEstateProjection
+from datetime import datetime
+
 from app.schemas import (
+    RealEstateProjectionResponse,
     RealEstateCreateRequest,
     RealEstateResponse,
     UserRealEstateResponse,
@@ -63,10 +66,32 @@ async def create_real_estate_asset(
         monthly_expenses=req.monthly_expenses,
         address=req.address,
         purchase_date=req.purchase_date or date.today(),
+        is_primary_residence=req.is_primary_residence,
+        rooms=req.rooms,
+        washrooms=req.washrooms,
+        garages=req.garages,
+        size_sqft=req.size_sqft,
     )
     db.add(asset)
     await db.commit()
     await db.refresh(asset)
+    
+    # Generate 35-year mock projection
+    current_year = datetime.now().year
+    proj_val = float(asset.current_value)
+    projections = []
+    for i in range(36):
+        proj = RealEstateProjection(
+            real_estate_id=asset.id,
+            projection_year=current_year + i,
+            projected_value=Decimal(str(proj_val))
+        )
+        projections.append(proj)
+        proj_val *= 1.035
+        
+    db.add_all(projections)
+    await db.commit()
+    
     return asset
 
 
@@ -82,3 +107,18 @@ async def delete_real_estate_asset(
     await db.delete(asset)
     await db.commit()
     return None
+
+
+@router.get("/{property_id}/projection", response_model=List[RealEstateProjectionResponse])
+async def get_real_estate_projection(
+    property_id: UUID, db: AsyncSession = Depends(get_db)
+):
+    stmt = select(RealEstateProjection).where(RealEstateProjection.real_estate_id == property_id).order_by(RealEstateProjection.projection_year)
+    result = await db.execute(stmt)
+    projections = result.scalars().all()
+    
+    if not projections:
+        # Fallback or error
+        return []
+        
+    return [RealEstateProjectionResponse(year=p.projection_year, projected_value=p.projected_value) for p in projections]
