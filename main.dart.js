@@ -102167,113 +102167,114 @@ k=A.bx(m,m,m,m,m,m,m,m,!0,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,
 s=A.T(new A.S(A.b(["Canada","United States","Global"],s),new A.at0(),r),q)
 r=t.p
 return A.aA(A.b([l,B.ap,A.ak(A.b([h,B.bv,A.b8(A.kY(k,j,p,s,new A.at1(n),i,o),1)],r),B.u,B.o,B.j,0,m)],r),B.G,B.o,B.j)},
-abJ(a6){var s,r,q,p,o,n,m,l,k,j,i,h,g,f,e,d,c,b,a,a0,a1=this,a2=null,a3="\u2022",a4=a1.go,a5=a4.i(0,a1.dx)
-if(a5==null)a5=A.b([],t.m0)
-s=A.q("1. Property Region / Market",a2,a2,a2,a2,A.k(a2,a2,a6.a===B.c?B.e:B.i,a2,a2,a2,a2,a2,a2,a2,a2,16,a2,a2,B.k,a2,a2,!0,a2,-0.1,a2,a2,a2,a2,a2,a2).dm(13,B.k),a2,a2)
-r=a1.fy
+abJ(a7){var s,r,q,p,o,n,m,l,k,j,i,h,g,f,e,d,c,b,a,a0,a1,a2=this,a3=null,a4="\u2022",a5=a2.go,a6=a5.i(0,a2.dx)
+if(a6==null)a6=A.b([],t.m0)
+s=A.q("1. Property Region / Market",a3,a3,a3,a3,A.k(a3,a3,a7.a===B.c?B.e:B.i,a3,a3,a3,a3,a3,a3,a3,a3,16,a3,a3,B.k,a3,a3,!0,a3,-0.1,a3,a3,a3,a3,a3,a3).dm(13,B.k),a3,a3)
+r=a2.fy
 q=A.X(r).h("S<1,qQ>")
-r=A.T(new A.S(r,new A.asQ(a1,a6),q),q.h("a9.E"))
+r=A.T(new A.S(r,new A.asQ(a2,a7),q),q.h("a9.E"))
 r=A.aSv(r,8,8)
-q=A.q("2. Structural Category",a2,a2,a2,a2,A.k(a2,a2,a6.a===B.c?B.e:B.i,a2,a2,a2,a2,a2,a2,a2,a2,16,a2,a2,B.k,a2,a2,!0,a2,-0.1,a2,a2,a2,a2,a2,a2).dm(13,B.k),a2,a2)
-p=a1.dx
-o=a6.a===B.c
+q=A.q("2. Structural Category",a3,a3,a3,a3,A.k(a3,a3,a7.a===B.c?B.e:B.i,a3,a3,a3,a3,a3,a3,a3,a3,16,a3,a3,B.k,a3,a3,!0,a3,-0.1,a3,a3,a3,a3,a3,a3).dm(13,B.k),a3,a3)
+p=a2.dx
+o=a7.a===B.c
 n=o?B.E:B.e
-m=A.k(a2,a2,o?B.e:B.i,a2,a2,a2,a2,a2,a2,a2,a2,13,a2,a2,a2,a2,a2,!0,a2,a2,a2,a2,a2,a2,a2,a2)
-o=a6.a===B.c
+m=A.k(a3,a3,o?B.e:B.i,a3,a3,a3,a3,a3,a3,a3,a3,13,a3,a3,a3,a3,a3,!0,a3,a3,a3,a3,a3,a3,a3,a3)
+o=a7.a===B.c
 l=o?B.ab:B.ac
 k=A.a1(14)
-l=A.bx(a2,new A.cs(4,k,new A.aw(o?B.C:B.B,1,B.A,-1)),a2,a2,a2,a2,a2,a2,!0,a2,a2,a2,a2,a2,a2,l,!0,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,!0,!0,!1,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2)
-k=A.j(a4).h("bf<1>")
-k=A.mG(new A.bf(a4,k),new A.asR(),k.h("F.E"),t.b7)
-a4=A.T(k,A.j(k).h("F.E"))
+l=A.bx(a3,new A.cs(4,k,new A.aw(o?B.C:B.B,1,B.A,-1)),a3,a3,a3,a3,a3,a3,!0,a3,a3,a3,a3,a3,a3,l,!0,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,!0,!0,!1,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3)
+k=A.j(a5).h("bf<1>")
+k=A.mG(new A.bf(a5,k),new A.asR(),k.h("F.E"),t.b7)
+a5=A.T(k,A.j(k).h("F.E"))
 o=t.N
-m=A.kY(l,n,p,a4,new A.asS(a1),m,o)
-a4=A.q("3. Structural Type",a2,a2,a2,a2,A.k(a2,a2,a6.a===B.c?B.e:B.i,a2,a2,a2,a2,a2,a2,a2,a2,16,a2,a2,B.k,a2,a2,!0,a2,-0.1,a2,a2,a2,a2,a2,a2).dm(13,B.k),a2,a2)
-p=a6.a===B.c
+m=A.kY(l,n,p,a5,new A.asS(a2),m,o)
+a5=A.q("3. Structural Type",a3,a3,a3,a3,A.k(a3,a3,a7.a===B.c?B.e:B.i,a3,a3,a3,a3,a3,a3,a3,a3,16,a3,a3,B.k,a3,a3,!0,a3,-0.1,a3,a3,a3,a3,a3,a3).dm(13,B.k),a3,a3)
+p=a7.a===B.c
 n=p?B.ab:B.ac
 l=A.a1(16)
 k=A.aR(p?B.C:B.B,1)
-j=A.X(a5).h("S<1,mz>")
-p=A.T(new A.S(a5,new A.asT(a1,a6),j),j.h("a9.E"))
-p=A.a8(a2,A.aA(p,B.u,B.o,B.j),B.n,a2,a2,new A.a7(n,a2,k,l,a2,a2,B.y),a2,a2,a2,a2,B.cy,a2,a2,a2)
-n=A.q("4. Tenure & Ownership Model",a2,a2,a2,a2,A.k(a2,a2,a6.a===B.c?B.e:B.i,a2,a2,a2,a2,a2,a2,a2,a2,16,a2,a2,B.k,a2,a2,!0,a2,-0.1,a2,a2,a2,a2,a2,a2).dm(13,B.k),a2,a2)
-l=a1.fr
-k=a6.a===B.c
+j=A.X(a6).h("S<1,mz>")
+p=A.T(new A.S(a6,new A.asT(a2,a7),j),j.h("a9.E"))
+p=A.a8(a3,A.aA(p,B.u,B.o,B.j),B.n,a3,a3,new A.a7(n,a3,k,l,a3,a3,B.y),a3,a3,a3,a3,B.cy,a3,a3,a3)
+n=A.q("4. Tenure & Ownership Model",a3,a3,a3,a3,A.k(a3,a3,a7.a===B.c?B.e:B.i,a3,a3,a3,a3,a3,a3,a3,a3,16,a3,a3,B.k,a3,a3,!0,a3,-0.1,a3,a3,a3,a3,a3,a3).dm(13,B.k),a3,a3)
+l=a2.fr
+k=a7.a===B.c
 j=k?B.E:B.e
-i=A.k(a2,a2,k?B.e:B.i,a2,a2,a2,a2,a2,a2,a2,a2,13,a2,a2,a2,a2,a2,!0,a2,a2,a2,a2,a2,a2,a2,a2)
-k=a6.a===B.c
+i=A.k(a3,a3,k?B.e:B.i,a3,a3,a3,a3,a3,a3,a3,a3,13,a3,a3,a3,a3,a3,!0,a3,a3,a3,a3,a3,a3,a3,a3)
+k=a7.a===B.c
 h=k?B.ab:B.ac
 g=A.a1(14)
-h=A.bx(a2,new A.cs(4,g,new A.aw(k?B.C:B.B,1,B.A,-1)),a2,a2,a2,a2,a2,a2,!0,a2,a2,a2,a2,a2,a2,h,!0,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,!0,!0,!1,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2)
-g=a1.id
+h=A.bx(a3,new A.cs(4,g,new A.aw(k?B.C:B.B,1,B.A,-1)),a3,a3,a3,a3,a3,a3,!0,a3,a3,a3,a3,a3,a3,h,!0,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,!0,!0,!1,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3)
+g=a2.id
 f=A.X(g).h("S<1,eb<l>>")
 k=A.T(new A.S(g,new A.asU(),f),f.h("a9.E"))
-o=A.kY(h,j,l,k,new A.asV(a1),i,o)
-l=A.q("5. Financial Valuation & Details",a2,a2,a2,a2,A.k(a2,a2,a6.a===B.c?B.e:B.i,a2,a2,a2,a2,a2,a2,a2,a2,16,a2,a2,B.k,a2,a2,!0,a2,-0.1,a2,a2,a2,a2,a2,a2).dm(13,B.k),a2,a2)
-k=A.k(a2,a2,a6.a===B.c?B.e:B.i,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,!0,a2,a2,a2,a2,a2,a2,a2,a2)
-j=A.k(a2,a2,a6.a===B.c?B.l:B.m,a2,a2,a2,a2,a2,a2,a2,a2,12,a2,a2,a2,a2,a2,!0,a2,a2,a2,a2,a2,a2,a2,a2)
-i=a6.a===B.c
-h=i?B.ab:B.ac
-g=A.a1(14)
-k=A.c5(a2,B.a0,!1,a2,!0,B.D,a2,A.c9(),a1.z,a2,a2,a2,a2,a2,2,A.bx(a2,new A.cs(4,g,new A.aw(i?B.C:B.B,1,B.A,-1)),a2,a2,a2,a2,a2,a2,!0,a2,a2,a2,a2,a2,a2,h,!0,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,j,"Property Name (e.g. Waterfront Penthouse, London Terrace)",!0,!0,!1,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2),B.I,!0,a2,!0,a2,!1,a2,B.V,a2,a2,a2,a2,a2,a2,a2,a2,1,a2,a2,!1,a3,a2,a2,a2,a2,a2,!1,a2,a2,!1,a2,!0,a2,B.N,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,k,!0,B.O,a2,B.a2,a2,a2,a2,a2)
-j=A.k(a2,a2,a6.a===B.c?B.e:B.i,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,!0,a2,a2,a2,a2,a2,a2,a2,a2)
-i=A.k(a2,a2,a6.a===B.c?B.l:B.m,a2,a2,a2,a2,a2,a2,a2,a2,12,a2,a2,a2,a2,a2,!0,a2,a2,a2,a2,a2,a2,a2,a2)
-h=a6.a===B.c
+o=A.kY(h,j,l,k,new A.asV(a2),i,o)
+l=A.q("5. Financial Valuation & Details",a3,a3,a3,a3,A.k(a3,a3,a7.a===B.c?B.e:B.i,a3,a3,a3,a3,a3,a3,a3,a3,16,a3,a3,B.k,a3,a3,!0,a3,-0.1,a3,a3,a3,a3,a3,a3).dm(13,B.k),a3,a3)
+k=A.q("Primary Residence",a3,a3,a3,a3,A.k(a3,a3,a7.a===B.c?B.e:B.i,a3,a3,a3,a3,a3,a3,a3,a3,14,a3,a3,a3,a3,a3,!0,a3,a3,a3,a3,a3,a3,a3,a3),a3,a3)
+j=A.q("Turn off if this is an Investment Property",a3,a3,a3,a3,A.k(a3,a3,a7.a===B.c?B.l:B.m,a3,a3,a3,a3,a3,a3,a3,a3,12,a3,a3,a3,a3,a3,!0,a3,a3,a3,a3,a3,a3,a3,a3),a3,a3)
+j=A.hX(!1,B.a6,!0,a3,new A.TN(a2.fx,new A.asW(a2),B.r,B.r.aG(0.5),k,j,B.am,a3),B.n,B.F,0,a3,a3,a3,a3,a3,B.cU)
+k=A.k(a3,a3,a7.a===B.c?B.e:B.i,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,!0,a3,a3,a3,a3,a3,a3,a3,a3)
+i=A.k(a3,a3,a7.a===B.c?B.l:B.m,a3,a3,a3,a3,a3,a3,a3,a3,12,a3,a3,a3,a3,a3,!0,a3,a3,a3,a3,a3,a3,a3,a3)
+h=a7.a===B.c
 g=h?B.ab:B.ac
 f=A.a1(14)
-j=A.b8(A.c5(a2,B.a0,!1,a2,!0,B.D,a2,A.c9(),a1.Q,a2,a2,a2,a2,a2,2,A.bx(a2,new A.cs(4,f,new A.aw(h?B.C:B.B,1,B.A,-1)),a2,a2,a2,a2,a2,a2,!0,a2,a2,a2,a2,a2,a2,g,!0,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,i,"Current Valuation ($)",!0,!0,!1,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2),B.I,!0,a2,!0,a2,!1,a2,B.V,a2,a2,a2,a2,B.bg,a2,a2,a2,1,a2,a2,!1,a3,a2,a2,a2,a2,a2,!1,a2,a2,!1,a2,!0,a2,B.N,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,j,!0,B.O,a2,B.a2,a2,a2,a2,a2),1)
-i=A.k(a2,a2,a6.a===B.c?B.e:B.i,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,!0,a2,a2,a2,a2,a2,a2,a2,a2)
-h=A.k(a2,a2,a6.a===B.c?B.l:B.m,a2,a2,a2,a2,a2,a2,a2,a2,12,a2,a2,a2,a2,a2,!0,a2,a2,a2,a2,a2,a2,a2,a2)
-g=a6.a===B.c
+k=A.c5(a3,B.a0,!1,a3,!0,B.D,a3,A.c9(),a2.z,a3,a3,a3,a3,a3,2,A.bx(a3,new A.cs(4,f,new A.aw(h?B.C:B.B,1,B.A,-1)),a3,a3,a3,a3,a3,a3,!0,a3,a3,a3,a3,a3,a3,g,!0,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,i,"Property Name (e.g. Waterfront Penthouse, London Terrace)",!0,!0,!1,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3),B.I,!0,a3,!0,a3,!1,a3,B.V,a3,a3,a3,a3,a3,a3,a3,a3,1,a3,a3,!1,a4,a3,a3,a3,a3,a3,!1,a3,a3,!1,a3,!0,a3,B.N,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,k,!0,B.O,a3,B.a2,a3,a3,a3,a3)
+i=A.k(a3,a3,a7.a===B.c?B.e:B.i,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,!0,a3,a3,a3,a3,a3,a3,a3,a3)
+h=A.k(a3,a3,a7.a===B.c?B.l:B.m,a3,a3,a3,a3,a3,a3,a3,a3,12,a3,a3,a3,a3,a3,!0,a3,a3,a3,a3,a3,a3,a3,a3)
+g=a7.a===B.c
 f=g?B.ab:B.ac
 e=A.a1(14)
-d=t.p
-i=A.ak(A.b([j,B.bv,A.b8(A.c5(a2,B.a0,!1,a2,!0,B.D,a2,A.c9(),a1.as,a2,a2,a2,a2,a2,2,A.bx(a2,new A.cs(4,e,new A.aw(g?B.C:B.B,1,B.A,-1)),a2,a2,a2,a2,a2,a2,!0,a2,a2,a2,a2,a2,a2,f,!0,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,h,"Mortgage Balance ($)",!0,!0,!1,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2),B.I,!0,a2,!0,a2,!1,a2,B.V,a2,a2,a2,a2,B.bg,a2,a2,a2,1,a2,a2,!1,a3,a2,a2,a2,a2,a2,!1,a2,a2,!1,a2,!0,a2,B.N,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,i,!0,B.O,a2,B.a2,a2,a2,a2,a2),1)],d),B.u,B.o,B.j,0,a2)
-j=A.k(a2,a2,a6.a===B.c?B.e:B.i,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,!0,a2,a2,a2,a2,a2,a2,a2,a2)
-h=A.k(a2,a2,a6.a===B.c?B.l:B.m,a2,a2,a2,a2,a2,a2,a2,a2,12,a2,a2,a2,a2,a2,!0,a2,a2,a2,a2,a2,a2,a2,a2)
-g=a6.a===B.c
-f=g?B.ab:B.ac
-e=A.a1(14)
-j=A.b8(A.c5(a2,B.a0,!1,a2,!0,B.D,a2,A.c9(),a1.at,a2,a2,a2,a2,a2,2,A.bx(a2,new A.cs(4,e,new A.aw(g?B.C:B.B,1,B.A,-1)),a2,a2,a2,a2,a2,a2,!0,a2,a2,a2,a2,a2,a2,f,!0,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,h,"Monthly Rent ($)",!0,!0,!1,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2),B.I,!0,a2,!0,a2,!1,a2,B.V,a2,a2,a2,a2,B.bg,a2,a2,a2,1,a2,a2,!1,a3,a2,a2,a2,a2,a2,!1,a2,a2,!1,a2,!0,a2,B.N,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,j,!0,B.O,a2,B.a2,a2,a2,a2,a2),1)
-h=A.k(a2,a2,a6.a===B.c?B.e:B.i,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,!0,a2,a2,a2,a2,a2,a2,a2,a2)
-g=A.k(a2,a2,a6.a===B.c?B.l:B.m,a2,a2,a2,a2,a2,a2,a2,a2,12,a2,a2,a2,a2,a2,!0,a2,a2,a2,a2,a2,a2,a2,a2)
-f=a6.a===B.c
+i=A.b8(A.c5(a3,B.a0,!1,a3,!0,B.D,a3,A.c9(),a2.Q,a3,a3,a3,a3,a3,2,A.bx(a3,new A.cs(4,e,new A.aw(g?B.C:B.B,1,B.A,-1)),a3,a3,a3,a3,a3,a3,!0,a3,a3,a3,a3,a3,a3,f,!0,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,h,"Current Valuation ($)",!0,!0,!1,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3),B.I,!0,a3,!0,a3,!1,a3,B.V,a3,a3,a3,a3,B.bg,a3,a3,a3,1,a3,a3,!1,a4,a3,a3,a3,a3,a3,!1,a3,a3,!1,a3,!0,a3,B.N,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,i,!0,B.O,a3,B.a2,a3,a3,a3,a3),1)
+h=A.k(a3,a3,a7.a===B.c?B.e:B.i,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,!0,a3,a3,a3,a3,a3,a3,a3,a3)
+g=A.k(a3,a3,a7.a===B.c?B.l:B.m,a3,a3,a3,a3,a3,a3,a3,a3,12,a3,a3,a3,a3,a3,!0,a3,a3,a3,a3,a3,a3,a3,a3)
+f=a7.a===B.c
 e=f?B.ab:B.ac
-c=A.a1(14)
-j=A.ak(A.b([j,B.bv,A.b8(A.c5(a2,B.a0,!1,a2,!0,B.D,a2,A.c9(),a1.ax,a2,a2,a2,a2,a2,2,A.bx(a2,new A.cs(4,c,new A.aw(f?B.C:B.B,1,B.A,-1)),a2,a2,a2,a2,a2,a2,!0,a2,a2,a2,a2,a2,a2,e,!0,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,g,"Monthly Expenses ($)",!0,!0,!1,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2),B.I,!0,a2,!0,a2,!1,a2,B.V,a2,a2,a2,a2,B.bg,a2,a2,a2,1,a2,a2,!1,a3,a2,a2,a2,a2,a2,!1,a2,a2,!1,a2,!0,a2,B.N,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,h,!0,B.O,a2,B.a2,a2,a2,a2,a2),1)],d),B.u,B.o,B.j,0,a2)
-h=A.k(a2,a2,a6.a===B.c?B.e:B.i,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,!0,a2,a2,a2,a2,a2,a2,a2,a2)
-g=A.k(a2,a2,a6.a===B.c?B.l:B.m,a2,a2,a2,a2,a2,a2,a2,a2,12,a2,a2,a2,a2,a2,!0,a2,a2,a2,a2,a2,a2,a2,a2)
-f=a6.a===B.c
-e=f?B.ab:B.ac
-c=A.a1(14)
-h=A.c5(a2,B.a0,!1,a2,!0,B.D,a2,A.c9(),a1.ay,a2,a2,a2,a2,a2,2,A.bx(a2,new A.cs(4,c,new A.aw(f?B.C:B.B,1,B.A,-1)),a2,a2,a2,a2,a2,a2,!0,a2,a2,a2,a2,a2,a2,e,!0,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,g,"Property Address / Location",!0,!0,!1,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2),B.I,!0,a2,!0,a2,!1,a2,B.V,a2,a2,a2,a2,a2,a2,a2,a2,1,a2,a2,!1,a3,a2,a2,a2,a2,a2,!1,a2,a2,!1,a2,!0,a2,B.N,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,h,!0,B.O,a2,B.a2,a2,a2,a2,a2)
-g=A.k(a2,a2,a6.a===B.c?B.e:B.i,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,!0,a2,a2,a2,a2,a2,a2,a2,a2)
-f=A.k(a2,a2,a6.a===B.c?B.l:B.m,a2,a2,a2,a2,a2,a2,a2,a2,12,a2,a2,a2,a2,a2,!0,a2,a2,a2,a2,a2,a2,a2,a2)
-e=a6.a===B.c
-c=e?B.ab:B.ac
-b=A.d2(B.L2,e?B.l:B.m,a2,18)
-g=A.b8(A.c5(a2,B.a0,!1,a2,!0,B.D,a2,A.c9(),a1.ch,a2,a2,a2,a2,a2,2,A.bx(a2,new A.cs(4,A.a1(14),B.z),a2,a2,a2,a2,a2,a2,!0,a2,a2,a2,a2,a2,a2,c,!0,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,f,"Rooms",!0,!0,!1,a2,b,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2),B.I,!0,a2,!0,a2,!1,a2,B.V,a2,a2,a2,a2,B.bg,a2,a2,a2,1,a2,a2,!1,a3,a2,a2,a2,a2,a2,!1,a2,a2,!1,a2,!0,a2,B.N,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,g,!0,B.O,a2,B.a2,a2,a2,a2,a2),1)
-f=A.k(a2,a2,a6.a===B.c?B.e:B.i,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,!0,a2,a2,a2,a2,a2,a2,a2,a2)
-e=A.k(a2,a2,a6.a===B.c?B.l:B.m,a2,a2,a2,a2,a2,a2,a2,a2,12,a2,a2,a2,a2,a2,!0,a2,a2,a2,a2,a2,a2,a2,a2)
-c=a6.a===B.c
-b=c?B.ab:B.ac
-a=A.d2(B.L1,c?B.l:B.m,a2,18)
-f=A.ak(A.b([g,B.bv,A.b8(A.c5(a2,B.a0,!1,a2,!0,B.D,a2,A.c9(),a1.CW,a2,a2,a2,a2,a2,2,A.bx(a2,new A.cs(4,A.a1(14),B.z),a2,a2,a2,a2,a2,a2,!0,a2,a2,a2,a2,a2,a2,b,!0,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,e,"Washrooms",!0,!0,!1,a2,a,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2),B.I,!0,a2,!0,a2,!1,a2,B.V,a2,a2,a2,a2,B.bg,a2,a2,a2,1,a2,a2,!1,a3,a2,a2,a2,a2,a2,!1,a2,a2,!1,a2,!0,a2,B.N,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,f,!0,B.O,a2,B.a2,a2,a2,a2,a2),1)],d),B.u,B.o,B.j,0,a2)
-g=A.k(a2,a2,a6.a===B.c?B.e:B.i,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,!0,a2,a2,a2,a2,a2,a2,a2,a2)
-e=A.k(a2,a2,a6.a===B.c?B.l:B.m,a2,a2,a2,a2,a2,a2,a2,a2,12,a2,a2,a2,a2,a2,!0,a2,a2,a2,a2,a2,a2,a2,a2)
-c=a6.a===B.c
-b=c?B.ab:B.ac
-a=A.d2(B.L4,c?B.l:B.m,a2,18)
-g=A.b8(A.c5(a2,B.a0,!1,a2,!0,B.D,a2,A.c9(),a1.cx,a2,a2,a2,a2,a2,2,A.bx(a2,new A.cs(4,A.a1(14),B.z),a2,a2,a2,a2,a2,a2,!0,a2,a2,a2,a2,a2,a2,b,!0,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,e,"Garages",!0,!0,!1,a2,a,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2),B.I,!0,a2,!0,a2,!1,a2,B.V,a2,a2,a2,a2,B.bg,a2,a2,a2,1,a2,a2,!1,a3,a2,a2,a2,a2,a2,!1,a2,a2,!1,a2,!0,a2,B.N,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,g,!0,B.O,a2,B.a2,a2,a2,a2,a2),1)
-e=A.k(a2,a2,a6.a===B.c?B.e:B.i,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,!0,a2,a2,a2,a2,a2,a2,a2,a2)
-c=A.k(a2,a2,a6.a===B.c?B.l:B.m,a2,a2,a2,a2,a2,a2,a2,a2,12,a2,a2,a2,a2,a2,!0,a2,a2,a2,a2,a2,a2,a2,a2)
-b=a6.a===B.c
+d=A.a1(14)
+c=t.p
+h=A.ak(A.b([i,B.bv,A.b8(A.c5(a3,B.a0,!1,a3,!0,B.D,a3,A.c9(),a2.as,a3,a3,a3,a3,a3,2,A.bx(a3,new A.cs(4,d,new A.aw(f?B.C:B.B,1,B.A,-1)),a3,a3,a3,a3,a3,a3,!0,a3,a3,a3,a3,a3,a3,e,!0,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,g,"Mortgage Balance ($)",!0,!0,!1,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3),B.I,!0,a3,!0,a3,!1,a3,B.V,a3,a3,a3,a3,B.bg,a3,a3,a3,1,a3,a3,!1,a4,a3,a3,a3,a3,a3,!1,a3,a3,!1,a3,!0,a3,B.N,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,h,!0,B.O,a3,B.a2,a3,a3,a3,a3),1)],c),B.u,B.o,B.j,0,a3)
+i=A.k(a3,a3,a7.a===B.c?B.e:B.i,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,!0,a3,a3,a3,a3,a3,a3,a3,a3)
+g=a2.fx?"Mortgage amount / Monthly rent":"Monthly Rent ($)"
+f=A.k(a3,a3,a7.a===B.c?B.l:B.m,a3,a3,a3,a3,a3,a3,a3,a3,12,a3,a3,a3,a3,a3,!0,a3,a3,a3,a3,a3,a3,a3,a3)
+e=a7.a===B.c
+d=e?B.ab:B.ac
+b=A.a1(14)
+i=A.b8(A.c5(a3,B.a0,!1,a3,!0,B.D,a3,A.c9(),a2.at,a3,a3,a3,a3,a3,2,A.bx(a3,new A.cs(4,b,new A.aw(e?B.C:B.B,1,B.A,-1)),a3,a3,a3,a3,a3,a3,!0,a3,a3,a3,a3,a3,a3,d,!0,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,f,g,!0,!0,!1,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3),B.I,!0,a3,!0,a3,!1,a3,B.V,a3,a3,a3,a3,B.bg,a3,a3,a3,1,a3,a3,!1,a4,a3,a3,a3,a3,a3,!1,a3,a3,!1,a3,!0,a3,B.N,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,i,!0,B.O,a3,B.a2,a3,a3,a3,a3),1)
+g=A.k(a3,a3,a7.a===B.c?B.e:B.i,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,!0,a3,a3,a3,a3,a3,a3,a3,a3)
+f=A.k(a3,a3,a7.a===B.c?B.l:B.m,a3,a3,a3,a3,a3,a3,a3,a3,12,a3,a3,a3,a3,a3,!0,a3,a3,a3,a3,a3,a3,a3,a3)
+e=a7.a===B.c
+d=e?B.ab:B.ac
+b=A.a1(14)
+i=A.ak(A.b([i,B.bv,A.b8(A.c5(a3,B.a0,!1,a3,!0,B.D,a3,A.c9(),a2.ax,a3,a3,a3,a3,a3,2,A.bx(a3,new A.cs(4,b,new A.aw(e?B.C:B.B,1,B.A,-1)),a3,a3,a3,a3,a3,a3,!0,a3,a3,a3,a3,a3,a3,d,!0,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,f,"Monthly Expenses ($)",!0,!0,!1,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3),B.I,!0,a3,!0,a3,!1,a3,B.V,a3,a3,a3,a3,B.bg,a3,a3,a3,1,a3,a3,!1,a4,a3,a3,a3,a3,a3,!1,a3,a3,!1,a3,!0,a3,B.N,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,g,!0,B.O,a3,B.a2,a3,a3,a3,a3),1)],c),B.u,B.o,B.j,0,a3)
+g=A.k(a3,a3,a7.a===B.c?B.e:B.i,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,!0,a3,a3,a3,a3,a3,a3,a3,a3)
+f=A.k(a3,a3,a7.a===B.c?B.l:B.m,a3,a3,a3,a3,a3,a3,a3,a3,12,a3,a3,a3,a3,a3,!0,a3,a3,a3,a3,a3,a3,a3,a3)
+e=a7.a===B.c
+d=e?B.ab:B.ac
+b=A.a1(14)
+g=A.c5(a3,B.a0,!1,a3,!0,B.D,a3,A.c9(),a2.ay,a3,a3,a3,a3,a3,2,A.bx(a3,new A.cs(4,b,new A.aw(e?B.C:B.B,1,B.A,-1)),a3,a3,a3,a3,a3,a3,!0,a3,a3,a3,a3,a3,a3,d,!0,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,f,"Property Address / Location",!0,!0,!1,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3),B.I,!0,a3,!0,a3,!1,a3,B.V,a3,a3,a3,a3,a3,a3,a3,a3,1,a3,a3,!1,a4,a3,a3,a3,a3,a3,!1,a3,a3,!1,a3,!0,a3,B.N,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,g,!0,B.O,a3,B.a2,a3,a3,a3,a3)
+f=A.k(a3,a3,a7.a===B.c?B.e:B.i,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,!0,a3,a3,a3,a3,a3,a3,a3,a3)
+e=A.k(a3,a3,a7.a===B.c?B.l:B.m,a3,a3,a3,a3,a3,a3,a3,a3,12,a3,a3,a3,a3,a3,!0,a3,a3,a3,a3,a3,a3,a3,a3)
+d=a7.a===B.c
+b=d?B.ab:B.ac
+a=A.d2(B.L2,d?B.l:B.m,a3,18)
+f=A.b8(A.c5(a3,B.a0,!1,a3,!0,B.D,a3,A.c9(),a2.ch,a3,a3,a3,a3,a3,2,A.bx(a3,new A.cs(4,A.a1(14),B.z),a3,a3,a3,a3,a3,a3,!0,a3,a3,a3,a3,a3,a3,b,!0,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,e,"Rooms",!0,!0,!1,a3,a,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3),B.I,!0,a3,!0,a3,!1,a3,B.V,a3,a3,a3,a3,B.bg,a3,a3,a3,1,a3,a3,!1,a4,a3,a3,a3,a3,a3,!1,a3,a3,!1,a3,!0,a3,B.N,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,f,!0,B.O,a3,B.a2,a3,a3,a3,a3),1)
+e=A.k(a3,a3,a7.a===B.c?B.e:B.i,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,!0,a3,a3,a3,a3,a3,a3,a3,a3)
+d=A.k(a3,a3,a7.a===B.c?B.l:B.m,a3,a3,a3,a3,a3,a3,a3,a3,12,a3,a3,a3,a3,a3,!0,a3,a3,a3,a3,a3,a3,a3,a3)
+b=a7.a===B.c
 a=b?B.ab:B.ac
-a0=A.d2(B.L5,b?B.l:B.m,a2,18)
-e=A.ak(A.b([g,B.bv,A.b8(A.c5(a2,B.a0,!1,a2,!0,B.D,a2,A.c9(),a1.cy,a2,a2,a2,a2,a2,2,A.bx(a2,new A.cs(4,A.a1(14),B.z),a2,a2,a2,a2,a2,a2,!0,a2,a2,a2,a2,a2,a2,a,!0,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,c,"Size (sq ft)",!0,!0,!1,a2,a0,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2),B.I,!0,a2,!0,a2,!1,a2,B.V,a2,a2,a2,a2,B.bg,a2,a2,a2,1,a2,a2,!1,a3,a2,a2,a2,a2,a2,!1,a2,a2,!1,a2,!0,a2,B.N,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,a2,e,!0,B.O,a2,B.a2,a2,a2,a2,a2),1)],d),B.u,B.o,B.j,0,a2)
-g=A.q("Primary Residence",a2,a2,a2,a2,A.k(a2,a2,a6.a===B.c?B.e:B.i,a2,a2,a2,a2,a2,a2,a2,a2,14,a2,a2,a2,a2,a2,!0,a2,a2,a2,a2,a2,a2,a2,a2),a2,a2)
-c=A.q("Turn off if this is an Investment Property",a2,a2,a2,a2,A.k(a2,a2,a6.a===B.c?B.l:B.m,a2,a2,a2,a2,a2,a2,a2,a2,12,a2,a2,a2,a2,a2,!0,a2,a2,a2,a2,a2,a2,a2,a2),a2,a2)
-return A.aA(A.b([s,B.bR,r,B.k1,q,B.bR,m,B.k1,a4,B.bR,p,B.k1,n,B.bR,o,B.k1,l,B.ch,k,B.bp,i,B.bp,j,B.bp,h,B.bp,f,B.bp,e,B.bp,A.hX(!1,B.a6,!0,a2,new A.TN(a1.fx,new A.asW(a1),B.r,B.r.aG(0.5),g,c,B.am,a2),B.n,B.F,0,a2,a2,a2,a2,a2,B.cU)],d),B.G,B.o,B.j)},
+a0=A.d2(B.L1,b?B.l:B.m,a3,18)
+e=A.ak(A.b([f,B.bv,A.b8(A.c5(a3,B.a0,!1,a3,!0,B.D,a3,A.c9(),a2.CW,a3,a3,a3,a3,a3,2,A.bx(a3,new A.cs(4,A.a1(14),B.z),a3,a3,a3,a3,a3,a3,!0,a3,a3,a3,a3,a3,a3,a,!0,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,d,"Washrooms",!0,!0,!1,a3,a0,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3),B.I,!0,a3,!0,a3,!1,a3,B.V,a3,a3,a3,a3,B.bg,a3,a3,a3,1,a3,a3,!1,a4,a3,a3,a3,a3,a3,!1,a3,a3,!1,a3,!0,a3,B.N,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,e,!0,B.O,a3,B.a2,a3,a3,a3,a3),1)],c),B.u,B.o,B.j,0,a3)
+f=A.k(a3,a3,a7.a===B.c?B.e:B.i,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,!0,a3,a3,a3,a3,a3,a3,a3,a3)
+d=A.k(a3,a3,a7.a===B.c?B.l:B.m,a3,a3,a3,a3,a3,a3,a3,a3,12,a3,a3,a3,a3,a3,!0,a3,a3,a3,a3,a3,a3,a3,a3)
+b=a7.a===B.c
+a=b?B.ab:B.ac
+a0=A.d2(B.L4,b?B.l:B.m,a3,18)
+f=A.b8(A.c5(a3,B.a0,!1,a3,!0,B.D,a3,A.c9(),a2.cx,a3,a3,a3,a3,a3,2,A.bx(a3,new A.cs(4,A.a1(14),B.z),a3,a3,a3,a3,a3,a3,!0,a3,a3,a3,a3,a3,a3,a,!0,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,d,"Garages",!0,!0,!1,a3,a0,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3),B.I,!0,a3,!0,a3,!1,a3,B.V,a3,a3,a3,a3,B.bg,a3,a3,a3,1,a3,a3,!1,a4,a3,a3,a3,a3,a3,!1,a3,a3,!1,a3,!0,a3,B.N,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,f,!0,B.O,a3,B.a2,a3,a3,a3,a3),1)
+d=A.k(a3,a3,a7.a===B.c?B.e:B.i,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,!0,a3,a3,a3,a3,a3,a3,a3,a3)
+b=A.k(a3,a3,a7.a===B.c?B.l:B.m,a3,a3,a3,a3,a3,a3,a3,a3,12,a3,a3,a3,a3,a3,!0,a3,a3,a3,a3,a3,a3,a3,a3)
+a=a7.a===B.c
+a0=a?B.ab:B.ac
+a1=A.d2(B.L5,a?B.l:B.m,a3,18)
+return A.aA(A.b([s,B.bR,r,B.k1,q,B.bR,m,B.k1,a5,B.bR,p,B.k1,n,B.bR,o,B.k1,l,B.ch,j,B.bp,k,B.bp,h,B.bp,i,B.bp,g,B.bp,e,B.bp,A.ak(A.b([f,B.bv,A.b8(A.c5(a3,B.a0,!1,a3,!0,B.D,a3,A.c9(),a2.cy,a3,a3,a3,a3,a3,2,A.bx(a3,new A.cs(4,A.a1(14),B.z),a3,a3,a3,a3,a3,a3,!0,a3,a3,a3,a3,a3,a3,a0,!0,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,b,"Size (sq ft)",!0,!0,!1,a3,a1,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3),B.I,!0,a3,!0,a3,!1,a3,B.V,a3,a3,a3,a3,B.bg,a3,a3,a3,1,a3,a3,!1,a4,a3,a3,a3,a3,a3,!1,a3,a3,!1,a3,!0,a3,B.N,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,a3,d,!0,B.O,a3,B.a2,a3,a3,a3,a3),1)],c),B.u,B.o,B.j,0,a3)],c),B.G,B.o,B.j)},
 abI(a){var s,r=this,q=null,p=r.k1,o=a.a===B.c,n=o?B.E:B.e,m=A.k(q,q,o?B.e:B.i,q,q,q,q,q,q,q,q,q,q,q,q,q,q,!0,q,q,q,q,q,q,q,q)
 o=A.bx(q,q,q,q,q,q,q,q,!0,q,q,q,q,q,q,q,q,q,q,q,q,q,q,q,q,q,q,q,q,q,q,q,q,q,q,q,q,q,q,A.k(q,q,a.a===B.c?B.l:B.m,q,q,q,q,q,q,q,q,q,q,q,q,q,q,!0,q,q,q,q,q,q,q,q),"Metal Type",!0,!0,!1,q,q,q,q,q,q,q,q,q,q,q,q,q,q)
 s=t.fo
