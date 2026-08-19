@@ -723,18 +723,21 @@ class _AssetCreationViewState extends State<AssetCreationView> {
           ),
         ),
         const SizedBox(height: 14),
-        SwitchListTile(
-          title: Text("Primary Residence", style: TextStyle(color: theme.text, fontSize: 14)),
-          subtitle: Text("Turn off if this is an Investment Property", style: TextStyle(color: theme.subtext, fontSize: 12)),
-          value: _isPrimaryResidence,
-          activeTrackColor: AppColors.positive.withValues(alpha: 0.5),
-          activeThumbColor: AppColors.positive,
-          contentPadding: EdgeInsets.zero,
-          onChanged: (bool value) {
-            setState(() {
-              _isPrimaryResidence = value;
-            });
-          },
+        Material(
+          color: Colors.transparent,
+          child: SwitchListTile(
+            title: Text("Primary Residence", style: TextStyle(color: theme.text, fontSize: 14)),
+            subtitle: Text("Turn off if this is an Investment Property", style: TextStyle(color: theme.subtext, fontSize: 12)),
+            value: _isPrimaryResidence,
+            activeTrackColor: AppColors.positive.withValues(alpha: 0.5),
+            activeThumbColor: AppColors.positive,
+            contentPadding: EdgeInsets.zero,
+            onChanged: (bool value) {
+              setState(() {
+                _isPrimaryResidence = value;
+              });
+            },
+          ),
         ),
       ],
     );
