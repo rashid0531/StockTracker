@@ -643,6 +643,23 @@ class _AssetCreationViewState extends State<AssetCreationView> {
         // 5. Property Name & Financial Details
         Text("5. Financial Valuation & Details", style: theme.cardTitleStyle.copyWith(fontSize: 13, fontWeight: FontWeight.bold)),
         const SizedBox(height: 10),
+        Material(
+          color: Colors.transparent,
+          child: SwitchListTile(
+            title: Text("Primary Residence", style: TextStyle(color: theme.text, fontSize: 14)),
+            subtitle: Text("Turn off if this is an Investment Property", style: TextStyle(color: theme.subtext, fontSize: 12)),
+            value: _isPrimaryResidence,
+            activeTrackColor: AppColors.positive.withValues(alpha: 0.5),
+            activeThumbColor: AppColors.positive,
+            contentPadding: EdgeInsets.zero,
+            onChanged: (bool value) {
+              setState(() {
+                _isPrimaryResidence = value;
+              });
+            },
+          ),
+        ),
+        const SizedBox(height: 14),
         TextField(
           controller: _reNameCtrl,
           style: TextStyle(color: theme.text),
@@ -697,7 +714,7 @@ class _AssetCreationViewState extends State<AssetCreationView> {
                 keyboardType: TextInputType.number,
                 style: TextStyle(color: theme.text),
                 decoration: InputDecoration(
-                  labelText: "Monthly Rent (\$)",
+                  labelText: _isPrimaryResidence ? "Mortgage amount / Monthly rent" : "Monthly Rent (\$)",
                   labelStyle: TextStyle(color: theme.subtext, fontSize: 12),
                   filled: true,
                   fillColor: theme.bg,
@@ -791,23 +808,7 @@ class _AssetCreationViewState extends State<AssetCreationView> {
             )),
           ],
         ),
-        const SizedBox(height: 14),
-        Material(
-          color: Colors.transparent,
-          child: SwitchListTile(
-            title: Text("Primary Residence", style: TextStyle(color: theme.text, fontSize: 14)),
-            subtitle: Text("Turn off if this is an Investment Property", style: TextStyle(color: theme.subtext, fontSize: 12)),
-            value: _isPrimaryResidence,
-            activeTrackColor: AppColors.positive.withValues(alpha: 0.5),
-            activeThumbColor: AppColors.positive,
-            contentPadding: EdgeInsets.zero,
-            onChanged: (bool value) {
-              setState(() {
-                _isPrimaryResidence = value;
-              });
-            },
-          ),
-        ),
+
       ],
     );
   }
