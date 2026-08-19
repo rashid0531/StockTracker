@@ -349,6 +349,7 @@ class DashboardView extends StatefulWidget {
 }
 
 class _DashboardViewState extends State<DashboardView> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   late final DashboardViewModel _viewModel = DashboardViewModel(apiService: ApiService());
   int _currentTabIndex = 0;
 
@@ -433,10 +434,15 @@ class _DashboardViewState extends State<DashboardView> {
   @override
   Widget build(BuildContext context) {
     final theme = Provider.of<ThemeProvider>(context);
-    final isWide = MediaQuery.of(context).size.width >= 700 || kIsWeb;
+    
 
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: theme.bg,
+      drawer: Drawer(
+        backgroundColor: theme.bg,
+        child: _buildWebSidePanel(theme),
+      ),
       body: theme.buildBackground(
         child: SafeArea(
           child: AnimatedBuilder(
@@ -448,67 +454,12 @@ class _DashboardViewState extends State<DashboardView> {
                 );
               }
 
-              if (isWide) {
-                return Row(
-                  children: [
-                    _buildWebSidePanel(theme),
-                    Expanded(
-                      child: _buildTabContent(theme),
-                    ),
-                  ],
-                );
-              }
-
               return _buildTabContent(theme);
             },
           ),
         ),
       ),
-      bottomNavigationBar: isWide
-          ? null
-          : BottomNavigationBar(
-              currentIndex: _currentTabIndex,
-              onTap: (index) {
-                setState(() {
-                  _currentTabIndex = index;
-                });
-                if (index == 1) {
-                  _viewModel.loadDividendTab();
-                } else if (index == 3) {
-                  _viewModel.loadCalendar();
-                } else if (index == 4) {
-                  _viewModel.loadTransactions();
-                }
-              },
-              backgroundColor: theme.card,
-              selectedItemColor: AppColors.positive,
-              unselectedItemColor: theme.subtext,
-              selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 10),
-              unselectedLabelStyle: const TextStyle(fontSize: 9),
-              type: BottomNavigationBarType.fixed,
-              items: const [
-                BottomNavigationBarItem(
-                  icon: Text("📊", style: TextStyle(fontSize: 18)),
-                  activeIcon: Text("📊", style: TextStyle(fontSize: 18)),
-                  label: "Portfolio",
-                ),
-                BottomNavigationBarItem(
-                  icon: Text("💰", style: TextStyle(fontSize: 18)),
-                  activeIcon: Text("💰", style: TextStyle(fontSize: 18)),
-                  label: "Dividend",
-                ),
-                BottomNavigationBarItem(
-                  icon: Text("📜", style: TextStyle(fontSize: 18)),
-                  activeIcon: Text("📜", style: TextStyle(fontSize: 18)),
-                  label: "History",
-                ),
-                BottomNavigationBarItem(
-                  icon: Text("⚙️", style: TextStyle(fontSize: 18)),
-                  activeIcon: Text("⚙️", style: TextStyle(fontSize: 18)),
-                  label: "Settings",
-                ),
-              ],
-            ),
+
     );
   }
 
@@ -722,6 +673,11 @@ class _DashboardViewState extends State<DashboardView> {
             children: [
               Row(
                 children: [
+                  IconButton(
+                    icon: Icon(Icons.menu, color: theme.text),
+                    onPressed: () => _scaffoldKey.currentState?.openDrawer(),
+                  ),
+                  const SizedBox(width: 8),
                   Container(
                     width: 42,
                     height: 42,
@@ -1034,7 +990,16 @@ class _DashboardViewState extends State<DashboardView> {
     return ListView(
       padding: const EdgeInsets.all(20.0),
       children: [
-        Text("FIRE Milestones", style: theme.titleStyle),
+        Row(
+          children: [
+            IconButton(
+              icon: Icon(Icons.menu, color: theme.text),
+              onPressed: () => _scaffoldKey.currentState?.openDrawer(),
+            ),
+            const SizedBox(width: 8),
+            Text("FIRE Milestones", style: theme.titleStyle),
+          ]
+        ),
         Text("Track how much of your expenses are covered by passive dividend income.", style: theme.subtitleStyle),
         const SizedBox(height: 24),
 
@@ -1246,11 +1211,20 @@ class _DashboardViewState extends State<DashboardView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                child: Row(
                   children: [
-                    Text("Dividend Calendar", style: theme.titleStyle),
-                    Text("Chronological schedule of ex-dividend dates and payments.", style: theme.subtitleStyle),
+                    IconButton(
+                      icon: Icon(Icons.menu, color: theme.text),
+                      onPressed: () => _scaffoldKey.currentState?.openDrawer(),
+                    ),
+                    const SizedBox(width: 8),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("Dividend Calendar", style: theme.titleStyle),
+                        Text("Chronological schedule of ex-dividend dates and payments.", style: theme.subtitleStyle),
+                      ],
+                    ),
                   ],
                 ),
               ),
@@ -2273,11 +2247,20 @@ class _DashboardViewState extends State<DashboardView> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              Row(
                 children: [
-                  Text("Dividend Income", style: theme.titleStyle.copyWith(fontSize: 20, fontWeight: FontWeight.w900)),
-                  Text("Track projected vs actual income", style: theme.subtitleStyle),
+                  IconButton(
+                    icon: Icon(Icons.menu, color: theme.text),
+                    onPressed: () => _scaffoldKey.currentState?.openDrawer(),
+                  ),
+                  const SizedBox(width: 8),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Dividend Income", style: theme.titleStyle.copyWith(fontSize: 20, fontWeight: FontWeight.w900)),
+                      Text("Track projected vs actual income", style: theme.subtitleStyle),
+                    ],
+                  ),
                 ],
               ),
               InkWell(
