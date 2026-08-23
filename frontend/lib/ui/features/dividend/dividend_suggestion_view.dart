@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../../../core/theme/theme_provider.dart';
+import 'package:provider/provider.dart';
+import '../../core/theme.dart';
 
 class DividendSuggestionView extends StatelessWidget {
   const DividendSuggestionView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final theme = AppTheme.of(context);
+    final theme = Provider.of<ThemeProvider>(context);
     
     return Scaffold(
-      backgroundColor: theme.background,
+      backgroundColor: theme.bg,
       appBar: AppBar(
-        backgroundColor: theme.surface,
+        backgroundColor: theme.card,
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: theme.text),
