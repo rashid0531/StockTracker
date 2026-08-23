@@ -8,6 +8,8 @@ import 'ui/features/login/login_view.dart';
 import 'ui/features/hub/hub_view.dart';
 import 'ui/features/hub/asset_creation_view.dart';
 import 'ui/features/dashboard/dashboard_view.dart';
+import 'ui/features/dividend/dividend_suggestion_view.dart';
+
 import 'ui/features/real_estate/real_estate_view.dart';
 import 'ui/features/real_estate/real_estate_detail_view.dart';
 import 'data/models/real_estate.dart';
@@ -83,6 +85,11 @@ class WealthTrackerApp extends StatelessWidget {
   static final GoRouter _router = GoRouter(
     initialLocation: '/',
     routes: [
+      GoRoute(
+        path: '/dividend-suggestion',
+        builder: (context, state) => const DividendSuggestionView(),
+      ),
+
       GoRoute(
         path: '/',
         builder: (context, state) => const LoginView(),

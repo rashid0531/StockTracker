@@ -2007,11 +2007,28 @@ class _DashboardViewState extends State<DashboardView> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              Row(
                 children: [
-                  Text("Transactions Ledger", style: theme.titleStyle.copyWith(fontSize: 20, fontWeight: FontWeight.w900)),
-                  Text("Complete record of buys & sells", style: theme.subtitleStyle),
+                  IconButton(
+                    icon: Icon(Icons.arrow_back, color: theme.text),
+                    onPressed: () {
+                      setState(() {
+                        _currentTabIndex = 0;
+                      });
+                    },
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.menu, color: theme.text),
+                    onPressed: () => _scaffoldKey.currentState?.openDrawer(),
+                  ),
+                  const SizedBox(width: 8),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Transactions Ledger", style: theme.titleStyle.copyWith(fontSize: 20, fontWeight: FontWeight.w900)),
+                      Text("Complete record of buys & sells", style: theme.subtitleStyle),
+                    ],
+                  ),
                 ],
               ),
               InkWell(
@@ -2263,21 +2280,39 @@ class _DashboardViewState extends State<DashboardView> {
                   ),
                 ],
               ),
-              InkWell(
-                onTap: () {
-                  _viewModel.loadDividendTab();
-                  _viewModel.loadReceivedDividends();
-                },
-                borderRadius: BorderRadius.circular(12),
-                child: Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: theme.card,
-                    shape: BoxShape.circle,
-                    border: Border.all(color: theme.border),
+              Row(
+                children: [
+                  InkWell(
+                    onTap: () => context.push('/dividend-suggestion'),
+                    borderRadius: BorderRadius.circular(12),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: AppColors.positive.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(color: AppColors.positive),
+                      ),
+                      child: Text("AI Suggestion", style: TextStyle(color: AppColors.positive, fontWeight: FontWeight.bold, fontSize: 12)),
+                    ),
                   ),
-                  child: Text("🔄", style: TextStyle(color: theme.text, fontSize: 16)),
-                ),
+                  const SizedBox(width: 12),
+                  InkWell(
+                    onTap: () {
+                      _viewModel.loadDividendTab();
+                      _viewModel.loadReceivedDividends();
+                    },
+                    borderRadius: BorderRadius.circular(12),
+                    child: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: theme.card,
+                        shape: BoxShape.circle,
+                        border: Border.all(color: theme.border),
+                      ),
+                      child: Text("🔄", style: TextStyle(color: theme.text, fontSize: 16)),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
