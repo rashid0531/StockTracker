@@ -993,6 +993,10 @@ class _DashboardViewState extends State<DashboardView> {
         Row(
           children: [
             IconButton(
+              icon: Icon(Icons.arrow_back, color: theme.text),
+              onPressed: () => setState(() => _currentTabIndex = 0),
+            ),
+            IconButton(
               icon: Icon(Icons.menu, color: theme.text),
               onPressed: () => _scaffoldKey.currentState?.openDrawer(),
             ),
@@ -1213,6 +1217,10 @@ class _DashboardViewState extends State<DashboardView> {
               Expanded(
                 child: Row(
                   children: [
+                    IconButton(
+                      icon: Icon(Icons.arrow_back, color: theme.text),
+                      onPressed: () => setState(() => _currentTabIndex = 0),
+                    ),
                     IconButton(
                       icon: Icon(Icons.menu, color: theme.text),
                       onPressed: () => _scaffoldKey.currentState?.openDrawer(),
@@ -2280,22 +2288,7 @@ class _DashboardViewState extends State<DashboardView> {
                   ),
                 ],
               ),
-              Row(
-                children: [
-                  InkWell(
-                    onTap: () => context.push('/dividend-suggestion'),
-                    borderRadius: BorderRadius.circular(12),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                      decoration: BoxDecoration(
-                        color: AppColors.positive.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: AppColors.positive),
-                      ),
-                      child: Text("AI Suggestion", style: TextStyle(color: AppColors.positive, fontWeight: FontWeight.bold, fontSize: 12)),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
+
                   InkWell(
                     onTap: () {
                       _viewModel.loadDividendTab();
@@ -2312,8 +2305,6 @@ class _DashboardViewState extends State<DashboardView> {
                       child: Text("🔄", style: TextStyle(color: theme.text, fontSize: 16)),
                     ),
                   ),
-                ],
-              ),
             ],
           ),
           const SizedBox(height: 20),
@@ -2468,33 +2459,50 @@ class _DashboardViewState extends State<DashboardView> {
           const SizedBox(height: 24),
 
           // Dividend Action Buttons
-          Row(
+          Column(
             children: [
-              Expanded(
-                child: HoverButton(
-                  label: "Analytics",
-                  icon: Icons.pie_chart,
-                  onTap: () => context.push('/dividend-analytics?id=${_viewModel.dividendProfileId}'),
-                  theme: theme,
-                ),
+              Row(
+                children: [
+                  Expanded(
+                    child: HoverButton(
+                      label: "Analytics",
+                      icon: Icons.pie_chart,
+                      onTap: () => context.push('/dividend-analytics?id=${_viewModel.dividendProfileId}'),
+                      theme: theme,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: HoverButton(
+                      label: "Objective",
+                      icon: Icons.local_fire_department,
+                      onTap: () => setState(() => _currentTabIndex = 2),
+                      theme: theme,
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: HoverButton(
-                  label: "Objective",
-                  icon: Icons.local_fire_department,
-                  onTap: () => setState(() => _currentTabIndex = 2),
-                  theme: theme,
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: HoverButton(
-                  label: "Calendar",
-                  icon: Icons.calendar_month,
-                  onTap: () => setState(() => _currentTabIndex = 3),
-                  theme: theme,
-                ),
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  Expanded(
+                    child: HoverButton(
+                      label: "Calendar",
+                      icon: Icons.calendar_month,
+                      onTap: () => setState(() => _currentTabIndex = 3),
+                      theme: theme,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: HoverButton(
+                      label: "Suggestion",
+                      icon: Icons.auto_awesome,
+                      onTap: () => context.push('/dividend-suggestion'),
+                      theme: theme,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

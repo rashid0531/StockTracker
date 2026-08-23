@@ -98,7 +98,7 @@ class DividendSuggestionView extends StatelessWidget {
         border: Border.all(color: theme.border, width: 1.5),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 4),
           )
@@ -112,7 +112,7 @@ class DividendSuggestionView extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: scoreColor.withOpacity(0.1),
+                  color: scoreColor.withValues(alpha: 0.1),
                   shape: BoxShape.circle,
                 ),
                 child: Icon(icon, color: scoreColor, size: 28),
@@ -151,7 +151,7 @@ class DividendSuggestionView extends StatelessWidget {
           const SizedBox(height: 20),
           Text(
             description,
-            style: TextStyle(color: theme.text.withOpacity(0.8), height: 1.5, fontSize: 14),
+            style: TextStyle(color: theme.text.withValues(alpha: 0.8), height: 1.5, fontSize: 14),
           ),
         ],
       ),
