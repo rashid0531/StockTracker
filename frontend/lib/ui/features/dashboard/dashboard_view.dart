@@ -1906,8 +1906,26 @@ class _DashboardViewState extends State<DashboardView> {
     return ListView(
       padding: const EdgeInsets.all(20.0),
       children: [
-        Text("Settings", style: theme.titleStyle),
-        Text("Manage your preferences and theme options.", style: theme.subtitleStyle),
+        Row(
+          children: [
+            IconButton(
+              icon: Icon(Icons.arrow_back, color: theme.text),
+              onPressed: () => setState(() => _currentTabIndex = 0),
+            ),
+            IconButton(
+              icon: Icon(Icons.menu, color: theme.text),
+              onPressed: () => _scaffoldKey.currentState?.openDrawer(),
+            ),
+            const SizedBox(width: 8),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("Settings", style: theme.titleStyle.copyWith(fontSize: 20, fontWeight: FontWeight.w900)),
+                Text("Manage your preferences and theme options.", style: theme.subtitleStyle),
+              ],
+            ),
+          ]
+        ),
         const SizedBox(height: 24),
 
         // Theme Customization Card
