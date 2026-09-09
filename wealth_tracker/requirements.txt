@@ -17,3 +17,7 @@ pyjwt
 passlib[bcrypt]
 python-multipart
 structlog
+opencv-python-headless
+easyocr
+python-multipart
+numpy

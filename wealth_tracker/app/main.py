@@ -4,7 +4,7 @@ setup_logging()
 
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.routers import holdings, admin, users, real_estate, precious_metals, health, portfolio, ai_suggestions
+from app.routers import market_data, profiles, portfolios, real_estate, health, admin, users, import_ocr
 
 from contextlib import asynccontextmanager
 from app.services.cache import cache_service
@@ -43,6 +43,8 @@ app.include_router(health.router)
 app.include_router(ai_suggestions.router)
 app.include_router(admin.router)
 app.include_router(users.router)
+app.include_router(import_ocr.router)
+
 
 
 @app.get("/")
