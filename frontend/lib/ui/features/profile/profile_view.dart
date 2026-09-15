@@ -455,10 +455,7 @@ class _ProfileViewState extends State<ProfileView> {
                 );
               }
 
-              return Center(
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 1000),
-                  child: Padding(
+              return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: Column(
                       children: [
@@ -510,22 +507,18 @@ class _ProfileViewState extends State<ProfileView> {
                   ),
 
                   const SizedBox(height: 16),
-
-                  // Content
                   Expanded(
                     child: _buildPerformanceTab(theme),
                   ),
                 ],
               ),
-                  ),
-                ),
-              );
-            },
-          ),
+            );
+          },
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 
   Widget _buildPerformanceTab(ThemeProvider theme) {
     final stocks = _viewModel.profile?.stocks ?? [];

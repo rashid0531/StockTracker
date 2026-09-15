@@ -454,12 +454,7 @@ class _DashboardViewState extends State<DashboardView> {
                 );
               }
 
-              return Center(
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 1000),
-                  child: _buildTabContent(theme),
-                ),
-              );
+              return _buildTabContent(theme);
             },
           ),
         ),

@@ -269,7 +269,12 @@ class _PremiumBackgroundState extends State<PremiumBackground> with SingleTicker
 
           // 5. Content overlay
           Positioned.fill(
-            child: widget.child,
+            child: Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 1000),
+                child: widget.child,
+              ),
+            ),
           ),
         ],
       ),

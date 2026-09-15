@@ -183,10 +183,7 @@ class HubView extends StatelessWidget {
       backgroundColor: theme.bg,
       body: theme.buildBackground(
         child: SafeArea(
-          child: Center(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 1000),
-              child: ListView(
+          child: ListView(
             padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 24.0),
             children: [
               // Header
@@ -353,8 +350,6 @@ class HubView extends StatelessWidget {
                 ),
             ],
           ),
-              ),
-            ),
         ),
       ),
     );
