@@ -300,7 +300,10 @@ class _ImportViewState extends State<ImportView> {
       ),
       body: theme.buildBackground(
         child: SafeArea(
-          child: ListView(
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 1000),
+              child: ListView(
             padding: const EdgeInsets.all(24.0),
             children: [
               // Wizard Progress Bar (for steps 1-3)
@@ -330,6 +333,8 @@ class _ImportViewState extends State<ImportView> {
               if (_currentStep == 4) _buildStep4(theme),
             ],
           ),
+              ),
+            ),
         ),
       ),
     );
