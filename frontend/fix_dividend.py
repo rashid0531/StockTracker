@@ -1,50 +1,32 @@
 import re
 
-with open('lib/ui/features/dashboard/dashboard_view.dart', 'r') as f:
+with open('lib/ui/features/dividend/dividend_suggestion_view.dart', 'r') as f:
     content = f.read()
 
-# Fix the mismatched closing braces in the dividend header
-bad_header = """                  InkWell(
-                    onTap: () {
-                      _viewModel.loadDividendTab();
-                      _viewModel.loadReceivedDividends();
-                    },
-                    borderRadius: BorderRadius.circular(12),
-                    child: Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: theme.card,
-                        shape: BoxShape.circle,
-                        border: Border.all(color: theme.border),
-                      ),
-                      child: Text("🔄", style: TextStyle(color: theme.text, fontSize: 16)),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),"""
+bad_body = """            ),
+          ],
+        ),
+      ),
+    );
+  }
+  
+  Widget _buildMeterCard({"""
 
-good_header = """                  InkWell(
-                    onTap: () {
-                      _viewModel.loadDividendTab();
-                      _viewModel.loadReceivedDividends();
-                    },
-                    borderRadius: BorderRadius.circular(12),
-                    child: Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: theme.card,
-                        shape: BoxShape.circle,
-                        border: Border.all(color: theme.border),
-                      ),
-                      child: Text("🔄", style: TextStyle(color: theme.text, fontSize: 16)),
-                    ),
-                  ),
-            ],
-          ),"""
+good_body = """            ),
+          ],
+        ),
+          ),
+        ),
+      ),
+    );
+  }
+  
+  Widget _buildMeterCard({"""
 
-content = content.replace(bad_header, good_header)
+content = content.replace(bad_body, good_body)
 
-with open('lib/ui/features/dashboard/dashboard_view.dart', 'w') as f:
+# And remove the extra closing brackets I accidentally added to the end of the file
+content = re.sub(r'        \),\n          \),\n        \),\n      \),\n    \);\n  }\n}\n$', r'}\n', content)
+
+with open('lib/ui/features/dividend/dividend_suggestion_view.dart', 'w') as f:
     f.write(content)

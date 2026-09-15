@@ -455,11 +455,14 @@ class _ProfileViewState extends State<ProfileView> {
                 );
               }
 
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Column(
-                children: [
-                  // Header Row with back and home buttons
+              return Center(
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 1000),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Column(
+                      children: [
+                        // Header Row with back and home buttons
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 16.0),
                     child: Row(
@@ -514,13 +517,15 @@ class _ProfileViewState extends State<ProfileView> {
                   ),
                 ],
               ),
-            );
-          },
+                  ),
+                ),
+              );
+            },
+          ),
         ),
       ),
-    ),
-  );
-}
+    );
+  }
 
   Widget _buildPerformanceTab(ThemeProvider theme) {
     final stocks = _viewModel.profile?.stocks ?? [];

@@ -24,7 +24,10 @@ class DividendSuggestionView extends StatelessWidget {
           style: theme.titleStyle.copyWith(fontSize: 18),
         ),
       ),
-      body: SingleChildScrollView(
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 1000),
+          child: SingleChildScrollView(
         padding: const EdgeInsets.all(20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -75,6 +78,8 @@ class DividendSuggestionView extends StatelessWidget {
               ),
             ),
           ],
+        ),
+          ),
         ),
       ),
     );
