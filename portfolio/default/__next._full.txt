@@ -1,0 +1,38 @@
+1:"$Sreact.fragment"
+2:"/StockTracker/_next/static/chunks/3y01_2vy79whl.js"
+3:"/StockTracker/_next/static/chunks/2lxzswuxpsz4f.js"
+4:I[3338,["$2","$3"],"LiveBackground"]
+5:I[62199,["$2","$3"],"AppProvider"]
+6:I[10400,["$2","$3"],"AppShell"]
+7:I[39756,["$2","$3"],"default"]
+8:I[37457,["$2","$3"],"default"]
+9:I[5014,["$2","$3"],"default"]
+a:I[22016,["$2","$3"],""]
+f:"$Sreact.suspense"
+10:"/StockTracker/_next/static/chunks/2cihf2fk4nwp5.js"
+11:"/StockTracker/_next/static/chunks/3ah_89y5tmrgm.js"
+12:"/StockTracker/_next/static/chunks/2hk15y0z0j9cs.js"
+13:"/StockTracker/_next/static/chunks/00vm8irzx1pcc.js"
+14:"/StockTracker/_next/static/chunks/3hey_ydfqqe9-.js"
+15:"/StockTracker/_next/static/chunks/2tjc7t-3_x-9x.js"
+16:"/StockTracker/_next/static/chunks/1su5yqil07a9r.js"
+17:I[83313,["$2","$3","$10","$11","$12","$13","$14","$15","$16"],"default"]
+18:I[97367,["$2","$3"],"OutletBoundary"]
+1a:"ViewportBoundary"
+1b:I[97367,["$2","$3"],"$1a"]
+1d:"MetadataBoundary"
+1e:I[97367,["$2","$3"],"$1d"]
+20:I[68027,["$2","$3"],"default",1]
+:HL["/StockTracker/_next/static/chunks/15ipk4fm4gscu.css","style"]
+:HL["/StockTracker/_next/static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/StockTracker/_next/static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+c:X
+e:[["children",{"s":"__PAGE__","h":512,"d":{"r":["$","$1","c",{"children":[["$","$f",null,{"fallback":["$","div",null,{"className":"p-8 text-gray-400 font-mono text-xs","children":"Loading profile ledger..."}],"children":["$","$L17",null,{}]}],[["$","script","script-0",{"src":"/StockTracker/_next/static/chunks/2cihf2fk4nwp5.js","async":true,"nonce":"$undefined"}],["$","script","script-1",{"src":"/StockTracker/_next/static/chunks/3ah_89y5tmrgm.js","async":true,"nonce":"$undefined"}],["$","script","script-2",{"src":"/StockTracker/_next/static/chunks/2hk15y0z0j9cs.js","async":true,"nonce":"$undefined"}],["$","script","script-3",{"src":"/StockTracker/_next/static/chunks/00vm8irzx1pcc.js","async":true,"nonce":"$undefined"}],["$","script","script-4",{"src":"/StockTracker/_next/static/chunks/3hey_ydfqqe9-.js","async":true,"nonce":"$undefined"}],["$","script","script-5",{"src":"/StockTracker/_next/static/chunks/2tjc7t-3_x-9x.js","async":true,"nonce":"$undefined"}],["$","script","script-6",{"src":"/StockTracker/_next/static/chunks/1su5yqil07a9r.js","async":true,"nonce":"$undefined"}]],["$","$L18",null,{"children":["$","$f",null,{"name":"Next.MetadataOutlet","children":"$@19"}]}]]}],"p":false,"v":null}}]]
+d:[["children",{"s":{"n":"id","t":"d","k":"default","s":["import"]},"h":512,"d":{"r":["$","$1","c",{"children":[null,["$","$L7",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L8",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],"p":false,"v":"$c"},"c":"$Qe"}]]
+b:[["children",{"s":"portfolio","h":512,"d":{"r":["$","$1","c",{"children":[null,["$","$L7",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L8",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],"p":false,"v":"$c"},"c":"$Qd"}]]
+0:{"P":null,"c":["","portfolio","default",""],"q":"","i":false,"t":{"t":{"s":"","h":528,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/StockTracker/_next/static/chunks/15ipk4fm4gscu.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}],["$","script","script-0",{"src":"/StockTracker/_next/static/chunks/3y01_2vy79whl.js","async":true,"nonce":"$undefined"}],["$","script","script-1",{"src":"/StockTracker/_next/static/chunks/2lxzswuxpsz4f.js","async":true,"nonce":"$undefined"}]],["$","html",null,{"lang":"en","className":"dark T19VSG_variable _8Li5zG_variable antialiased","children":["$","body",null,{"className":"bg-[#060709] text-gray-100 min-h-screen flex relative overflow-x-hidden","children":[["$","$L4",null,{}],["$","$L5",null,{"children":["$","$L6",null,{"children":["$","$L7",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L8",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","div",null,{"className":"min-h-screen bg-transparent text-slate-100 flex items-center justify-center p-6 relative overflow-hidden font-sans","children":["$","div",null,{"className":"w-full max-w-md text-center space-y-6","children":[["$","div",null,{"className":"inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-tr from-emerald-500/20 to-teal-500/10 border border-emerald-500/30 text-emerald-400","children":["$","$L9",null,{"ref":"$undefined","icon":{"name":"compass","size":24,"node":[["circle",{"cx":"12","cy":"12","r":"10","key":"1mglay"}],["path",{"d":"m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z","key":"9ktpf1"}]]},"className":"w-8 h-8 animate-pulse"}]}],["$","div",null,{"className":"space-y-2","children":[["$","h1",null,{"className":"text-3xl font-extrabold tracking-tight text-white","children":"404: Page Not Found"}],["$","p",null,{"className":"text-sm text-gray-400","children":"The page or portfolio link you requested does not exist or has been moved."}]]}],["$","div",null,{"children":["$","$La",null,{"href":"/portfolio","className":"inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-bold text-sm transition-all shadow-lg shadow-emerald-500/20","children":[["$","$L9",null,{"ref":"$undefined","icon":{"name":"arrow-left","size":24,"node":[["path",{"d":"m12 19-7-7 7-7","key":"1l729n"}],["path",{"d":"M19 12H5","key":"x3x0zl"}]]},"className":"w-4 h-4"}],"Back to Dashboard"]}]}]]}]}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}]}]}]]}]}]]}],"p":false,"v":null},"c":"$Qb"},"h":{"r":["$","$1","h",{"children":[null,["$","$L1b",null,{"children":"$L1c"}],["$","$L1e",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$f",null,{"name":"Next.Metadata","children":"$L1f"}]}],null]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"p":false,"v":null}},"m":"$undefined","G":["$20",[["$","link","0",{"rel":"stylesheet","href":"/StockTracker/_next/static/chunks/15ipk4fm4gscu.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]]],"S":true,"r":"$undefined","s":"$undefined","a":"$undefined","l":"$undefined","p":"$undefined","d":"$undefined","b":"8sqf3q1TAyXKUWFmdGmI6"}
+c:C
+1c:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]
+21:I[27201,["$2","$3"],"IconMark"]
+19:null
+1f:[["$","title","0",{"children":"Wealth Tracker"}],["$","meta","1",{"name":"description","content":"Advanced multi-asset portfolio & automated dividend tracker"}],["$","link","2",{"rel":"icon","href":"/StockTracker/favicon.ico?favicon.117ezoe8m31dk.ico","sizes":"48x48","type":"image/x-icon"}],["$","$L21","3",{}]]
