@@ -1,4 +1,4 @@
-:HL["/StockTracker/_next/static/chunks/15ipk4fm4gscu.css","style"]
+:HL["/StockTracker/_next/static/chunks/1ieaz3j04domh.css","style"]
 2:[["children",{"s":"__PAGE__","h":160}]]
 1:[["children",{"s":"/_not-found","h":96,"c":"$Q2"}]]
-0:{"b":"8sqf3q1TAyXKUWFmdGmI6","t":{"t":{"s":"","h":80,"c":"$Q1"}}}
+0:{"b":"AYTIe4gnQ7ejo4mPPH6DD","t":{"t":{"s":"","h":80,"c":"$Q1"}}}
